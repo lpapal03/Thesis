@@ -18,6 +18,13 @@ func get(s *zmq.Socket, msg_id int) {
 	rec_msg, _ := s.RecvMessage(0)
 	fmt.Println("Server response:\n-------")
 	fmt.Println(rec_msg[1])
+
+	// Send request to 3f+1 servers
+
+	// Wait response from 2f+1
+
+	// Foreach record r in each response, r should be in at least f+1 responses
+	// In other words, f+1 responses should match
 }
 
 func client_task(id string) {
@@ -40,9 +47,9 @@ func client_task(id string) {
 
 func main() {
 
-	go client_task("1")
-	go client_task("2")
-	go client_task("3")
+	go client_task("c1")
+	go client_task("c2")
+	go client_task("c3")
 
 	for {
 	}
