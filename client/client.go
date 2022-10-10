@@ -22,6 +22,7 @@ func get(s *zmq.Socket, msg_id int) {
 	// Send request to 3f+1 servers
 
 	// Wait response from 2f+1
+	// When waiting for responses,
 
 	// Foreach record r in each response, r should be in at least f+1 responses
 	// In other words, f+1 responses should match
