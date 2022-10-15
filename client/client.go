@@ -50,19 +50,27 @@ func client_task(id string) {
 	server_sockets[1].SendMessage("Hello 1")
 	server_sockets[0].SendMessage("Hello 0")
 
+	// outside for will happen until i get 2f+1 replies
 	for {
-		sockets, _ := poller.Poll(-1)
-		for _, socket := range sockets {
-			switch s := socket.Socket; s {
-			case server_sockets[0]:
-				msg, _ := s.Recv(0)
-				//  Process msg
-				fmt.Println(msg)
-			case server_sockets[1]:
-				msg, _ := s.Recv(0)
-				//  Process msg
-				fmt.Println(msg)
+		poller_sockets, _ := poller.Poll(-1)
+		for _, poller_socket := range poller_sockets {
+			p_s := poller_socket.Socket
+			for _, server_socket := range server_sockets {
+				if server_socket == p_s {
+					msg, _ := p_s.Recv(0)
+					fmt.Println(msg)
+				}
 			}
+			// switch s := socket.Socket; s {
+			// case server_sockets[0]:
+			// 	msg, _ := s.Recv(0)
+			// 	//  Process msg
+			// 	fmt.Println(msg)
+			// case server_sockets[1]:
+			// 	msg, _ := s.Recv(0)
+			// 	//  Process msg
+			// 	fmt.Println(msg)
+			// }
 		}
 	}
 
