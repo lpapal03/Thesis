@@ -4,19 +4,16 @@ package main
 
 import (
 	"fmt"
+	"server/gset"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
 func server_task(port string, context *zmq.Context) {
 
-	g_set := make(map[string]string)
-	g_set["record1"] = "dog"
-	g_set["record2"] = "blue"
-	g_set["record3"] = "cat"
-	g_set["record4"] = "red"
-
-	// server_count := 5
+	mygset := gset.Create()
+	gset.Append(mygset, "A")
+	gset.Get(mygset)
 
 	inbound_socket, _ := context.NewSocket(zmq.ROUTER)
 	inbound_socket.Bind(port)
@@ -46,4 +43,5 @@ func main() {
 	go server_task("tcp://*:5556", zctx)
 	for {
 	}
+
 }
