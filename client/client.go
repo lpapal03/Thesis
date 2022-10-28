@@ -3,84 +3,59 @@
 package main
 
 import (
+	"client/config"
 	"fmt"
-	"math/rand"
-	"time"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
-// Sender id is bound to the socket
-// func get(s *zmq.Socket, msg_id int) {
-// 	msg := []string{strconv.Itoa(msg_id), "get"}
-// 	s.SendMessage(msg)
-// 	rec_msg, _ := s.RecvMessage(0)
-// 	fmt.Println("Server response:\n-------")
-// 	fmt.Println(rec_msg[1])
+func broadcast(message string, server_sockets []*zmq.Socket) {
+	for i := 0; i < len(server_sockets); i++ {
+		server_sockets[i].SendMessage(message)
+	}
+}
 
-// Send request to 3f+1 servers
+func client_task(id string, server_ports []string) {
 
-// Wait response from 2f+1
-// When waiting for responses,
-
-// Foreach record r in each response, r should be in at least f+1 responses
-// In other words, f+1 responses should match
-// }
-func client_task(id string) {
-
-	rand.Seed(time.Now().UnixNano())
-	servers := []string{"tcp://localhost:5555", "tcp://localhost:5556"}
-	var server_sockets [2]*zmq.Socket
+	// Declare context, poller, router sockets of servers, message counter
 	zctx, _ := zmq.NewContext()
 	poller := zmq.NewPoller()
+	var server_sockets []*zmq.Socket
+	//message_counter := 0
 
-	// id := strconv.Itoa(os.Getpid()) + strconv.Itoa(rand.Intn(10))
-
-	for i := 0; i < len(servers); i++ {
+	// Connect client dealer sockets to all servers
+	for i := 0; i < len(server_ports); i++ {
 		s, _ := zctx.NewSocket(zmq.DEALER)
 		s.SetIdentity(id)
-		s.Connect(servers[i])
-		server_sockets[i] = s
+		s.Connect("tcp://localhost:" + server_ports[i])
+		fmt.Println("Client conected to", "tcp://localhost:"+server_ports[i])
+		server_sockets = append(server_sockets, s)
 		poller.Add(server_sockets[i], zmq.POLLIN)
-		fmt.Printf("Client with id %s connected to server %s\n", id, servers[i])
-		fmt.Println(server_sockets[i])
-		fmt.Println()
 	}
 
-	server_sockets[1].SendMessage("Hello 1")
-	server_sockets[0].SendMessage("Hello 0")
+	message := "Test"
+	broadcast(message, server_sockets)
 
+	// Wait for replies code
 	// outside for will happen until i get 2f+1 replies
-	for {
-		poller_sockets, _ := poller.Poll(-1)
-		for _, poller_socket := range poller_sockets {
-			p_s := poller_socket.Socket
-			for _, server_socket := range server_sockets {
-				if server_socket == p_s {
-					msg, _ := p_s.Recv(0)
-					fmt.Println(msg)
-				}
-			}
-			// switch s := socket.Socket; s {
-			// case server_sockets[0]:
-			// 	msg, _ := s.Recv(0)
-			// 	//  Process msg
-			// 	fmt.Println(msg)
-			// case server_sockets[1]:
-			// 	msg, _ := s.Recv(0)
-			// 	//  Process msg
-			// 	fmt.Println(msg)
-			// }
-		}
-	}
+	// for {
+	// 	poller_sockets, _ := poller.Poll(-1)
+	// 	for _, poller_socket := range poller_sockets {
+	// 		p_s := poller_socket.Socket
+	// 		for _, server_socket := range server_sockets {
+	// 			if server_socket == p_s {
+	// 				msg, _ := p_s.Recv(0)
+	// 				fmt.Println(msg)
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 }
 
 func main() {
 
-	go client_task("c1")
-	// go client_task("c2")
-	// go client_task("c3")
+	go client_task("c1", config.Servers)
 
 	for {
 	}
