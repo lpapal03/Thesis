@@ -10,7 +10,6 @@ import (
 	zmq "github.com/pebbe/zmq4"
 )
 
-// Also sorts
 func gset_to_string(gset map[string]string) string {
 	var s = ""
 	for k, v := range gset {
