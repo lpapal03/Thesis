@@ -40,16 +40,19 @@ func server_task(my_port string, server_ports []string) {
 	}
 
 	for {
-		msg, err := inbound_socket.RecvMessage(0)
-		fmt.Println(msg, err)
+		msg, _ := inbound_socket.RecvMessage(0)
+		fmt.Println(msg)
 		response := []string{msg[0], "World", my_port}
 		inbound_socket.SendMessage(response)
 	}
 }
 
 func main() {
-	go server_task("10000", config.Servers)
-	go server_task("10001", config.Servers)
+	// Start all servers
+	for i := 0; i < config.N; i++ {
+		go server_task(config.Servers[i], config.Servers)
+	}
+	// Infinite loop in main thread to allow processes to run
 	for {
 	}
 

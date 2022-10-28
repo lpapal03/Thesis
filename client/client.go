@@ -15,27 +15,10 @@ func broadcast(message string, server_sockets []*zmq.Socket) {
 	}
 }
 
-func client_task(id string, server_ports []string) {
-
-	// Declare context, poller, router sockets of servers, message counter
-	zctx, _ := zmq.NewContext()
-	poller := zmq.NewPoller()
-	var server_sockets []*zmq.Socket
-	//message_counter := 0
-
-	// Connect client dealer sockets to all servers
-	for i := 0; i < len(server_ports); i++ {
-		s, _ := zctx.NewSocket(zmq.DEALER)
-		s.SetIdentity(id)
-		s.Connect("tcp://localhost:" + server_ports[i])
-		fmt.Println("Client conected to", "tcp://localhost:"+server_ports[i])
-		server_sockets = append(server_sockets, s)
-		poller.Add(server_sockets[i], zmq.POLLIN)
-	}
-
-	message := "Test"
-	broadcast(message, server_sockets)
-
+func get(server_sockets []*zmq.Socket, msg_cnt int) {
+	msg_cnt += 1
+	broadcast("get", server_sockets)
+	// wait for 2f+1 replies
 	// Wait for replies code
 	// outside for will happen until i get 2f+1 replies
 	// for {
@@ -50,6 +33,27 @@ func client_task(id string, server_ports []string) {
 	// 		}
 	// 	}
 	// }
+}
+
+func client_task(id string, server_ports []string) {
+
+	// Declare context, poller, router sockets of servers, message counter
+	zctx, _ := zmq.NewContext()
+	poller := zmq.NewPoller()
+	var server_sockets []*zmq.Socket
+	message_counter := 0
+
+	// Connect client dealer sockets to all servers
+	for i := 0; i < len(server_ports); i++ {
+		s, _ := zctx.NewSocket(zmq.DEALER)
+		s.SetIdentity(id)
+		s.Connect("tcp://localhost:" + server_ports[i])
+		fmt.Println("Client conected to", "tcp://localhost:"+server_ports[i])
+		server_sockets = append(server_sockets, s)
+		poller.Add(server_sockets[i], zmq.POLLIN)
+	}
+
+	get(server_sockets, message_counter)
 
 }
 
