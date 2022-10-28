@@ -10,6 +10,16 @@ import (
 	zmq "github.com/pebbe/zmq4"
 )
 
+// Also sorts
+func gset_to_string(gset map[string]string) string {
+	var s = ""
+	for k, v := range gset {
+		s = s + "{key:" + k + ", value:" + v + "}\n"
+	}
+	s = s[:len(s)-1]
+	return s
+}
+
 func server_task(my_port string, server_ports []string) {
 	// Declare context, poller, router sockets of servers
 	zctx, _ := zmq.NewContext()
@@ -18,7 +28,9 @@ func server_task(my_port string, server_ports []string) {
 
 	// Create gset object
 	mygset := gset.Create()
-	gset.Append(mygset, "A") //DELETE
+	gset.Append(mygset, "A")
+	gset.Append(mygset, "B")
+	gset.Append(mygset, "C")
 
 	// My router socket
 	inbound_socket, _ := zctx.NewSocket(zmq.ROUTER)
@@ -39,11 +51,14 @@ func server_task(my_port string, server_ports []string) {
 		// fmt.Printf("Server %s connected to server %s\n", my_port, server_ports[i])
 	}
 
+	// Listen to messages
 	for {
 		msg, _ := inbound_socket.RecvMessage(0)
-		fmt.Println(msg)
-		response := []string{msg[0], "World", my_port}
-		inbound_socket.SendMessage(response)
+		fmt.Println(my_port + " | " + msg[1] + " from " + msg[0])
+		if msg[1] == "get" {
+			response := []string{msg[0], "get_response", gset_to_string(mygset)}
+			inbound_socket.SendMessage(response)
+		}
 	}
 }
 
