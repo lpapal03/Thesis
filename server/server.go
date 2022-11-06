@@ -19,7 +19,7 @@ func gset_to_string(gset map[string]string) string {
 	return s
 }
 
-func server_task(my_port string, server_ports []string) {
+func server_task(my_node string, server_nodes []string) {
 	// Declare context, poller, router sockets of servers
 	zctx, _ := zmq.NewContext()
 	poller := zmq.NewPoller()
@@ -33,18 +33,18 @@ func server_task(my_port string, server_ports []string) {
 
 	// My router socket
 	inbound_socket, _ := zctx.NewSocket(zmq.ROUTER)
-	inbound_socket.Bind("tcp://*:" + my_port)
-	fmt.Printf("Port %s is bound\n", my_port)
+	inbound_socket.Bind("tcp://*:" + config.Server_router_port)
+	fmt.Println("Bound tcp://*:" + config.Server_router_port)
 
 	// Connect server dealer sockets to all other servers
-	for i := 0; i < len(server_ports); i++ {
+	for i := 0; i < len(server_nodes); i++ {
 		// Connect if not me
-		if server_ports[i] == my_port {
+		if server_nodes[i] == my_node {
 			continue
 		}
 		s, _ := zctx.NewSocket(zmq.DEALER)
-		s.SetIdentity(my_port)
-		s.Connect("tcp://localhost:" + server_ports[i])
+		s.SetIdentity(my_node)
+		s.Connect("tcp://" + server_nodes[i] + config.Server_router_port)
 		server_sockets = append(server_sockets, s)
 		poller.Add(server_sockets[len(server_sockets)-1], zmq.POLLIN)
 		// fmt.Printf("Server %s connected to server %s\n", my_port, server_ports[i])
@@ -53,7 +53,7 @@ func server_task(my_port string, server_ports []string) {
 	// Listen to messages
 	for {
 		msg, _ := inbound_socket.RecvMessage(0)
-		fmt.Println(my_port + " | " + msg[1] + " from " + msg[0])
+		fmt.Println(my_node + " | " + msg[1] + " from " + msg[0])
 		if msg[1] == "get" {
 			response := []string{msg[0], "get_response", gset_to_string(mygset)}
 			inbound_socket.SendMessage(response)
