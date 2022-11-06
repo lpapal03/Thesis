@@ -1,7 +1,9 @@
 package config
 
 // Router sockets of servers
-var Servers = []string{"10000", "10001", "10002", "10003"}
+var Servers = []string{"node0"}
+
+var Server_router_port = "10000"
 
 var N int = len(Servers)
 var f int = (N - 1) / 3
