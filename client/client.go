@@ -84,8 +84,9 @@ func client_task(id string, server_ports []string) {
 	for i := 0; i < len(server_ports); i++ {
 		s, _ := zctx.NewSocket(zmq.DEALER)
 		s.SetIdentity(id)
-		s.Connect("tcp://localhost:" + server_ports[i])
-		fmt.Println("Client conected to", "tcp://localhost:"+server_ports[i])
+		target := "tcp://" + server_ports[i] + ":" + config.Server_router_port
+		s.Connect(target)
+		fmt.Println("Client conected to " + target)
 		server_sockets = append(server_sockets, s)
 		poller.Add(server_sockets[i], zmq.POLLIN)
 	}
