@@ -1,11 +1,27 @@
 package config
 
-// Router sockets of servers
-var Servers = []string{"node0"}
+type Server struct {
+	Host string
+	Port string
+}
 
-var Server_router_port = "10000"
+var Servers_LOCAL = []Server{
+	{Host: "localhost:", Port: "10000"},
+	{Host: "localhost:", Port: "10001"},
+	{Host: "localhost:", Port: "10002"},
+	{Host: "localhost:", Port: "10003"},
+	{Host: "localhost:", Port: "10004"},
+}
 
-var N int = len(Servers)
+const DEFAULT_SERVER_PORT = "10000"
+
+var Servers = []Server{
+	{Host: "node0:", Port: DEFAULT_SERVER_PORT},
+	{Host: "node1:", Port: DEFAULT_SERVER_PORT},
+	{Host: "node2:", Port: DEFAULT_SERVER_PORT},
+}
+
+var N int = len(Servers_LOCAL)
 var f int = (N - 1) / 3
 
 // 3f+1

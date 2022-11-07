@@ -43,3 +43,12 @@ func Append(gset map[string]string, record string) {
 	sha512_hash := string_to_sha512(record)
 	gset[sha512_hash] = record
 }
+
+func GsetToString(gset map[string]string) string {
+	var s = ""
+	for k, v := range gset {
+		s = s + "{key:" + k + ", value:" + v + "}\n"
+	}
+	s = s[:len(s)-1]
+	return s
+}

@@ -4,22 +4,26 @@ package main
 
 import (
 	"client/config"
+	"client/messaging"
+	"client/tools"
+	"errors"
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
-func broadcast(message string, server_sockets []*zmq.Socket) {
-	for i := 0; i < len(server_sockets); i++ {
-		server_sockets[i].SendMessage(message)
+func broadcast(message string, servers []*zmq.Socket) {
+	for i := 0; i < len(servers); i++ {
+		servers[i].SendMessage(message)
 	}
 }
 
-func get(server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller) {
+func get(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller) (string, error) {
 	*msg_cnt += 1
-	broadcast("get", server_sockets)
+	broadcast(messaging.GET, server_sockets)
 	// Wait for 2f+1 replies
 	var reply_messages = []string{}
 	var replies int = 0
@@ -30,8 +34,10 @@ func get(server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller) {
 			for _, server_socket := range server_sockets {
 				if server_socket == p_s {
 					msg, _ := p_s.RecvMessage(0)
-					if msg[0] == "get_response" {
-						reply_messages = append(reply_messages, msg[1])
+					// msg[1] = msg_type
+					if msg[1] == messaging.GET_RESPONSE {
+						tools.Log(me, "GET response from "+msg[0])
+						reply_messages = append(reply_messages, msg[2])
 						replies += 1
 					}
 				}
@@ -39,7 +45,7 @@ func get(server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller) {
 		}
 	}
 
-	fmt.Println("GET operation done")
+	tools.Log(me, messaging.GET+" done, received "+strconv.Itoa(len(reply_messages))+"/"+strconv.Itoa(config.LOW_THRESHOLD)+" wanted replies")
 
 	// By this point I have 2f+1 replies
 	// Now to check if f+1 are the same
@@ -53,6 +59,7 @@ func get(server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller) {
 		// sort records
 		sort.Strings(records)
 		reply_messages[i] = strings.Join(records, "")
+
 		fmt.Println(reply_messages[i])
 	}
 
@@ -60,19 +67,25 @@ func get(server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller) {
 	// In order to find f+1 matching replies
 	var matching_replies int = 0
 	for i := 0; i < len(reply_messages); i++ {
-		matching_replies++
-		if matching_replies >= config.LOW_THRESHOLD {
-			break
+		matching_replies = 0
+		for j := 0; j < len(reply_messages); j++ {
+			if i == j {
+				continue
+			}
+			if strings.Contains(reply_messages[i], reply_messages[j]) ||
+				strings.Contains(reply_messages[j], reply_messages[i]) {
+				matching_replies++
+			}
+			if matching_replies >= config.LOW_THRESHOLD {
+				tools.Log(me, "Found "+strconv.Itoa(matching_replies)+"/"+strconv.Itoa(config.LOW_THRESHOLD)+" matching replies")
+				return reply_messages[i], nil
+			}
 		}
 	}
-
-	if matching_replies >= config.LOW_THRESHOLD {
-		// return reply that is same in f+1 replies
-	}
-
+	return "", errors.New("No f+1 matching responses!")
 }
 
-func client_task(id string, server_ports []string) {
+func client_task(id string, servers []config.Server) {
 
 	// Declare context, poller, router sockets of servers, message counter
 	zctx, _ := zmq.NewContext()
@@ -81,23 +94,32 @@ func client_task(id string, server_ports []string) {
 	message_counter := 0
 
 	// Connect client dealer sockets to all servers
-	for i := 0; i < len(server_ports); i++ {
+	for i := 0; i < len(servers); i++ {
 		s, _ := zctx.NewSocket(zmq.DEALER)
 		s.SetIdentity(id)
-		target := "tcp://" + server_ports[i] + ":" + config.Server_router_port
+		target := "tcp://" + servers[i].Host + servers[i].Port
 		s.Connect(target)
 		fmt.Println("Client conected to " + target)
 		server_sockets = append(server_sockets, s)
 		poller.Add(server_sockets[i], zmq.POLLIN)
 	}
 
-	get(server_sockets, &message_counter, poller)
+	get(id, server_sockets, &message_counter, poller)
 
 }
 
 func main() {
 
-	go client_task("c1", config.Servers)
+	LOCAL := true
+	var servers []config.Server
+	if LOCAL {
+		servers = config.Servers_LOCAL
+	} else {
+		servers = config.Servers
+	}
+
+	go client_task("c1", servers)
+	go client_task("c2", servers)
 
 	for {
 	}

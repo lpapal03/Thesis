@@ -3,23 +3,15 @@
 package main
 
 import (
-	"fmt"
 	"server/config"
 	"server/gset"
+	"server/messaging"
+	"server/tools"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
-func gset_to_string(gset map[string]string) string {
-	var s = ""
-	for k, v := range gset {
-		s = s + "{key:" + k + ", value:" + v + "}\n"
-	}
-	s = s[:len(s)-1]
-	return s
-}
-
-func server_task(my_node string, server_nodes []string) {
+func server_task(me config.Server, servers []config.Server) {
 	// Declare context, poller, router sockets of servers
 	zctx, _ := zmq.NewContext()
 	poller := zmq.NewPoller()
@@ -33,18 +25,18 @@ func server_task(my_node string, server_nodes []string) {
 
 	// My router socket
 	inbound_socket, _ := zctx.NewSocket(zmq.ROUTER)
-	inbound_socket.Bind("tcp://*:" + config.Server_router_port)
-	fmt.Println("Bound tcp://*:" + config.Server_router_port)
+	inbound_socket.Bind("tcp://*:" + me.Port)
+	tools.Log(me.Host+me.Port, "Bound tcp://*:"+me.Port)
 
 	// Connect server dealer sockets to all other servers
-	for i := 0; i < len(server_nodes); i++ {
+	for i := 0; i < len(servers); i++ {
 		// Connect if not me
-		if server_nodes[i] == my_node {
+		if servers[i] == me {
 			continue
 		}
 		s, _ := zctx.NewSocket(zmq.DEALER)
-		s.SetIdentity(my_node)
-		s.Connect("tcp://" + server_nodes[i] + config.Server_router_port)
+		s.SetIdentity(me.Host + me.Port)
+		s.Connect("tcp://" + servers[i].Host + servers[i].Port)
 		server_sockets = append(server_sockets, s)
 		poller.Add(server_sockets[len(server_sockets)-1], zmq.POLLIN)
 		// fmt.Printf("Server %s connected to server %s\n", my_port, server_ports[i])
@@ -53,20 +45,30 @@ func server_task(my_node string, server_nodes []string) {
 	// Listen to messages
 	for {
 		msg, _ := inbound_socket.RecvMessage(0)
-		fmt.Println(my_node + " | " + msg[1] + " from " + msg[0])
-		if msg[1] == "get" {
-			response := []string{msg[0], "get_response", gset_to_string(mygset)}
+		tools.Log(me.Host+me.Port, msg[1]+" from "+msg[0])
+		if msg[1] == messaging.GET {
+			// msg[0] = sender_id
+			response := []string{msg[0], me.Host + me.Port, messaging.GET_RESPONSE, gset.GsetToString(mygset)}
 			inbound_socket.SendMessage(response)
+			tools.Log(me.Host+me.Port, messaging.GET_RESPONSE+" to "+msg[0])
 		}
 	}
 }
 
 func main() {
+	LOCAL := true
+	var servers []config.Server
+	if LOCAL {
+		servers = config.Servers_LOCAL
+	} else {
+		servers = config.Servers
+	}
+
 	// Start all servers
 	for i := 0; i < config.N; i++ {
-		go server_task(config.Servers[i], config.Servers)
+		go server_task(servers[i], servers)
 	}
-	// Infinite loop in main thread to allow processes to run
+	// Infinite loop in main thread to allow the other threads to run
 	for {
 	}
 
