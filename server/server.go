@@ -21,7 +21,6 @@ func server_task(me config.Server, servers []config.Server) {
 	mygset := gset.Create()
 	gset.Append(mygset, "A")
 	gset.Append(mygset, "B")
-	gset.Append(mygset, "C")
 
 	// My router socket
 	inbound_socket, _ := zctx.NewSocket(zmq.ROUTER)
@@ -48,7 +47,7 @@ func server_task(me config.Server, servers []config.Server) {
 		tools.Log(me.Host+me.Port, msg[1]+" from "+msg[0])
 		if msg[1] == messaging.GET {
 			// msg[0] = sender_id
-			response := []string{msg[0], me.Host + me.Port, messaging.GET_RESPONSE, gset.GsetToString(mygset)}
+			response := []string{msg[0], me.Host + me.Port, messaging.GET_RESPONSE, gset.GsetToString(mygset, false)}
 			inbound_socket.SendMessage(response)
 			tools.Log(me.Host+me.Port, messaging.GET_RESPONSE+" to "+msg[0])
 		}

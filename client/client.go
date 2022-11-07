@@ -8,9 +8,11 @@ import (
 	"client/tools"
 	"errors"
 	"fmt"
+	"math/rand"
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	zmq "github.com/pebbe/zmq4"
 )
@@ -22,6 +24,7 @@ func broadcast(message string, servers []*zmq.Socket) {
 }
 
 func get(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller) (string, error) {
+	tools.Log(me, "Invoked GET")
 	*msg_cnt += 1
 	broadcast(messaging.GET, server_sockets)
 	// Wait for 2f+1 replies
@@ -99,12 +102,17 @@ func client_task(id string, servers []config.Server) {
 		s.SetIdentity(id)
 		target := "tcp://" + servers[i].Host + servers[i].Port
 		s.Connect(target)
-		fmt.Println("Client conected to " + target)
+		tools.Log(id, "Established connection with "+target)
 		server_sockets = append(server_sockets, s)
 		poller.Add(server_sockets[i], zmq.POLLIN)
 	}
 
-	get(id, server_sockets, &message_counter, poller)
+	for {
+		rand.Seed(time.Now().UnixNano())
+		n := rand.Intn(10)
+		time.Sleep(time.Duration(n) * time.Second)
+		get(id, server_sockets, &message_counter, poller)
+	}
 
 }
 
@@ -119,7 +127,6 @@ func main() {
 	}
 
 	go client_task("c1", servers)
-	go client_task("c2", servers)
 
 	for {
 	}

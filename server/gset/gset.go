@@ -44,11 +44,18 @@ func Append(gset map[string]string, record string) {
 	gset[sha512_hash] = record
 }
 
-func GsetToString(gset map[string]string) string {
+func GsetToString(gset map[string]string, verbose bool) string {
 	var s = ""
-	for k, v := range gset {
-		s = s + "{key:" + k + ", value:" + v + "}\n"
+	if verbose {
+		for k, v := range gset {
+			s = s + "{key:" + k + ", value:" + v + "}\n"
+		}
+	} else {
+		for _, v := range gset {
+			s = s + "{value:" + v + "}\n"
+		}
 	}
+
 	s = s[:len(s)-1]
 	return s
 }
