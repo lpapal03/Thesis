@@ -19,8 +19,6 @@ func server_task(me config.Server, servers []config.Server) {
 
 	// Create gset object
 	mygset := gset.Create()
-	gset.Append(mygset, "A")
-	gset.Append(mygset, "B")
 
 	// My router socket
 	inbound_socket, _ := zctx.NewSocket(zmq.ROUTER)
@@ -38,18 +36,22 @@ func server_task(me config.Server, servers []config.Server) {
 		s.Connect("tcp://" + servers[i].Host + servers[i].Port)
 		server_sockets = append(server_sockets, s)
 		poller.Add(server_sockets[len(server_sockets)-1], zmq.POLLIN)
-		// fmt.Printf("Server %s connected to server %s\n", my_port, server_ports[i])
 	}
 
 	// Listen to messages
 	for {
 		msg, _ := inbound_socket.RecvMessage(0)
-		tools.Log(me.Host+me.Port, msg[1]+" from "+msg[0])
-		if msg[1] == messaging.GET {
-			// msg[0] = sender_id
-			response := []string{msg[0], me.Host + me.Port, messaging.GET_RESPONSE, gset.GsetToString(mygset, false)}
-			inbound_socket.SendMessage(response)
-			tools.Log(me.Host+me.Port, messaging.GET_RESPONSE+" to "+msg[0])
+
+		sender_id := msg[0]
+		message_type := msg[1]
+		tools.Log(me.Host+me.Port, message_type+" from "+sender_id)
+
+		if message_type == messaging.GET {
+			gset.HandleGet(sender_id, me.Host+me.Port, *inbound_socket, mygset)
+
+		}
+		if message_type == messaging.ADD {
+			gset.HandleAdd(me.Host+me.Port, mygset, msg[2], server_sockets)
 		}
 	}
 }

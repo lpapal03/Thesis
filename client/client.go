@@ -7,17 +7,14 @@ import (
 	"client/messaging"
 	"client/tools"
 	"errors"
-	"fmt"
-	"math/rand"
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
-func broadcast(message string, servers []*zmq.Socket) {
+func broadcast(message []string, servers []*zmq.Socket) {
 	for i := 0; i < len(servers); i++ {
 		servers[i].SendMessage(message)
 	}
@@ -26,7 +23,8 @@ func broadcast(message string, servers []*zmq.Socket) {
 func get(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller) (string, error) {
 	tools.Log(me, "Invoked GET")
 	*msg_cnt += 1
-	broadcast(messaging.GET, server_sockets)
+	message := []string{messaging.GET}
+	broadcast(message, server_sockets)
 	// Wait for 2f+1 replies
 	var reply_messages = []string{}
 	var replies int = 0
@@ -62,8 +60,6 @@ func get(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poll
 		// sort records
 		sort.Strings(records)
 		reply_messages[i] = strings.Join(records, "")
-
-		fmt.Println(reply_messages[i])
 	}
 
 	// We can now begin comparing server replies
@@ -88,6 +84,12 @@ func get(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poll
 	return "", errors.New("No f+1 matching responses!")
 }
 
+func add(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller, record string) {
+	tools.Log(me, "Invoked ADD with {"+record+"}")
+	*msg_cnt += 1
+	broadcast([]string{messaging.ADD, record}, server_sockets)
+}
+
 func client_task(id string, servers []config.Server) {
 
 	// Declare context, poller, router sockets of servers, message counter
@@ -107,12 +109,16 @@ func client_task(id string, servers []config.Server) {
 		poller.Add(server_sockets[i], zmq.POLLIN)
 	}
 
-	for {
-		rand.Seed(time.Now().UnixNano())
-		n := rand.Intn(10)
-		time.Sleep(time.Duration(n) * time.Second)
-		get(id, server_sockets, &message_counter, poller)
-	}
+	// for {
+	// 	rand.Seed(time.Now().UnixNano())
+	// 	n := rand.Intn(10)
+	// 	time.Sleep(time.Duration(n) * time.Second)
+	// 	get(id, server_sockets, &message_counter, poller)
+	// }
+
+	get(id, server_sockets, &message_counter, poller)
+	add(id, server_sockets, &message_counter, poller, "Hello world")
+	get(id, server_sockets, &message_counter, poller)
 
 }
 
@@ -127,6 +133,8 @@ func main() {
 	}
 
 	go client_task("c1", servers)
+	// go client_task("c", servers)
+	// go client_task("c1", servers)
 
 	for {
 	}
