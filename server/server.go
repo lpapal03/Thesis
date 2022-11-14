@@ -25,7 +25,7 @@ func server_task(me config.Server, servers []config.Server) {
 	inbound_socket.Bind("tcp://*:" + me.Port)
 	tools.Log(me.Host+me.Port, "Bound tcp://*:"+me.Port)
 
-	// Connect server dealer sockets to all other servers
+	// Connect my dealer sockets to all other servers' router
 	for i := 0; i < len(servers); i++ {
 		// Connect if not me
 		if servers[i] == me {
@@ -34,7 +34,9 @@ func server_task(me config.Server, servers []config.Server) {
 		s, _ := zctx.NewSocket(zmq.DEALER)
 		s.SetIdentity(me.Host + me.Port)
 		s.Connect("tcp://" + servers[i].Host + servers[i].Port)
+		// append socket to socket list
 		server_sockets = append(server_sockets, s)
+		// new socket is the last one
 		poller.Add(server_sockets[len(server_sockets)-1], zmq.POLLIN)
 	}
 
@@ -51,7 +53,7 @@ func server_task(me config.Server, servers []config.Server) {
 
 		}
 		if message_type == messaging.ADD {
-			gset.HandleAdd(me.Host+me.Port, mygset, msg[2], server_sockets)
+			gset.HandleAdd(sender_id, me.Host+me.Port, mygset, msg[2], server_sockets)
 		}
 	}
 }

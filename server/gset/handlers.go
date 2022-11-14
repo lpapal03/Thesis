@@ -13,7 +13,7 @@ func HandleGet(sender_id, my_id string, inbound_socket zmq.Socket, mygset map[st
 	tools.Log(my_id, messaging.GET_RESPONSE+" to "+sender_id)
 }
 
-func HandleAdd(id string, mygset map[string]string, record string, servers []*zmq.Socket) {
+func HandleAdd(sender_id, my_id string, mygset map[string]string, record string, servers []*zmq.Socket) {
 
 	if Exists(mygset, record) {
 		return
@@ -21,9 +21,9 @@ func HandleAdd(id string, mygset map[string]string, record string, servers []*zm
 
 	if !Exists(mygset, record) {
 		Append(mygset, record)
-		tools.Log(id, "Added {"+record+"} to local G-Set")
+		tools.Log(my_id, "Added {"+record+"} to local G-Set")
 	} else {
-		tools.Log(id, "Record {"+record+"} already exists in local G-Set")
+		tools.Log(my_id, "Record {"+record+"} already exists in local G-Set")
 	}
 
 }
