@@ -3,9 +3,9 @@
 package main
 
 import (
-	"client/config"
-	"client/messaging"
-	"client/tools"
+	"frontend/config"
+	"frontend/gset"
+	"frontend/tools"
 
 	zmq "github.com/pebbe/zmq4"
 )
@@ -16,7 +16,7 @@ func client_task(id string, servers []config.Server) {
 	zctx, _ := zmq.NewContext()
 	poller := zmq.NewPoller()
 	var server_sockets []*zmq.Socket
-	// message_counter := 0
+	message_counter := 0
 
 	// Connect client dealer sockets to all servers
 	for i := 0; i < len(servers); i++ {
@@ -30,7 +30,11 @@ func client_task(id string, servers []config.Server) {
 	}
 
 	// gset.Add(id, server_sockets, &message_counter, poller, "Hello world")
-	messaging.TargetedMessage([]string{messaging.ADD, "Hello"}, server_sockets[0])
+
+	gset.Get(id, server_sockets, &message_counter, poller)
+	// messaging.TargetedMessage([]string{messaging.ADD, "Hello"}, server_sockets[0])
+
+	// messaging.SimpleBroadcast([]string{messaging.GET}, server_sockets)
 
 }
 

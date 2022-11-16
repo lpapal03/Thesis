@@ -1,10 +1,10 @@
 package gset
 
 import (
-	"client/config"
-	"client/messaging"
-	"client/tools"
 	"errors"
+	"frontend/config"
+	"frontend/messaging"
+	"frontend/tools"
 	"sort"
 	"strconv"
 	"strings"
