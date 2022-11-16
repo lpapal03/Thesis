@@ -3,35 +3,18 @@
 package main
 
 import (
+	"frontend/client"
 	"frontend/config"
-	"frontend/gset"
-	"frontend/tools"
-
-	zmq "github.com/pebbe/zmq4"
+	"frontend/messaging"
 )
 
-func client_task(id string, servers []config.Server) {
+func client_task(id string, servers []config.Node) {
 
-	// Declare context, poller, router sockets of servers, message counter
-	zctx, _ := zmq.NewContext()
-	poller := zmq.NewPoller()
-	var server_sockets []*zmq.Socket
-	message_counter := 0
-
-	// Connect client dealer sockets to all servers
-	for i := 0; i < len(servers); i++ {
-		s, _ := zctx.NewSocket(zmq.DEALER)
-		s.SetIdentity(id)
-		target := "tcp://" + servers[i].Host + servers[i].Port
-		s.Connect(target)
-		tools.Log(id, "Established connection with "+target)
-		server_sockets = append(server_sockets, s)
-		poller.Add(server_sockets[i], zmq.POLLIN)
-	}
+	client := client.Create(id, servers)
 
 	// gset.Add(id, server_sockets, &message_counter, poller, "Hello world")
 
-	gset.Get(id, server_sockets, &message_counter, poller)
+	messaging.GetGset(client)
 	// messaging.TargetedMessage([]string{messaging.ADD, "Hello"}, server_sockets[0])
 
 	// messaging.SimpleBroadcast([]string{messaging.GET}, server_sockets)
@@ -41,7 +24,7 @@ func client_task(id string, servers []config.Server) {
 func main() {
 
 	LOCAL := true
-	var servers []config.Server
+	var servers []config.Node
 	if LOCAL {
 		servers = config.Servers_LOCAL
 	} else {
@@ -49,8 +32,6 @@ func main() {
 	}
 
 	go client_task("c1", servers)
-	// go client_task("c", servers)
-	// go client_task("c1", servers)
 
 	for {
 	}

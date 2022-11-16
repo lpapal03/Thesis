@@ -1,11 +1,11 @@
 package config
 
-type Server struct {
+type Node struct {
 	Host string
 	Port string
 }
 
-var Servers_LOCAL = []Server{
+var Servers_LOCAL = []Node{
 	{Host: "localhost:", Port: "10000"},
 	{Host: "localhost:", Port: "10001"},
 	{Host: "localhost:", Port: "10002"},
@@ -15,7 +15,7 @@ var Servers_LOCAL = []Server{
 
 const DEFAULT_SERVER_PORT = "10000"
 
-var Servers = []Server{
+var Servers = []Node{
 	{Host: "node0:", Port: DEFAULT_SERVER_PORT},
 	{Host: "node1:", Port: DEFAULT_SERVER_PORT},
 	{Host: "node2:", Port: DEFAULT_SERVER_PORT},

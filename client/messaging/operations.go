@@ -1,9 +1,9 @@
-package gset
+package messaging
 
 import (
 	"errors"
+	"frontend/client"
 	"frontend/config"
-	"frontend/messaging"
 	"frontend/tools"
 	"sort"
 	"strconv"
@@ -12,24 +12,24 @@ import (
 	zmq "github.com/pebbe/zmq4"
 )
 
-func Get(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller) (string, error) {
-	tools.Log(me, "Invoked GET")
-	*msg_cnt += 1
-	message := []string{messaging.GET}
-	messaging.SimpleBroadcast(message, server_sockets)
+func GetGset(client client.Client) (string, error) {
+	tools.Log(client.Id, "Invoked GET")
+	client.Message_counter++
+	message := []string{GET}
+	SimpleBroadcast(message, client.Servers)
 	// Wait for 2f+1 replies
 	var reply_messages = []string{}
 	var replies int = 0
 	for replies < config.MEDIUM_THRESHOLD {
-		poller_sockets, _ := poller.Poll(-1)
+		poller_sockets, _ := client.Poller.Poll(-1)
 		for _, poller_socket := range poller_sockets {
 			p_s := poller_socket.Socket
-			for _, server_socket := range server_sockets {
+			for _, server_socket := range client.Servers {
 				if server_socket == p_s {
 					msg, _ := p_s.RecvMessage(0)
 					// msg[1] = msg_type
-					if msg[1] == messaging.GET_RESPONSE {
-						tools.Log(me, "GET response from "+msg[0])
+					if msg[1] == GET_RESPONSE {
+						tools.Log(client.Id, "GET response from "+msg[0])
 						reply_messages = append(reply_messages, msg[2])
 						replies += 1
 					}
@@ -38,7 +38,7 @@ func Get(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poll
 		}
 	}
 
-	tools.Log(me, messaging.GET+" done, received "+strconv.Itoa(len(reply_messages))+"/"+strconv.Itoa(config.LOW_THRESHOLD)+" wanted replies")
+	tools.Log(client.Id, GET+" done, received "+strconv.Itoa(len(reply_messages))+"/"+strconv.Itoa(config.LOW_THRESHOLD)+" wanted replies")
 
 	// By this point I have 2f+1 replies
 	// Now to check if f+1 are the same
@@ -68,7 +68,7 @@ func Get(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poll
 				matching_replies++
 			}
 			if matching_replies >= config.LOW_THRESHOLD {
-				tools.Log(me, "Found "+strconv.Itoa(matching_replies)+"/"+strconv.Itoa(config.LOW_THRESHOLD)+" matching replies")
+				tools.Log(client.Id, "Found "+strconv.Itoa(matching_replies)+"/"+strconv.Itoa(config.LOW_THRESHOLD)+" matching replies")
 				return reply_messages[i], nil
 			}
 		}
@@ -79,5 +79,5 @@ func Get(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poll
 func Add(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller, record string) {
 	tools.Log(me, "Invoked ADD with {"+record+"}")
 	*msg_cnt += 1
-	messaging.SimpleBroadcast([]string{messaging.ADD, record}, server_sockets)
+	SimpleBroadcast([]string{ADD, record}, server_sockets)
 }
