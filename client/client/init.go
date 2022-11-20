@@ -32,6 +32,11 @@ func Create(id string, servers []config.Node) Client {
 		poller.Add(server_sockets[i], zmq.POLLIN)
 	}
 
-	return Client{Id: id, Zctx: *zctx, Poller: *poller, Message_counter: 0, Servers: server_sockets}
+	return Client{
+		Id:              id,
+		Zctx:            *zctx,
+		Poller:          *poller,
+		Message_counter: 0,
+		Servers:         server_sockets}
 
 }

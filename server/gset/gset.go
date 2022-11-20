@@ -17,8 +17,7 @@ func string_to_sha512(s string) string {
 
 // Create gset
 func Create() map[string]string {
-	m := make(map[string]string)
-	return m
+	return make(map[string]string)
 }
 
 // Prints entire gset

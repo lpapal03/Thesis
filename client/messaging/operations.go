@@ -12,11 +12,17 @@ import (
 	zmq "github.com/pebbe/zmq4"
 )
 
+func simpleBroadcast(message []string, servers []*zmq.Socket) {
+	for i := 0; i < len(servers); i++ {
+		servers[i].SendMessage(message)
+	}
+}
+
 func GetGset(client client.Client) (string, error) {
-	tools.Log(client.Id, "Invoked GET")
+	tools.Log(client.Id, "Broadcasted {GET} to all servers")
 	client.Message_counter++
 	message := []string{GET}
-	SimpleBroadcast(message, client.Servers)
+	simpleBroadcast(message, client.Servers)
 	// Wait for 2f+1 replies
 	var reply_messages = []string{}
 	var replies int = 0
@@ -76,8 +82,14 @@ func GetGset(client client.Client) (string, error) {
 	return "", errors.New("No f+1 matching responses!")
 }
 
-func Add(me string, server_sockets []*zmq.Socket, msg_cnt *int, poller *zmq.Poller, record string) {
-	tools.Log(me, "Invoked ADD with {"+record+"}")
-	*msg_cnt += 1
-	SimpleBroadcast([]string{ADD, record}, server_sockets)
+func Add(client client.Client, record string) {
+	tools.Log(client.Id, "Invoked ADD with {"+record+"}")
+	client.Message_counter++
+	simpleBroadcast([]string{ADD, record}, client.Servers)
+}
+
+func TargetedAdd(client client.Client, target zmq.Socket, record string) {
+	tools.Log(client.Id, "Invoked targeted ADD with {"+record+"}")
+	client.Message_counter++
+	target.SendMessage([]string{ADD, record})
 }

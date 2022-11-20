@@ -13,7 +13,7 @@ func server_task(me config.Node, piers []config.Node) {
 	// Listen to messages and handle them
 	for {
 		message, _ := server.Receive_socket.RecvMessage(0)
-		messaging.HandleMessage(server, message)
+		go messaging.HandleMessage(server, messaging.ParseMessage(message))
 	}
 }
 
