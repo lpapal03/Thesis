@@ -4,22 +4,20 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
-	"strings"
 )
 
 func HandleMessage(server server.Server, message Message) {
 	tools.Log(server.Id, "Received "+message.Tag+" from "+message.Sender)
 
-	if message.Tag == GET {
+	switch message.Tag {
+	case GET:
 		handleGet(server, message)
-	}
-	if message.Tag == ADD {
+	case ADD:
 		handleAdd(server, message)
+	case BRACHA_BROADCAST_INIT:
+		handleRB(server, message)
 	}
-	// message is related to broadcast service
-	if strings.Contains(message.Tag, BRACHA_BROADCAST) {
-		HandleReliableBroadcast(server, message)
-	}
+
 }
 
 // Handle get request. I need sender_id to know where
@@ -36,4 +34,8 @@ func handleAdd(server server.Server, message Message) {
 	ReliableBroadcast(server, message)
 	// if true, append
 
+}
+
+func handleRB(receiver server.Server, message Message) {
+	HandleReliableBroadcast(receiver, message)
 }

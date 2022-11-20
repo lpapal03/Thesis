@@ -22,13 +22,13 @@ var Servers = []Node{
 }
 
 var N int = len(Servers_LOCAL)
-var f int = (N - 1) / 3
+var F int = (N - 1) / 3
 
 // 3f+1
-var HIGH_THRESHOLD = 3*f + 1
+var HIGH_THRESHOLD = 3*F + 1
 
 // 2f+1
-var MEDIUM_THRESHOLD = 2*f + 1
+var MEDIUM_THRESHOLD = 2*F + 1
 
 // f+1
-var LOW_THRESHOLD = f + 1
+var LOW_THRESHOLD = F + 1
