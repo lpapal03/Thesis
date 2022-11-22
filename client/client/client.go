@@ -29,7 +29,7 @@ func Create(id string, servers []config.Node) Client {
 		s.Connect(target)
 		tools.Log(id, "Established connection with "+target)
 		server_sockets = append(server_sockets, s)
-		poller.Add(server_sockets[i], zmq.POLLIN)
+		poller.Add(s, zmq.POLLIN)
 	}
 
 	return Client{

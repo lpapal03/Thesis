@@ -4,17 +4,18 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
+	"strings"
 )
 
-func HandleMessage(server server.Server, message Message) {
+func HandleMessage(server server.Server, msg []string) {
+	message := ParseMessage(msg)
 	tools.Log(server.Id, "Received "+message.Tag+" from "+message.Sender)
 
-	switch message.Tag {
-	case GET:
+	if message.Tag == GET {
 		handleGet(server, message)
-	case ADD:
+	} else if message.Tag == ADD {
 		handleAdd(server, message)
-	case BRACHA_BROADCAST_INIT:
+	} else if strings.Contains(message.Tag, BRACHA_BROADCAST) {
 		handleRB(server, message)
 	}
 
@@ -32,7 +33,9 @@ func handleAdd(server server.Server, message Message) {
 
 	// Call RB service
 	ReliableBroadcast(server, message)
-	// if true, append
+
+	// Wait for BRB-Deliver
+	// Add record
 
 }
 

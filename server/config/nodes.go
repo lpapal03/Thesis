@@ -9,8 +9,8 @@ var Servers_LOCAL = []Node{
 	{Host: "localhost:", Port: "11111"},
 	{Host: "localhost:", Port: "22222"},
 	{Host: "localhost:", Port: "33333"},
-	// {Host: "localhost:", Port: "10003"},
-	// {Host: "localhost:", Port: "10004"},
+	{Host: "localhost:", Port: "10003"},
+	{Host: "localhost:", Port: "10004"},
 }
 
 const DEFAULT_SERVER_PORT = "10000"

@@ -8,6 +8,13 @@ import (
 	zmq "github.com/pebbe/zmq4"
 )
 
+type brb_state struct {
+	My_echo_state map[string]bool
+	My_vote_state map[string]bool
+	Pier_echo_pot map[string]bool
+	Pier_vote_pot map[string]bool
+}
+
 type Server struct {
 	Zctx           *zmq.Context
 	Poller         *zmq.Poller
@@ -17,6 +24,7 @@ type Server struct {
 	Port           string
 	Id             string
 	Gset           map[string]string
+	BRB_state      brb_state
 }
 
 func Create(node config.Node, piers []config.Node) Server {
@@ -25,7 +33,11 @@ func Create(node config.Node, piers []config.Node) Server {
 	poller := zmq.NewPoller()
 	server_sockets := make([]*zmq.Socket, 0)
 	my_gset := gset.Create()
-	gset.Append(my_gset, "Helo")
+	my_echo_state := make(map[string]bool)
+	my_vote_state := make(map[string]bool)
+	pier_echo_pot := make(map[string]bool)
+	pier_vote_pot := make(map[string]bool)
+	gset.Append(my_gset, "FIRST RECORD")
 	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
 	receive_socket.Bind("tcp://*:" + node.Port)
 	tools.Log(id, "Bound tcp://*:"+node.Port)
@@ -42,7 +54,7 @@ func Create(node config.Node, piers []config.Node) Server {
 		// append socket to socket list
 		server_sockets = append(server_sockets, s)
 		// new socket is the last one
-		poller.Add(server_sockets[len(server_sockets)-1], zmq.POLLIN)
+		poller.Add(s, zmq.POLLIN)
 	}
 
 	return Server{
@@ -53,5 +65,14 @@ func Create(node config.Node, piers []config.Node) Server {
 		Host:           node.Host,
 		Port:           node.Port,
 		Id:             id,
-		Gset:           my_gset}
+		Gset:           my_gset,
+		BRB_state: brb_state{
+			My_echo_state: my_echo_state,
+			My_vote_state: my_vote_state,
+			Pier_echo_pot: pier_echo_pot,
+			Pier_vote_pot: pier_vote_pot}}
+}
+
+func BRB_state_cleanup() {
+
 }

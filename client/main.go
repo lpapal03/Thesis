@@ -13,10 +13,13 @@ func client_task(id string, servers []config.Node) {
 	client := client.Create(id, servers)
 
 	// messaging.Add(client, "Hello")
-
+	// for {
+	// 	messaging.TargetedAdd(client, *client.Servers[0], "Hello")
+	// 	time.Sleep(time.Second * 2)
+	// }
 	messaging.TargetedAdd(client, *client.Servers[0], "Hello")
-
-	// messaging.GetGset(client)
+	// s, _ := messaging.GetGset(client)
+	// fmt.Println(s)
 	// messaging.SimpleBroadcast([]string{messaging.GET}, server_sockets)
 
 }

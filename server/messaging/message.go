@@ -7,7 +7,7 @@ type Message struct {
 	Content  []string
 }
 
-func CreateMessage(tag string, content []string) []string {
+func CreateMessageString(tag string, content []string) []string {
 	return append([]string{tag}, content...)
 }
 

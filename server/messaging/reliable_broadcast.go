@@ -5,96 +5,106 @@ import (
 	"backend/server"
 	"backend/tools"
 	"fmt"
+	"strconv"
 	"strings"
 )
 
-// Implement reliable broadcast
-// Here, all of the sending and receiving will happen
-// CALLED ONCE BY LEADER
 func ReliableBroadcast(leader server.Server, message Message) {
 
-	// step 0
-	v := CreateMessage(BRACHA_BROADCAST_INIT, append([]string{message.Sender}, message.Content...))
-	for _, pier_sokcet := range leader.Piers {
-		pier_sokcet.SendMessage(v)
+	tools.Log(leader.Id, "Called Reliable broadcast module")
+
+	v := CreateMessageString(BRACHA_BROADCAST_INIT, append([]string{message.Sender}, message.Content...))
+	for _, pier_socket := range leader.Piers {
+		pier_socket.SendMessage(v)
 	}
-	tools.Log(leader.Id, "Sent message {"+(strings.Join(v, " "))+"} to all piers")
+	v[0] = BRACHA_BROADCAST_ECHO
+	for _, pier_socket := range leader.Piers {
+		pier_socket.SendMessage(v)
+	}
+
+	my_states_key := message.Sender + " " + strings.Join(message.Content, " ")
+	leader.BRB_state.My_echo_state[my_states_key] = false
+	leader.BRB_state.My_vote_state[my_states_key] = true
 
 }
 
 // Called from every server receiving RB messages
-func HandleReliableBroadcast(receiver server.Server, v Message) bool {
+func HandleReliableBroadcast(receiver server.Server, v Message) {
 
-	// maps piers to answer types
-	// if message received in poller is equal to v, add it to maps
-	init := make(map[string]bool)
-	echo := make(map[string]bool)
-	ready := make(map[string]bool)
+	fmt.Println(receiver.Id, " ", receiver.BRB_state.My_vote_state)
 
-	a, b, c := countMessages(init, echo, ready)
-	fmt.Println(a, b, c)
+	my_states_key := strings.Join(v.Content, " ")                  // c1 Hello
+	pier_pots_key := strings.Join(v.Content, " ") + " " + v.Sender // c1 Hello localhost:1000
 
-	fmt.Println("HandleReliableBroadcast for ", v)
+	// add message in message pot and count
+	if v.Tag == BRACHA_BROADCAST_ECHO {
+		receiver.BRB_state.Pier_echo_pot[pier_pots_key] = true
+	}
+	if v.Tag == BRACHA_BROADCAST_VOTE {
+		receiver.BRB_state.Pier_vote_pot[pier_pots_key] = true
+	}
+	echo_count := countMessages(receiver.BRB_state.Pier_echo_pot, my_states_key)
+	vote_count := countMessages(receiver.BRB_state.Pier_vote_pot, my_states_key)
 
-	// step 1
-	// for !isStepDone(1, init, echo, ready) {
-	// 	sockets, _ := receiver.Poller.Poll(-1)
-	// 	for _, socket := range sockets {
+	// on receiving <v> from leader
+	if v.Tag == BRACHA_BROADCAST_INIT {
+		receiver.BRB_state.My_echo_state[my_states_key] = true
+		receiver.BRB_state.My_vote_state[my_states_key] = true
+		v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
+		for _, pier_socket := range receiver.Piers {
+			pier_socket.SendMessage(v)
+		}
+		receiver.BRB_state.My_echo_state[my_states_key] = false
+	}
 
-	// 	}
-	// }
-	sendToAll(receiver, v, BRACHA_BROADCAST_ECHO)
+	// on receiving <echo, v> from n-f distinct parties:
+	if echo_count >= config.N-config.F {
+		if receiver.BRB_state.My_vote_state[my_states_key] == true {
+			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
+			for _, pier_socket := range receiver.Piers {
+				pier_socket.SendMessage(v)
+			}
+		}
+		receiver.BRB_state.My_vote_state[my_states_key] = false
+	}
 
-	// if all is good, send true, meaning message
-	// has been correctly processed
-	return true
+	// on receiving <echo, v> from f+1 distinct parties:
+	if vote_count >= config.F+1 {
+		if receiver.BRB_state.My_vote_state[my_states_key] == true {
+			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
+			for _, pier_socket := range receiver.Piers {
+				pier_socket.SendMessage(v)
+			}
+		}
+		receiver.BRB_state.My_vote_state[my_states_key] = false
+	}
+
+	if vote_count >= config.N-config.F {
+		tools.Log(receiver.Id, "DELIVERED DELIVERED DELIVERED "+strings.Join(v.Content, " "))
+	}
+
+	tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count)+"/"+strconv.Itoa(config.N-config.F))
+	tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count)+"/"+strconv.Itoa(config.N-config.F))
 
 }
 
-func sendToAll(receiver server.Server, message Message, new_tag string) {
-	msg := CreateMessage(new_tag, append([]string{message.Sender}, message.Content...))
-	for _, pier_sokcet := range receiver.Piers {
-		pier_sokcet.SendMessage(msg)
+// count the messages received for a given v
+// returns init_count, echo_count, ready_count
+func countMessages(pot map[string]bool, identifier string) int {
+	// example:
+	// identifier = c1 hello
+	count := 0
+	for key := range pot {
+		if strings.Contains(key, identifier) {
+			count++
+		}
 	}
+	return count
 }
 
-func countMessages(init, echo, ready map[string]bool) (int, int, int) {
-	init_count := 0
-	echo_count := 0
-	ready_count := 0
-
-	for _, v := range init {
-		if v {
-			init_count++
-		}
+// CHANGEEEE
+func sendToAll(receiver server.Server, message Message) {
+	for _, pier_socket := range receiver.Piers {
+		pier_socket.SendMessage(message)
 	}
-	for _, v := range echo {
-		if v {
-			echo_count++
-		}
-	}
-	for _, v := range ready {
-		if v {
-			ready_count++
-		}
-	}
-
-	return init_count, echo_count, ready_count
-}
-
-func isStepDone(step int, init, echo, ready map[string]bool) bool {
-
-	init_count, echo_count, ready_count := countMessages(init, echo, ready)
-
-	if step == 1 && (init_count > 0 || echo_count >= (config.N+config.F)/2 || ready_count >= config.F+1) {
-		return true
-	}
-	if step == 2 && (echo_count >= (config.N+config.F)/2 || ready_count >= config.F+1) {
-		return true
-	}
-	if step == 3 && (ready_count >= 2*config.F+1) {
-		return true
-	}
-
-	return false
 }
