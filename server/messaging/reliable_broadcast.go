@@ -2,6 +2,7 @@ package messaging
 
 import (
 	"backend/config"
+	"backend/gset"
 	"backend/server"
 	"backend/tools"
 	"strings"
@@ -32,22 +33,28 @@ func HandleReliableBroadcast(receiver server.Server, v Message) {
 	my_states_key := strings.Join(v.Content, " ")                  // c1 Hello
 	pier_pots_key := strings.Join(v.Content, " ") + " " + v.Sender // c1 Hello localhost:1000
 
-	// add message in message pot and count
-	if isMessageValid(receiver, my_states_key) {
-		if v.Tag == BRACHA_BROADCAST_ECHO {
-			receiver.BRB_state.Pier_echo_pot[pier_pots_key] = true
-		}
-		if v.Tag == BRACHA_BROADCAST_VOTE {
-			receiver.BRB_state.Pier_vote_pot[pier_pots_key] = true
-		}
+	// if record exists that means the append operation is done
+	// and we don't need to process any more messages related
+	// to the current message
+	if gset.Exists(receiver.Gset, v.Content[1]) {
+		return
 	}
+
+	// add message in message pot and count
+	if v.Tag == BRACHA_BROADCAST_ECHO {
+		receiver.BRB_state.Pier_echo_pot[pier_pots_key] = true
+	}
+	if v.Tag == BRACHA_BROADCAST_VOTE {
+		receiver.BRB_state.Pier_vote_pot[pier_pots_key] = true
+	}
+
 	echo_count := countMessages(receiver.BRB_state.Pier_echo_pot, my_states_key)
 	vote_count := countMessages(receiver.BRB_state.Pier_vote_pot, my_states_key)
 
 	// on receiving <v> from leader
 	if v.Tag == BRACHA_BROADCAST_INIT {
 		brb_state_cleanup(receiver, my_states_key)
-		receiver.BRB_state.My_init_state[my_states_key] = true
+
 		receiver.BRB_state.My_echo_state[my_states_key] = true
 		receiver.BRB_state.My_vote_state[my_states_key] = true
 		v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
@@ -87,7 +94,6 @@ func HandleReliableBroadcast(receiver server.Server, v Message) {
 
 func brb_state_cleanup(server server.Server, identifier string) {
 
-	delete(server.BRB_state.My_init_state, identifier)
 	delete(server.BRB_state.My_echo_state, identifier)
 	delete(server.BRB_state.My_vote_state, identifier)
 	delete(server.BRB_state.My_deliver_state, identifier)
@@ -104,16 +110,6 @@ func brb_state_cleanup(server server.Server, identifier string) {
 		}
 	}
 
-}
-
-func isMessageValid(receiver server.Server, identifier string) bool {
-	valid := false
-	for key := range receiver.BRB_state.My_init_state {
-		if strings.Contains(key, identifier) {
-			valid = true
-		}
-	}
-	return valid
 }
 
 // count the messages received for a given v

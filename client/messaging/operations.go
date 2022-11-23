@@ -12,13 +12,6 @@ import (
 	zmq "github.com/pebbe/zmq4"
 )
 
-func isRecordValid(r string) error {
-	if strings.Contains(r, " ") {
-		return errors.New("Message can't have spaces!")
-	}
-	return nil
-}
-
 func simpleBroadcast(message []string, servers []*zmq.Socket) {
 	for i := 0; i < len(servers); i++ {
 		servers[i].SendMessage(message)
@@ -49,7 +42,7 @@ func GetGset(client client.Client) (string, error) {
 
 	// Wait for 2f+1 replies
 	for len(reply_matrix) < config.MEDIUM_THRESHOLD {
-		sockets, _ := client.Poller.Poll(-1)
+		sockets, _ := client.Poller.Poll(1000)
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
@@ -100,21 +93,29 @@ func GetGset(client client.Client) (string, error) {
 
 // TODO: Handle responses
 func Add(client client.Client, record string) {
-	err := isRecordValid(record)
-	if err != nil {
-		tools.LogFatal(client.Id, err.Error())
-	}
 	tools.Log(client.Id, "Invoked ADD with {"+record+"}")
 	client.Message_counter++
 	simpleBroadcast([]string{ADD, record}, client.Servers)
 }
 
 func TargetedAdd(client client.Client, target zmq.Socket, record string) {
-	err := isRecordValid(record)
-	if err != nil {
-		tools.LogFatal(client.Id, err.Error())
-	}
 	tools.Log(client.Id, "Invoked targeted ADD with {"+record+"}")
 	client.Message_counter++
 	target.SendMessage([]string{ADD, record})
+
+	have_response := false
+
+	// wait for reply
+	for !have_response {
+		sockets, _ := client.Poller.Poll(1000)
+		for _, socket := range sockets {
+			s := socket.Socket
+			msg, _ := s.RecvMessage(0)
+			if msg[1] == ADD_RESPONSE && msg[3] == record {
+				tools.Log(client.Id, ADD_RESPONSE+" from "+msg[0]+" with status code {"+msg[2]+"} for adding record {"+msg[3]+"}")
+				have_response = true
+				break
+			}
+		}
+	}
 }

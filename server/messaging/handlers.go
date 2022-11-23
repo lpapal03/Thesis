@@ -30,23 +30,23 @@ func handleGet(server server.Server, message Message) {
 }
 
 func handleAdd(server server.Server, message Message) {
-
 	// Call RB service
 	if !gset.Exists(server.Gset, message.Content[0]) {
 		ReliableBroadcast(server, message)
 	} else {
-		response := CreateMessageString(ADD_RESPONSE, []string{"Success"})
+		response := []string{message.Sender, server.Id, ADD_RESPONSE, "Success", message.Content[0]}
 		server.Receive_socket.SendMessage(response)
 		tools.Log(server.Id, "Sent ADD_RESPONSE to "+message.Sender)
 	}
-
 }
 
 // called when RB is done
 func handleAddInternal(server server.Server, message Message) {
+
 	gset.Append(server.Gset, message.Content[1])
-	response := CreateMessageString(ADD_RESPONSE, []string{"Success"})
+	response := []string{message.Content[0], server.Id, ADD_RESPONSE, "Success", message.Content[1]}
 	server.Receive_socket.SendMessage(response)
+
 	tools.Log(server.Id, "Sent ADD_RESPONSE to "+message.Sender)
 }
 
