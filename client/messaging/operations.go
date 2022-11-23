@@ -98,6 +98,7 @@ func GetGset(client client.Client) (string, error) {
 	return "", errors.New("No f+1 matching responses!")
 }
 
+// TODO: Handle responses
 func Add(client client.Client, record string) {
 	err := isRecordValid(record)
 	if err != nil {

@@ -14,6 +14,7 @@ func server_task(me config.Node, piers []config.Node) {
 	for {
 		message, _ := server.Receive_socket.RecvMessage(0)
 		messaging.HandleMessage(server, message)
+		// time.Sleep(time.Millisecond * 300)
 	}
 }
 
