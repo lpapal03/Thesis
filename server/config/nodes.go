@@ -10,9 +10,9 @@ var Servers_LOCAL = []Node{
 	{Host: "localhost:", Port: "22222"},
 	{Host: "localhost:", Port: "33333"},
 	{Host: "localhost:", Port: "10003"},
-	{Host: "localhost:", Port: "10004"},
-	{Host: "localhost:", Port: "10005"},
-	{Host: "localhost:", Port: "10006"},
+	// {Host: "localhost:", Port: "10004"},
+	// {Host: "localhost:", Port: "10005"},
+	// {Host: "localhost:", Port: "10006"},
 	// {Host: "localhost:", Port: "10007"},
 }
 
