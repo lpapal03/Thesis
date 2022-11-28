@@ -49,7 +49,7 @@ func client_task(id string, servers []config.Node) {
 
 func main() {
 
-	LOCAL := true
+	LOCAL := false
 	var servers []config.Node
 	if LOCAL {
 		servers = config.Servers_LOCAL

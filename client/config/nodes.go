@@ -19,12 +19,13 @@ var Servers_LOCAL = []Node{
 const DEFAULT_SERVER_PORT = "10000"
 
 var Servers = []Node{
-	{Host: "node0:", Port: DEFAULT_SERVER_PORT},
 	{Host: "node1:", Port: DEFAULT_SERVER_PORT},
 	{Host: "node2:", Port: DEFAULT_SERVER_PORT},
+	{Host: "node3:", Port: DEFAULT_SERVER_PORT},
+	{Host: "node4:", Port: DEFAULT_SERVER_PORT},
 }
 
-var N int = len(Servers_LOCAL)
+var N int = len(Servers)
 var f int = (N - 1) / 3
 
 // 3f+1

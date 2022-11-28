@@ -19,7 +19,7 @@ func server_task(me config.Node, piers []config.Node) {
 }
 
 func main() {
-	LOCAL := true
+	LOCAL := false
 	var servers []config.Node
 	if LOCAL {
 		servers = config.Servers_LOCAL
