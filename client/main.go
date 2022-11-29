@@ -16,21 +16,10 @@ func client_task(id string, servers []config.Node) {
 
 	// messaging.Add(client, "Hello")
 
-	msg := ""
-
-	if client.Id == "c1" {
-		msg = "Hello aaaa"
-	}
-	if client.Id == "c2" {
-		msg = "World"
-	}
-	if client.Id == "c3" {
-		msg = "How_are_you"
-	}
+	msg := "Hello"
 
 	messaging.TargetedAdd(client, *client.Servers[0], msg)
 	time.Sleep(time.Second * 2)
-	messaging.TargetedAdd(client, *client.Servers[0], msg)
 	g, _ := messaging.GetGset(client)
 	fmt.Println(g)
 	// for {
@@ -49,7 +38,7 @@ func client_task(id string, servers []config.Node) {
 
 func main() {
 
-	LOCAL := false
+	LOCAL := true
 	var servers []config.Node
 	if LOCAL {
 		servers = config.Servers_LOCAL

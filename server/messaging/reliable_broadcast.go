@@ -5,6 +5,7 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
+	"strconv"
 	"strings"
 )
 
@@ -32,6 +33,11 @@ func HandleReliableBroadcast(receiver server.Server, v Message) {
 
 	my_states_key := strings.Join(v.Content, " ")                  // c1 Hello
 	pier_pots_key := strings.Join(v.Content, " ") + " " + v.Sender // c1 Hello localhost:1000
+
+	// assume that i already sent echo and vote to myself
+	pier_pots_key_self := strings.Join(v.Content, " ") + " " + receiver.Id
+	receiver.BRB_state.Pier_echo_pot[pier_pots_key_self] = true
+	receiver.BRB_state.Pier_vote_pot[pier_pots_key_self] = true
 
 	// if record exists that means the append operation is done
 	// and we don't need to process any more messages related
@@ -80,6 +86,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) {
 		receiver.BRB_state.My_vote_state[my_states_key] = false
 	}
 
+	// on receiving <vote, v> from n-f distinct parties:
 	if vote_count >= config.N-config.F {
 		tools.Log(receiver.Id, "Delivered "+strings.Join(v.Content, " "))
 		receiver.BRB_state.My_deliver_state[my_states_key] = true
@@ -87,8 +94,8 @@ func HandleReliableBroadcast(receiver server.Server, v Message) {
 		brb_state_cleanup(receiver, my_states_key)
 	}
 
-	// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count)+"/"+strconv.Itoa(config.N-config.F))
-	// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count)+"/"+strconv.Itoa(config.N-config.F))
+	tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count)+"/"+strconv.Itoa(config.N-config.F))
+	tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count)+"/"+strconv.Itoa(config.N-config.F))
 
 }
 
@@ -126,7 +133,6 @@ func countMessages(pot map[string]bool, identifier string) int {
 	return count
 }
 
-// CHANGEEEE
 func sendToAll(receiver server.Server, message []string) {
 	for _, pier_socket := range receiver.Piers {
 		pier_socket.SendMessage(message)
