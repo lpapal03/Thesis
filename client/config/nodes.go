@@ -1,3 +1,6 @@
+// WILL BECOME .config FILE
+// with functions elsewhere that initializes stuff
+
 package config
 
 const MODE = "LOCAL"

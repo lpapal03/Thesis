@@ -50,9 +50,9 @@ func main() {
 		}
 
 		// turning point
-		// change task
+		// change task from server_task to byzantine_server_task
 		if strings.Contains(servers[i].Port, "9999") {
-			go byzantine_server_task(servers[i], servers)
+			go server_task(servers[i], servers)
 		}
 	}
 	// Infinite loop in main thread to allow the other threads to run
