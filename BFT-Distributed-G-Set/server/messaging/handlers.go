@@ -9,7 +9,7 @@ import (
 
 func HandleMessage(server server.Server, msg []string) {
 	message := ParseMessage(msg)
-	tools.Log(server.Id, "Received "+message.Tag+" from "+message.Sender)
+	// tools.Log(server.Id, "Received "+message.Tag+" from "+message.Sender)
 
 	if message.Tag == GET {
 		handleGet(server, message)
@@ -38,16 +38,6 @@ func handleAdd(server server.Server, message Message) {
 		server.Receive_socket.SendMessage(response)
 		tools.Log(server.Id, "Sent ADD_RESPONSE to "+message.Sender)
 	}
-}
-
-// called when RB is done
-func handleAddInternal(server server.Server, message Message) {
-
-	gset.Append(server.Gset, message.Content[1])
-	response := []string{message.Content[0], server.Id, ADD_RESPONSE, "Success", message.Content[1]}
-	server.Receive_socket.SendMessage(response)
-
-	tools.Log(server.Id, "Sent ADD_RESPONSE to "+message.Sender)
 }
 
 func handleRB(receiver server.Server, message Message) {

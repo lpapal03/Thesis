@@ -5,7 +5,6 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
-	"strconv"
 	"strings"
 )
 
@@ -14,11 +13,11 @@ func ReliableBroadcast(leader server.Server, message Message) {
 	tools.Log(leader.Id, "Called Reliable broadcast module")
 
 	v := CreateMessageString(BRACHA_BROADCAST_INIT, append([]string{message.Sender}, message.Content...))
-	for _, pier_socket := range leader.Piers {
+	for _, pier_socket := range leader.Peers {
 		pier_socket.SendMessage(v)
 	}
 	v[0] = BRACHA_BROADCAST_ECHO
-	for _, pier_socket := range leader.Piers {
+	for _, pier_socket := range leader.Peers {
 		pier_socket.SendMessage(v)
 	}
 
@@ -36,8 +35,8 @@ func HandleReliableBroadcast(receiver server.Server, v Message) {
 
 	// assume that i already sent echo and vote to myself
 	pier_pots_key_self := strings.Join(v.Content, " ") + " " + receiver.Id
-	receiver.BRB_state.Pier_echo_pot[pier_pots_key_self] = true
-	receiver.BRB_state.Pier_vote_pot[pier_pots_key_self] = true
+	receiver.BRB_state.Peer_echo_pot[pier_pots_key_self] = true
+	receiver.BRB_state.Peer_vote_pot[pier_pots_key_self] = true
 
 	// if record exists that means the append operation is done
 	// and we don't need to process any more messages related
@@ -48,19 +47,18 @@ func HandleReliableBroadcast(receiver server.Server, v Message) {
 
 	// add message in message pot and count
 	if v.Tag == BRACHA_BROADCAST_ECHO {
-		receiver.BRB_state.Pier_echo_pot[pier_pots_key] = true
+		receiver.BRB_state.Peer_echo_pot[pier_pots_key] = true
 	}
 	if v.Tag == BRACHA_BROADCAST_VOTE {
-		receiver.BRB_state.Pier_vote_pot[pier_pots_key] = true
+		receiver.BRB_state.Peer_vote_pot[pier_pots_key] = true
 	}
 
-	echo_count := countMessages(receiver.BRB_state.Pier_echo_pot, my_states_key)
-	vote_count := countMessages(receiver.BRB_state.Pier_vote_pot, my_states_key)
+	echo_count := countMessages(receiver.BRB_state.Peer_echo_pot, my_states_key)
+	vote_count := countMessages(receiver.BRB_state.Peer_vote_pot, my_states_key)
 
 	// on receiving <v> from leader
 	if v.Tag == BRACHA_BROADCAST_INIT {
 		brb_state_cleanup(receiver, my_states_key)
-
 		receiver.BRB_state.My_echo_state[my_states_key] = true
 		receiver.BRB_state.My_vote_state[my_states_key] = true
 		v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
@@ -90,13 +88,25 @@ func HandleReliableBroadcast(receiver server.Server, v Message) {
 	if vote_count >= config.N-config.F {
 		tools.Log(receiver.Id, "Delivered "+strings.Join(v.Content, " "))
 		receiver.BRB_state.My_deliver_state[my_states_key] = true
-		handleAddInternal(receiver, v)
+		deliver(receiver, v)
 		brb_state_cleanup(receiver, my_states_key)
 	}
 
-	tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count)+"/"+strconv.Itoa(config.N-config.F))
-	tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count)+"/"+strconv.Itoa(config.N-config.F))
+	// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count)+"/"+strconv.Itoa(config.N-config.F))
+	// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count)+"/"+strconv.Itoa(config.N-config.F))
 
+}
+
+func deliver(server server.Server, message Message) {
+	response := []string{}
+	if gset.Exists(server.Gset, message.Content[1]) {
+		response = []string{message.Content[0], server.Id, ADD_RESPONSE, "Already exists", message.Content[1]}
+	} else {
+		gset.Append(server.Gset, message.Content[1])
+		response = []string{message.Content[0], server.Id, ADD_RESPONSE, "Success", message.Content[1]}
+	}
+	server.Receive_socket.SendMessage(response)
+	tools.Log(server.Id, "Sent ADD_RESPONSE to "+message.Sender)
 }
 
 func brb_state_cleanup(server server.Server, identifier string) {
@@ -105,15 +115,15 @@ func brb_state_cleanup(server server.Server, identifier string) {
 	delete(server.BRB_state.My_vote_state, identifier)
 	delete(server.BRB_state.My_deliver_state, identifier)
 
-	for k := range server.BRB_state.Pier_echo_pot {
+	for k := range server.BRB_state.Peer_echo_pot {
 		if strings.Contains(k, identifier) {
-			delete(server.BRB_state.Pier_echo_pot, k)
+			delete(server.BRB_state.Peer_echo_pot, k)
 		}
 	}
 
-	for k := range server.BRB_state.Pier_vote_pot {
+	for k := range server.BRB_state.Peer_vote_pot {
 		if strings.Contains(k, identifier) {
-			delete(server.BRB_state.Pier_vote_pot, k)
+			delete(server.BRB_state.Peer_vote_pot, k)
 		}
 	}
 
@@ -134,7 +144,7 @@ func countMessages(pot map[string]bool, identifier string) int {
 }
 
 func sendToAll(receiver server.Server, message []string) {
-	for _, pier_socket := range receiver.Piers {
+	for _, pier_socket := range receiver.Peers {
 		pier_socket.SendMessage(message)
 	}
 }

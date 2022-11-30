@@ -7,18 +7,15 @@ import (
 	"frontend/client"
 	"frontend/config"
 	"frontend/messaging"
-	"time"
 )
 
 func client_task(id string, servers []config.Node) {
 
 	client := client.Create(id, servers)
 
-	msg := "Hello"
-
 	// messaging.Add(client, msg)
-	messaging.TargetedAdd(client, *client.Servers[0], msg)
-	time.Sleep(time.Second * 2)
+	messaging.TargetedAdd(client, *client.Servers[0], "1")
+	// time.Sleep(time.Second * 2)
 	g, _ := messaging.GetGset(client)
 	fmt.Println(g)
 
@@ -26,18 +23,12 @@ func client_task(id string, servers []config.Node) {
 
 func main() {
 
-	LOCAL := true
-	var servers []config.Node
-	if LOCAL {
-		servers = config.Servers_LOCAL
-	} else {
-		servers = config.Servers
-	}
+	config.CreateScenario("NORMAL", "LOCAL")
+	servers := config.SERVERS
 
 	go client_task("c1", servers)
-	// go client_task("c2", servers)
-	// go client_task("c3", servers)
 
+	// Infinite loop in main thread
 	for {
 	}
 

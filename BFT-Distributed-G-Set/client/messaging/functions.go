@@ -89,6 +89,8 @@ func GetGset(client client.Client) (string, error) {
 		}
 	}
 	return "", errors.New("No f+1 matching responses!")
+	// Don't stop if i have 2f+1 but not f+1
+	// Wait until f+1
 }
 
 // TODO: Handle responses
