@@ -8,25 +8,6 @@ import (
 	"strings"
 )
 
-func client_task(id string, servers []config.Node) {
-
-	client := client.Create(id, servers)
-
-	// messaging.Add(client, msg)
-	// messaging.TargetedAdd(client, *client.Servers[0], "Hello")
-
-	messaging.Add(client, "Hello")
-	messaging.Add(client, "World")
-	messaging.Add(client, "How")
-	messaging.Add(client, "Are")
-	messaging.Add(client, "You")
-
-	// time.Sleep(time.Millisecond * 500)
-
-	messaging.Get(client)
-
-}
-
 func Start_CLI() {
 
 	// ask about scenario
@@ -55,13 +36,4 @@ func Start_CLI() {
 			messaging.Add(client, record)
 		}
 	}
-
-	// config.CreateScenario("NORMAL", "LOCAL")
-	// servers := config.SERVERS
-
-	// go client_task("c1", servers)
-
-	// // Infinite loop in main thread
-	// for {
-	// }
 }

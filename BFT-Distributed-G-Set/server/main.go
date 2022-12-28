@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-	// ui.WebInterface()
 
 	config.CreateScenario("NORMAL", "LOCAL")
 	servers := config.SERVERS
