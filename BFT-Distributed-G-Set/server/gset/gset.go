@@ -54,7 +54,7 @@ func GsetToString(gset map[string]string, verbose bool) string {
 		}
 	} else {
 		for _, v := range gset {
-			s = s + "{value:" + v + "} "
+			s = s + "{" + v + "} "
 		}
 	}
 	s = s[:len(s)-1]
