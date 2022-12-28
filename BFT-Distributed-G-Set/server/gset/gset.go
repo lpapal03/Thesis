@@ -44,17 +44,19 @@ func Append(gset map[string]string, record string) {
 }
 
 func GsetToString(gset map[string]string, verbose bool) string {
+	if len(gset) == 0 {
+		return "{null}"
+	}
 	var s = ""
 	if verbose {
 		for k, v := range gset {
-			s = s + "{key:" + k + ", value:" + v + "}\n"
+			s = s + "{key:" + k + ", value:" + v + "} "
 		}
 	} else {
 		for _, v := range gset {
-			s = s + "{value:" + v + "}\n"
+			s = s + "{value:" + v + "} "
 		}
 	}
-
 	s = s[:len(s)-1]
 	return s
 }

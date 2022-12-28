@@ -2,10 +2,10 @@ package config
 
 var LOCAL_SERVERS = []Node{
 	// good
-	{Host: "localhost:", Port: "10001"},
+	{Host: "localhost:", Port: "10009"},
 	{Host: "localhost:", Port: "10002"},
 	{Host: "localhost:", Port: "10003"},
-	{Host: "localhost:", Port: "20004"},
+	{Host: "localhost:", Port: "10004"},
 	// {Host: "localhost:", Port: "10005"},
 	// {Host: "localhost:", Port: "10006"},
 	// // turning point

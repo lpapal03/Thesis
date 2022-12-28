@@ -14,6 +14,13 @@ var (
 	SERVERS          []Node
 )
 
+const SCENARIO_LOCAL = "SCENARIO_LOCAL"
+const SCENARIO_REMOTE = "SCENARIO_REMOTE"
+
+const MODE_NORMAL = "MODE_NORMAL"
+const MODE_MUTES = "MODE_MUTE"
+const MODE_HALF_AND_HALF = "MODE_HALF_AND_HALF"
+
 func CreateScenario(scenario, mode string) {
 
 	if mode == "LOCAL" {

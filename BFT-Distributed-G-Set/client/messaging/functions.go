@@ -1,123 +1,83 @@
 package messaging
 
 import (
-	"errors"
 	"frontend/client"
 	"frontend/config"
 	"frontend/tools"
 	"sort"
-	"strconv"
 	"strings"
-
-	zmq "github.com/pebbe/zmq4"
 )
 
-func simpleBroadcast(message []string, servers []*zmq.Socket) {
-	for i := 0; i < len(servers); i++ {
-		servers[i].SendMessage(message)
+// returns true iff we have
+// more than 2f+1 replies
+// and f+1 matching
+// returns a valid reply
+func findValidReply(replies map[string]string) string {
+	if len(replies) < config.MEDIUM_THRESHOLD {
+		return ""
 	}
-}
+	reply_strings := []string{}
+	for k := range replies {
+		temp := strings.Split(replies[k], " ")
+		sort.Strings(temp)
+		reply_strings = append(reply_strings, strings.Join(temp, " "))
+	}
 
-func countReplies(m map[string]bool) int {
-	count := 0
-	for _, msg := range m {
-		if msg {
-			count++
+	histo := make(map[string]int)
+	for _, str := range reply_strings {
+		histo[str]++
+	}
+	valhi := 0
+	strhi := ""
+	for k, v := range histo {
+		if v > valhi {
+			valhi = v
+			strhi = k
 		}
 	}
-	return count
+	if valhi >= config.LOW_THRESHOLD {
+		return strhi
+	}
+	return ""
 }
 
-func GetGset(client client.Client) (string, error) {
+func Get(client client.Client) string {
 
-	simpleBroadcast([]string{GET}, client.Servers)
-	tools.Log(client.Id, "Broadcasted {GET} to all servers")
+	for i := 0; i < len(client.Servers); i++ {
+		client.Servers[i].SendMessage([]string{GET})
+	}
 
+	tools.Log(client.Id, "Called GET")
 	client.Message_counter++
+	replies := make(map[string]string)
+	done := false
 
-	// reply matrix ensures that i dont get
-	// the same reply from a server more than once.
-	var reply_messages = []string{}
-	reply_matrix := make(map[string]bool)
-
-	// Wait for 2f+1 replies
-	for len(reply_matrix) < config.MEDIUM_THRESHOLD {
-		sockets, _ := client.Poller.Poll(1000)
+	tools.Log(client.Id, "Waiting for valid GET_REPLY...")
+	for !done {
+		sockets, _ := client.Poller.Poll(-1)
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
-			if msg[1] == GET_RESPONSE && !reply_matrix[msg[0]] {
-				reply_matrix[msg[0]] = true
-				tools.Log(client.Id, "GET response from "+msg[0])
-				reply_messages = append(reply_messages, msg[2])
+			if msg[1] == GET_RESPONSE {
+				replies[msg[0]] = msg[2]
 			}
 		}
-	}
-	tools.Log(client.Id, GET+" done, received "+strconv.Itoa(len(reply_messages))+"/"+strconv.Itoa(config.MEDIUM_THRESHOLD)+" wanted replies")
-
-	// By this point I have 2f+1 replies
-	// Now to check if f+1 are the same
-
-	// We need to make sure the replies are comparable
-	// For this, we need to separate records, order them and the join them
-	// Therefore creating a single string for each reply, which is easily compared
-	for i := 0; i < len(reply_messages); i++ {
-		// divide reply to individual records
-		records := strings.Split(reply_messages[i], "\n")
-		// sort records
-		sort.Strings(records)
-		reply_messages[i] = strings.Join(records, "")
-	}
-
-	// We can now begin comparing server replies
-	// In order to find f+1 matching replies
-	var matching_replies int = 0
-	for i := 0; i < len(reply_messages); i++ {
-		matching_replies = 0
-		for j := 0; j < len(reply_messages); j++ {
-			if i == j {
-				continue
-			}
-			if strings.Contains(reply_messages[i], reply_messages[j]) ||
-				strings.Contains(reply_messages[j], reply_messages[i]) {
-				matching_replies++
-			}
-			if matching_replies >= config.LOW_THRESHOLD {
-				tools.Log(client.Id, "Found "+strconv.Itoa(matching_replies)+"/"+strconv.Itoa(config.LOW_THRESHOLD)+" matching replies")
-				return reply_messages[i], nil
-			}
+		r := findValidReply(replies)
+		if len(r) > 0 {
+			done = true
+			tools.Log(client.Id, "Reply: "+r)
+			return r
 		}
 	}
-	return "", errors.New("No f+1 matching responses!")
-	// Don't stop if i have 2f+1 but not f+1
-	// Wait until f+1
+	return ""
 }
 
 // TODO: Handle responses
 func Add(client client.Client, record string) {
-	tools.Log(client.Id, "Invoked ADD with {"+record+"}")
-	client.Message_counter++
-	simpleBroadcast([]string{ADD, record}, client.Servers)
-}
-
-func TargetedAdd(client client.Client, target zmq.Socket, record string) {
-	tools.Log(client.Id, "Invoked targeted ADD with {"+record+"}")
-	client.Message_counter++
-	target.SendMessage([]string{ADD, record})
-
-	have_response := false
-
-	// wait for reply
-	for !have_response {
-		sockets, _ := client.Poller.Poll(1000)
-		for _, socket := range sockets {
-			s := socket.Socket
-			msg, _ := s.RecvMessage(0)
-			if msg[1] == ADD_RESPONSE && msg[3] == record {
-				tools.Log(client.Id, ADD_RESPONSE+" from "+msg[0]+" with status code {"+msg[2]+"} for adding record {"+msg[3]+"}")
-				have_response = true
-				break
-			}
-		}
+	tools.Log(client.Id, "Called ADD("+record+")")
+	for i := 0; i < len(client.Servers); i++ {
+		// TargetedAdd(client, *client.Servers[i], record)
+		client.Message_counter++
+		client.Servers[i].SendMessage([]string{ADD, record})
 	}
 }

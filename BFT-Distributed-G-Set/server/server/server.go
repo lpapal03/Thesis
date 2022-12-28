@@ -9,12 +9,10 @@ import (
 )
 
 type brb_state struct {
-	My_init_state    map[string]bool
-	My_echo_state    map[string]bool
-	My_vote_state    map[string]bool
-	My_deliver_state map[string]bool
-	Peer_echo_pot    map[string]bool
-	Peer_vote_pot    map[string]bool
+	My_echo_state map[string]bool
+	My_vote_state map[string]bool
+	Peer_echo_pot map[string]bool
+	Peer_vote_pot map[string]bool
 }
 
 type Server struct {
@@ -37,10 +35,8 @@ func Create(node config.Node, peers []config.Node) Server {
 	my_gset := gset.Create()
 	my_echo_state := make(map[string]bool)
 	my_vote_state := make(map[string]bool)
-	my_deliver_state := make(map[string]bool)
 	peer_echo_pot := make(map[string]bool)
 	peer_vote_pot := make(map[string]bool)
-	gset.Append(my_gset, "INIT")
 	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
 	receive_socket.Bind("tcp://*:" + node.Port)
 	tools.Log(id, "Bound tcp://*:"+node.Port)
@@ -70,9 +66,8 @@ func Create(node config.Node, peers []config.Node) Server {
 		Id:             id,
 		Gset:           my_gset,
 		BRB_state: brb_state{
-			My_echo_state:    my_echo_state,
-			My_vote_state:    my_vote_state,
-			My_deliver_state: my_deliver_state,
-			Peer_echo_pot:    peer_echo_pot,
-			Peer_vote_pot:    peer_vote_pot}}
+			My_echo_state: my_echo_state,
+			My_vote_state: my_vote_state,
+			Peer_echo_pot: peer_echo_pot,
+			Peer_vote_pot: peer_vote_pot}}
 }
