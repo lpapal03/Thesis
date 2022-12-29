@@ -33,10 +33,6 @@ func handleAdd(server server.Server, message Message) {
 	// Call RB service
 	if !gset.Exists(server.Gset, message.Content[0]) {
 		ReliableBroadcast(server, message)
-	} else {
-		response := []string{message.Sender, server.Id, ADD_RESPONSE, "Success", message.Content[0]}
-		server.Receive_socket.SendMessage(response)
-		tools.Log(server.Id, "Sent ADD_RESPONSE to "+message.Sender)
 	}
 }
 

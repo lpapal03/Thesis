@@ -13,15 +13,18 @@ func ReliableBroadcast(leader server.Server, message Message) {
 
 	tools.Log(leader.Id, "Called Reliable broadcast module")
 
-	v := CreateMessageString(BRACHA_BROADCAST_INIT, append([]string{message.Sender}, message.Content...))
-	// send init to all
-	for _, pier_socket := range leader.Peers {
-		pier_socket.SendMessage(v)
+	content := append([]string{message.Sender}, message.Content...)
+
+	// send init to everyone
+	tag := BRACHA_BROADCAST_INIT
+	v := CreateMessageString(tag, content)
+	for _, peer_socket := range leader.Peers {
+		peer_socket.SendMessage(v)
 	}
-	v[0] = BRACHA_BROADCAST_ECHO
-	// since i cannot receive init
-	// act like I "received" echo from self, send echo to all
-	// from this point on act only on receive
+
+	// send echo to everyone (assume I received INIT from self)
+	tag = BRACHA_BROADCAST_ECHO
+	v = CreateMessageString(tag, content)
 	for _, pier_socket := range leader.Peers {
 		pier_socket.SendMessage(v)
 	}

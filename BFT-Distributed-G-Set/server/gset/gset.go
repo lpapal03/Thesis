@@ -45,7 +45,7 @@ func Append(gset map[string]string, record string) {
 
 func GsetToString(gset map[string]string, verbose bool) string {
 	if len(gset) == 0 {
-		return "{null}"
+		return "{}"
 	}
 	var s = ""
 	if verbose {
