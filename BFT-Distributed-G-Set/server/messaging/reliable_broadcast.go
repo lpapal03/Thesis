@@ -25,13 +25,13 @@ func ReliableBroadcast(leader server.Server, message Message) {
 	// send echo to everyone (assume I received INIT from self)
 	tag = BRACHA_BROADCAST_ECHO
 	v = CreateMessageString(tag, content)
-	for _, pier_socket := range leader.Peers {
-		pier_socket.SendMessage(v)
+	for _, peer_socket := range leader.Peers {
+		peer_socket.SendMessage(v)
 	}
 
-	my_states_key := message.Content[0]
-	leader.BRB_state.My_echo_state[my_states_key] = true
-	leader.BRB_state.My_vote_state[my_states_key] = false
+	states_key := message.Content[0]
+	leader.Echo_state[states_key] = true
+	leader.Vote_state[states_key] = false
 }
 
 // Called from every server receiving RB messages
@@ -43,45 +43,45 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 		return false
 	}
 
-	my_states_key := v.Content[1]                  // c1 Hello
-	pier_pots_key := v.Content[1] + " " + v.Sender // c1 Hello localhost:1000
+	states_key := v.Content[1]                     // c1 Hello
+	peer_pots_key := v.Content[1] + " " + v.Sender // c1 Hello localhost:1000
 
 	// add message in message pot and count
 	if v.Tag == BRACHA_BROADCAST_ECHO {
-		receiver.BRB_state.Peer_echo_pot[pier_pots_key] = true
+		receiver.Peer_echo_pot[peer_pots_key] = true
 	}
 	if v.Tag == BRACHA_BROADCAST_VOTE {
-		receiver.BRB_state.Peer_vote_pot[pier_pots_key] = true
+		receiver.Peer_vote_pot[peer_pots_key] = true
 	}
 
-	echo_count := countMessages(receiver.BRB_state.Peer_echo_pot, my_states_key)
-	vote_count := countMessages(receiver.BRB_state.Peer_vote_pot, my_states_key)
+	echo_count := countMessages(receiver.Peer_echo_pot, states_key)
+	vote_count := countMessages(receiver.Peer_vote_pot, states_key)
 
 	// on receiving <v> from leader
 	if v.Tag == BRACHA_BROADCAST_INIT {
-		receiver.BRB_state.My_echo_state[my_states_key] = true
-		receiver.BRB_state.My_vote_state[my_states_key] = true
+		receiver.Echo_state[states_key] = true
+		receiver.Vote_state[states_key] = true
 		v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
 		sendToAll(receiver, v)
-		receiver.BRB_state.My_echo_state[my_states_key] = false
+		receiver.Echo_state[states_key] = false
 	}
 
 	// on receiving <echo, v> from n-f distinct parties:
 	if echo_count >= config.N-config.F {
-		if receiver.BRB_state.My_vote_state[my_states_key] == true {
+		if receiver.Vote_state[states_key] == true {
 			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
 			sendToAll(receiver, v)
 		}
-		receiver.BRB_state.My_vote_state[my_states_key] = false
+		receiver.Vote_state[states_key] = false
 	}
 
 	// on receiving <echo, v> from f+1 distinct parties:
 	if vote_count >= config.F+1 {
-		if receiver.BRB_state.My_vote_state[my_states_key] == true {
+		if receiver.Vote_state[states_key] == true {
 			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
 			sendToAll(receiver, v)
 		}
-		receiver.BRB_state.My_vote_state[my_states_key] = false
+		receiver.Vote_state[states_key] = false
 	}
 
 	// on receiving <vote, v> from n-f distinct parties:
@@ -97,10 +97,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 }
 
 // count the messages received for a given v
-// returns init_count, echo_count, ready_count
 func countMessages(pot map[string]bool, identifier string) int {
-	// example: identifier = c1 hello
-	// count start from 1
 	// assume I received echo and vote from self
 	count := 1
 	for key := range pot {
@@ -112,26 +109,26 @@ func countMessages(pot map[string]bool, identifier string) int {
 }
 
 func sendToAll(receiver server.Server, message []string) {
-	for _, pier_socket := range receiver.Peers {
-		pier_socket.SendMessage(message)
+	for _, peer_socket := range receiver.Peers {
+		peer_socket.SendMessage(message)
 	}
 }
 
 // can be used to destroy unused objects
 func brb_state_cleanup(server server.Server, identifier string) {
 
-	delete(server.BRB_state.My_echo_state, identifier)
-	delete(server.BRB_state.My_vote_state, identifier)
+	delete(server.Echo_state, identifier)
+	delete(server.Vote_state, identifier)
 
-	for k := range server.BRB_state.Peer_echo_pot {
+	for k := range server.Peer_echo_pot {
 		if strings.Contains(k, identifier) {
-			delete(server.BRB_state.Peer_echo_pot, k)
+			delete(server.Peer_echo_pot, k)
 		}
 	}
 
-	for k := range server.BRB_state.Peer_vote_pot {
+	for k := range server.Peer_vote_pot {
 		if strings.Contains(k, identifier) {
-			delete(server.BRB_state.Peer_vote_pot, k)
+			delete(server.Peer_vote_pot, k)
 		}
 	}
 }
