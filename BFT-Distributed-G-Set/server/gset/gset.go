@@ -50,11 +50,11 @@ func GsetToString(gset map[string]string, verbose bool) string {
 	var s = ""
 	if verbose {
 		for k, v := range gset {
-			s = s + "{key:" + k + ", value:" + v + "} "
+			s = s + "{key:" + k + ", value:" + v + "},"
 		}
 	} else {
 		for _, v := range gset {
-			s = s + "{" + v + "} "
+			s = s + "{" + v + "},"
 		}
 	}
 	s = s[:len(s)-1]

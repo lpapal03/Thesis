@@ -1,29 +1,47 @@
 package ui
 
 import (
+	"bufio"
 	"fmt"
 	"frontend/client"
 	"frontend/config"
 	"frontend/messaging"
+	"os"
 	"strings"
 )
 
+func isCommandValid(cmd string) bool {
+
+	return true
+}
+
 func Start_CLI() {
 
-	// ask about scenario
-	// then begin infinite loop
+	scanner := bufio.NewScanner(os.Stdin)
+	var id string
+	var command string
+	var record string
 
-	id := "c1"
+	// fmt.Print("Your ID\n> ")
+	// scanner.Scan()
+	// id = scanner.Text()
+	// fmt.Println("ID set to '" + scanner.Text() + "'")
+
+	// FOR TESTING
+	id = "c1"
+	fmt.Println("ID set to '" + id + "'")
+
 	config.CreateScenario("NORMAL", "LOCAL")
 	servers := config.SERVERS
 	client := client.Create(id, servers)
 
-	var command string
-	var record string
-	for {
-		fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT: ")
-		fmt.Scanln(&command)
-		command = strings.ToLower(command)
+	// var command string
+	// var record string
+	fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
+	for scanner.Scan() {
+		// fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT: ")
+		// fmt.Scanln(&command)
+		command = strings.ToLower(scanner.Text())
 		if command == "e" {
 			return
 		}
@@ -31,9 +49,15 @@ func Start_CLI() {
 			messaging.Get(client)
 		}
 		if command == "a" {
-			fmt.Print("Record to append: ")
-			fmt.Scanln(&record)
+			fmt.Print("Record to append\n> ")
+			scanner.Scan()
+			record = scanner.Text()
 			messaging.Add(client, record)
+		}
+		if len(command) == 0 {
+			fmt.Print("> ")
+		} else {
+			fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
 		}
 	}
 }

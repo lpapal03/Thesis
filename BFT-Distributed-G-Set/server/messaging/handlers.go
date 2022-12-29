@@ -23,20 +23,24 @@ func HandleMessage(server server.Server, msg []string) {
 
 // Handle get request. I need sender_id to know where
 // my response will go to
-func handleGet(server server.Server, message Message) {
-	response := []string{message.Sender, server.Id, GET_RESPONSE, gset.GsetToString(server.Gset, false)}
-	server.Receive_socket.SendMessage(response)
-	tools.Log(server.Id, GET_RESPONSE+" to "+message.Sender)
+func handleGet(receiver server.Server, message Message) {
+	response := []string{message.Sender, receiver.Id, GET_RESPONSE, gset.GsetToString(receiver.Gset, false)}
+	receiver.Receive_socket.SendMessage(response)
+	tools.Log(receiver.Id, GET_RESPONSE+" to "+message.Sender)
 }
 
-func handleAdd(server server.Server, message Message) {
+func handleAdd(receiver server.Server, message Message) {
 	// Call RB service
-	if !gset.Exists(server.Gset, message.Content[0]) {
-		ReliableBroadcast(server, message)
+	if gset.Exists(receiver.Gset, message.Content[0]) {
+		return
 	}
+	ReliableBroadcast(receiver, message)
 }
 
 func handleRB(receiver server.Server, message Message) {
+	if gset.Exists(receiver.Gset, message.Content[1]) {
+		return
+	}
 	delivered := HandleReliableBroadcast(receiver, message)
 	if delivered {
 		gset.Append(receiver.Gset, message.Content[1])

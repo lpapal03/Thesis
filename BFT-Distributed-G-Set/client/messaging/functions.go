@@ -18,7 +18,7 @@ func findValidReply(replies map[string]string) string {
 	}
 	reply_strings := []string{}
 	for k := range replies {
-		temp := strings.Split(replies[k], " ")
+		temp := strings.Split(replies[k], ",")
 		sort.Strings(temp)
 		reply_strings = append(reply_strings, strings.Join(temp, " "))
 	}

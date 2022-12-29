@@ -17,10 +17,11 @@ type Server struct {
 	Port           string
 	Id             string
 	Gset           map[string]string
-	Echo_state     map[string]bool
-	Vote_state     map[string]bool
-	Peer_echo_pot  map[string]bool
-	Peer_vote_pot  map[string]bool
+	// Echo_state     map[string]bool
+	// Vote_state     map[string]bool
+	// Peer_echo_pot  map[string]bool
+	// Peer_vote_pot  map[string]bool
+	BRB map[string]bool
 }
 
 func Create(node config.Node, peers []config.Node) Server {
@@ -29,10 +30,11 @@ func Create(node config.Node, peers []config.Node) Server {
 	poller := zmq.NewPoller()
 	server_sockets := make([]*zmq.Socket, 0)
 	my_gset := gset.Create()
-	echo_state := make(map[string]bool)
-	vote_state := make(map[string]bool)
-	peer_echo_pot := make(map[string]bool)
-	peer_vote_pot := make(map[string]bool)
+	// echo_state := make(map[string]bool)
+	// vote_state := make(map[string]bool)
+	// peer_echo_pot := make(map[string]bool)
+	// peer_vote_pot := make(map[string]bool)
+	brb := make(map[string]bool)
 	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
 	receive_socket.Bind("tcp://*:" + node.Port)
 	tools.Log(id, "Bound tcp://*:"+node.Port)
@@ -61,8 +63,6 @@ func Create(node config.Node, peers []config.Node) Server {
 		Port:           node.Port,
 		Id:             id,
 		Gset:           my_gset,
-		Echo_state:     echo_state,
-		Vote_state:     vote_state,
-		Peer_echo_pot:  peer_echo_pot,
-		Peer_vote_pot:  peer_vote_pot}
+		BRB:            brb,
+	}
 }
