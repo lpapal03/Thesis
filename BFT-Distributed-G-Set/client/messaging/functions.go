@@ -50,10 +50,9 @@ func Get(client client.Client) string {
 	tools.Log(client.Id, "Called GET")
 	client.Message_counter++
 	replies := make(map[string]string)
-	done := false
 
 	tools.Log(client.Id, "Waiting for valid GET_REPLY...")
-	for !done {
+	for {
 		sockets, _ := client.Poller.Poll(-1)
 		for _, socket := range sockets {
 			s := socket.Socket
@@ -64,12 +63,10 @@ func Get(client client.Client) string {
 		}
 		r := findValidReply(replies)
 		if len(r) > 0 {
-			done = true
 			tools.Log(client.Id, "Reply: "+r)
 			return r
 		}
 	}
-	return ""
 }
 
 // TODO: Handle responses
