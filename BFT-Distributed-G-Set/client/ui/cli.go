@@ -10,11 +10,6 @@ import (
 	"strings"
 )
 
-func isCommandValid(cmd string) bool {
-
-	return true
-}
-
 func Start_CLI() {
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -39,8 +34,6 @@ func Start_CLI() {
 	// var record string
 	fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
 	for scanner.Scan() {
-		// fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT: ")
-		// fmt.Scanln(&command)
 		command = strings.ToLower(scanner.Text())
 		if command == "e" {
 			return

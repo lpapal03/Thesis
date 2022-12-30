@@ -77,4 +77,6 @@ func Add(client client.Client, record string) {
 		client.Message_counter++
 		client.Servers[i].SendMessage([]string{ADD, record})
 	}
+
+	// WAIT FOR F+1 RESPONSES
 }

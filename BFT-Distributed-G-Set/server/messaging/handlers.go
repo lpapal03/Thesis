@@ -8,7 +8,7 @@ import (
 )
 
 func HandleMessage(server server.Server, msg []string) {
-	message := ParseMessageObject(msg)
+	message := StringToMessage(msg)
 	tools.Log(server.Id, "Received "+message.Tag+" from "+message.Sender)
 
 	if message.Tag == GET {
