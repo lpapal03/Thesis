@@ -50,6 +50,9 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
 	echo_count, vote_count := countMessages(receiver.BRB, count_key)
 
+	// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
+	// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
+
 	// on receiving <v> from leader
 	if v.Tag == BRACHA_BROADCAST_INIT {
 		receiver.BRB[my_echo_key] = true
@@ -83,6 +86,10 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 		receiver.BRB = make(map[string]bool)
 		return true
 	}
+
+	// for k, v := range receiver.BRB {
+	// 	fmt.Println(receiver.Id, k, v)
+	// }
 
 	return false
 

@@ -15,11 +15,7 @@ type Server struct {
 	Host           string
 	Port           string
 	Id             string
-	// Echo_state     map[string]bool
-	// Vote_state     map[string]bool
-	// Peer_echo_pot  map[string]bool
-	// Peer_vote_pot  map[string]bool
-	BRB map[string]bool
+	BRB            map[string]bool
 }
 
 func Create(node config.Node, peers []config.Node) Server {

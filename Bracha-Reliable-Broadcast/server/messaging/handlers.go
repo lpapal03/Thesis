@@ -6,7 +6,11 @@ import (
 )
 
 func HandleMessage(server server.Server, msg []string) {
-	message := StringToMessage(msg)
+	message, err := StringToMessage(msg)
+	// if message is not in the right format, discard
+	if err != nil {
+		return
+	}
 	tools.Log(server.Id, "Received "+message.Tag+" from "+message.Sender)
 
 	if message.Tag == BRACHA_BROADCAST {

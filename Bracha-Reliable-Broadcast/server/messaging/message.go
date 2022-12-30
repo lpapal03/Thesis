@@ -1,5 +1,7 @@
 package messaging
 
+import "errors"
+
 type Message struct {
 	Sender   string
 	Receiver string
@@ -11,6 +13,9 @@ func CreateMessageString(tag string, content []string) []string {
 	return append([]string{tag}, content...)
 }
 
-func StringToMessage(m []string) Message {
-	return Message{Sender: m[0], Receiver: "", Tag: m[1], Content: m[2:]}
+func StringToMessage(m []string) (Message, error) {
+	if len(m) > 3 {
+		return Message{Sender: m[0], Receiver: "", Tag: m[1], Content: m[2:]}, nil
+	}
+	return Message{}, errors.New("Could not parse message")
 }
