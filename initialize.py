@@ -1,15 +1,22 @@
 import os
 
-def check_ping(hostname):
+def IsHostActive(hostname):
     response = os.system("ping -c 1 " + hostname)
-    # and then check the response...
     if response == 0:
-        pingstatus = "Network Active"
+        return True
     else:
-        pingstatus = "Network Error"
-    
-    return pingstatus
-
+        return False
 
 if __name__ == '__main__':
-    print(check_ping("node0"))
+    f = open("hosts", "w")
+    for i in range(9999):
+        active = IsHostActive("node" + str(i))
+        if active:
+            f.write("node" + str(i) + "\n")
+        if not active:
+            break
+    f.close()
+    os.system("ansible-playbook -i ./hosts env_setup_ubuntu_18-04.yml")
+    os.remove("hosts")
+    
+        
