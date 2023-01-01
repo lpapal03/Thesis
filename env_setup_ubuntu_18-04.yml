@@ -17,7 +17,7 @@
     - name: Example clone of a single branch
       git:
         repo: https://github.com/loukaspapalazarou/Thesis.git
-        dest: /test
+        dest: /users/loukis
         clone: yes
         update: yes
 
