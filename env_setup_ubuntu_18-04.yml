@@ -17,7 +17,7 @@
     - name: Example clone of a single branch
       git:
         repo: https://github.com/loukaspapalazarou/Thesis.git
-        dest: /src/ansible-examples
-        single_branch: yes
-        version: master
+        dest: /test
+        clone: yes
+        update: yes
 
