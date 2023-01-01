@@ -1,3 +1,4 @@
+---
 - name: Install ZeroMQ and clone repository
   hosts: all
   become: yes
@@ -16,4 +17,4 @@
     - name: Clone repository
       git:
         repo: https://github.com/loukaspapalazarou/Thesis
-        dest: /Thesis
+        dest: /path/to/local/repo
