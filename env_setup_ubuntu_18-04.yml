@@ -15,7 +15,7 @@
         name: libzmq3-dev
         state: latest
     - name: Example clone of a single branch
-      ansible.builtin.git:
+      git:
         repo: https://github.com/loukaspapalazarou/Thesis.git
         dest: /src/ansible-examples
         single_branch: yes
