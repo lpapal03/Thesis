@@ -1,12 +1,12 @@
 ---
-- name: Install ZeroMQ and clone repository
+- name: Install ZeroMQ
   hosts: all
   become: yes
   tasks:
     - name: Add ZeroMQ repository to sources list
       shell: echo 'deb http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/xUbuntu_18.04/ /' | tee /etc/apt/sources.list.d/network:messaging:zeromq:release-stable.list
     - name: Import the ZeroMQ GPG key
-      shell: curl -fsSL https://download.opensuse.org/repositories/network:messaging:/zeromq:release-stable/xUbuntu_18.04/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/network_messaging_zeromq_release-stable.gpg > /dev/null
+      shell: curl -fsSL https://download.opensuse.org/repositories/network:messaging:zeromq:release-stable/xUbuntu_18.04/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/network_messaging_zeromq_release-stable.gpg > /dev/null
     - name: Update package cache
       apt:
         update_cache: yes
@@ -16,3 +16,4 @@
         state: latest
     - name: Clone repository
       shell: git clone https://github.com/loukaspapalazarou/Thesis
+
