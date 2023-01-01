@@ -36,7 +36,6 @@ func handleGet(receiver server.Server, message Message) {
 
 func handleAdd(receiver server.Server, message Message) {
 	ReliableBroadcast(receiver, message)
-	fmt.Println(message)
 }
 
 func handleRB(receiver server.Server, message Message) {
