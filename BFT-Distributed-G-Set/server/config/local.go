@@ -1,17 +1,14 @@
 package config
 
 var LOCAL_SERVERS = []Node{
-	// good
-	{Host: "localhost:", Port: "10009"},
-	{Host: "localhost:", Port: "10002"},
-	{Host: "localhost:", Port: "10003"},
-	{Host: "localhost:", Port: "10004"},
-	// {Host: "localhost:", Port: "10005"},
-	// {Host: "localhost:", Port: "10006"},
-	// // turning point
-	// {Host: "localhost:", Port: "99999"},
-	// // byzantine
-	// {Host: "localhost:", Port: "20002"},
-	// {Host: "localhost:", Port: "20003"},
-	// {Host: "localhost:", Port: "20004"},
+	{Host: "localhost:", Port: "5555"},
+	{Host: "localhost:", Port: "5556"},
+	{Host: "localhost:", Port: "5557"},
+	{Host: "localhost:", Port: "5558"},
+	{Host: "localhost:", Port: "5559"},
+	{Host: "localhost:", Port: "5560"},
+	{Host: "localhost:", Port: "5561"},
+	// {Host: "localhost:", Port: "5562"},
+	// {Host: "localhost:", Port: "5563"},
+	// {Host: "localhost:", Port: "5564"},
 }

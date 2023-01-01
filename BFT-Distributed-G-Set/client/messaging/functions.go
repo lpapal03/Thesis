@@ -69,6 +69,17 @@ func Get(client client.Client) string {
 	}
 }
 
+// the amount of add responses given a record
+func countAddReplies(replies map[string]bool, record string) int {
+	count := 0
+	for k := range replies {
+		if record == strings.Split(k, "-")[1] {
+			count++
+		}
+	}
+	return count
+}
+
 // TODO: Handle responses
 func Add(client client.Client, record string) {
 	tools.Log(client.Id, "Called ADD("+record+")")
@@ -78,5 +89,22 @@ func Add(client client.Client, record string) {
 		client.Servers[i].SendMessage([]string{ADD, record})
 	}
 
-	// WAIT FOR F+1 RESPONSES
+	// // WAIT FOR F+1 RESPONSES
+	// replies := make(map[string]bool)
+	// tools.Log(client.Id, "Waiting for f+1 ADD_RESPONSES...")
+	// for {
+	// 	sockets, _ := client.Poller.Poll(-1)
+	// 	for _, socket := range sockets {
+	// 		s := socket.Socket
+	// 		msg, _ := s.RecvMessage(0)
+	// 		fmt.Println(msg)
+	// 		if msg[1] == ADD_RESPONSE {
+	// 			replies[msg[0]+"-"+msg[2]] = true
+	// 		}
+	// 	}
+	// 	if countAddReplies(replies, record) >= config.F+1 {
+	// 		tools.Log(client.Id, "Record appended")
+	// 		return
+	// 	}
+	// }
 }

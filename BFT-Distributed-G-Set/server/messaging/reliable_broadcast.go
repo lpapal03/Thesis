@@ -2,6 +2,7 @@ package messaging
 
 import (
 	"backend/config"
+	"backend/gset"
 	"backend/server"
 	"backend/tools"
 	"strings"
@@ -10,7 +11,12 @@ import (
 // Leader, the one who initializes the module
 func ReliableBroadcast(leader server.Server, message Message) {
 
-	tools.Log(leader.Id, "Called Reliable broadcast module")
+	tools.Log(leader.Id, "Called Reliable broadcast")
+
+	my_echo_key := message.Sender + "-" + message.Content[0] + "-" + leader.Id + "-echo"
+	my_vote_key := message.Sender + "-" + message.Content[0] + "-" + leader.Id + "-vote"
+	leader.BRB[my_echo_key] = true
+	leader.BRB[my_vote_key] = true
 
 	content := append([]string{message.Sender}, message.Content...)
 
@@ -23,47 +29,47 @@ func ReliableBroadcast(leader server.Server, message Message) {
 	tag = BRACHA_BROADCAST_ECHO
 	v = CreateMessageString(tag, content)
 	sendToAll(leader, v)
-
-	my_echo_key := message.Sender + "-" + message.Content[0] + "-" + leader.Id + "-echo"
-	my_vote_key := message.Sender + "-" + message.Content[0] + "-" + leader.Id + "-vote"
 	leader.BRB[my_echo_key] = true
-	leader.BRB[my_vote_key] = true
 }
 
 // Called from every server receiving RB messages
 func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
-	echo_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-echo"
-	vote_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-vote"
+	if gset.Exists(receiver.Gset, v.Content[1]) {
+		return true
+	}
+
+	peer_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-echo"
+	peer_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-vote"
 	my_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-echo"
 	my_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-vote"
-	count_key := v.Content[0] + "-" + v.Content[1]
+	bare_key := v.Content[0] + "-" + v.Content[1]
 
 	// add message in message pot and count
 	if v.Tag == BRACHA_BROADCAST_ECHO {
-		receiver.BRB[echo_key] = true
+		receiver.BRB[peer_echo_key] = true
 	}
 	if v.Tag == BRACHA_BROADCAST_VOTE {
-		receiver.BRB[vote_key] = true
+		receiver.BRB[peer_vote_key] = true
 	}
 
-	echo_count, vote_count := countMessages(receiver.BRB, count_key)
+	echo_count, vote_count := countMessages(receiver.BRB, bare_key)
 
-	// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count)+"/"+strconv.Itoa(config.N-config.F))
-	// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count)+"/"+strconv.Itoa(config.F+1))
+	// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
+	// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
 
 	// on receiving <v> from leader
 	if v.Tag == BRACHA_BROADCAST_INIT {
-		receiver.BRB[echo_key] = true
-		receiver.BRB[vote_key] = true
+		receiver.BRB[my_echo_key] = true
+		receiver.BRB[my_vote_key] = true
 		v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
 		sendToAll(receiver, v)
 		receiver.BRB[my_echo_key] = false
 	}
 
 	// on receiving <echo, v> from n-f distinct parties:
-	if echo_count >= config.N-config.F {
-		if receiver.BRB[vote_key] == true {
+	if v.Tag == BRACHA_BROADCAST_ECHO && echo_count >= config.N-config.F {
+		if receiver.BRB[my_vote_key] == true {
 			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
 			sendToAll(receiver, v)
 		}
@@ -71,21 +77,25 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	}
 
 	// on receiving <echo, v> from f+1 distinct parties:
-	if vote_count >= config.F+1 {
-		if receiver.BRB[vote_key] == true {
+	if v.Tag == BRACHA_BROADCAST_ECHO && vote_count >= config.F+1 {
+		if receiver.BRB[my_vote_key] == true {
 			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
 			sendToAll(receiver, v)
 		}
-		receiver.BRB[vote_key] = false
+		receiver.BRB[my_vote_key] = false
 	}
 
 	// on receiving <vote, v> from n-f distinct parties:
-	if vote_count >= config.N-config.F {
+	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
 		tools.Log(receiver.Id, "Delivered "+strings.Join(v.Content, " "))
 		// clean map (not important, just saves memory)
-		receiver.BRB = make(map[string]bool)
+		potCleanUp(receiver.BRB, bare_key)
 		return true
 	}
+
+	// for k, v := range receiver.BRB {
+	// 	fmt.Println(receiver.Id, k, v)
+	// }
 
 	return false
 
@@ -93,13 +103,15 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
 // count the messages received for a given v
 func countMessages(pot map[string]bool, count_key string) (int, int) {
-	echo_count := 0
-	vote_count := 0
-	for k := range pot {
-		if strings.Contains(k, count_key) && strings.Contains(k, "echo") {
+	// start counters from 1, assuming caller is true on echo and vote
+	echo_count := 1
+	vote_count := 1
+	for k, v := range pot {
+
+		if strings.Contains(k, count_key) && strings.Contains(k, "echo") && v {
 			echo_count++
 		}
-		if strings.Contains(k, count_key) && strings.Contains(k, "vote") {
+		if strings.Contains(k, count_key) && strings.Contains(k, "vote") && v {
 			vote_count++
 		}
 	}
@@ -109,5 +121,14 @@ func countMessages(pot map[string]bool, count_key string) (int, int) {
 func sendToAll(receiver server.Server, message []string) {
 	for _, peer_socket := range receiver.Peers {
 		peer_socket.SendMessage(message)
+	}
+}
+
+func potCleanUp(pot map[string]bool, bare_key string) {
+
+	for k := range pot {
+		if strings.Contains(k, bare_key) {
+			delete(pot, k)
+		}
 	}
 }

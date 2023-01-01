@@ -7,5 +7,5 @@ import (
 
 func main() {
 	servers := config.SetServers("LOCAL")
-	modules.Start(servers, "MUTES")
+	modules.Start(servers, "NORMAL")
 }

@@ -1,4 +1,4 @@
-package modules
+package scenarios
 
 import (
 	"backend/config"
@@ -6,11 +6,8 @@ import (
 	"backend/server"
 )
 
-func Server_Task_HalfAndHalf(me config.Node, peers []config.Node) {
-
-	server := server.Create(me, peers)
-
-	// Listen to messages and handle them
+func Normal_listener_task(listener config.Node, peers []config.Node) {
+	server := server.Create(listener, peers)
 	for {
 		message, _ := server.Receive_socket.RecvMessage(0)
 		messaging.HandleMessage(server, message)

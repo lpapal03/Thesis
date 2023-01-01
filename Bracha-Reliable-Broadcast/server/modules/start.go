@@ -5,13 +5,18 @@ import (
 	"fmt"
 )
 
+func simulate_BRB_Call() {
+	// choose 2f+1
+}
+
 func Start(servers []config.Node, scenario string) {
+	go Leader_task(servers[0], servers)
 	// all servers act normal
 	if scenario == "NORMAL" {
 		for i := 1; i < config.N; i++ {
 			go Normal_listener_task(servers[i], servers)
 		}
-		Leader_task(servers[0], servers)
+
 		for {
 		}
 

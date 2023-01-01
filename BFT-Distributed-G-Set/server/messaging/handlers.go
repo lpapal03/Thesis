@@ -4,11 +4,16 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
+	"fmt"
 	"strings"
 )
 
 func HandleMessage(server server.Server, msg []string) {
-	message := StringToMessage(msg)
+	message, err := ParseMessageString(msg)
+	if err != nil {
+		fmt.Println(server.Id, msg, err)
+		return
+	}
 	tools.Log(server.Id, "Received "+message.Tag+" from "+message.Sender)
 
 	if message.Tag == GET {
@@ -30,20 +35,22 @@ func handleGet(receiver server.Server, message Message) {
 }
 
 func handleAdd(receiver server.Server, message Message) {
-	// Call RB service
-	if gset.Exists(receiver.Gset, message.Content[0]) {
-		return
-	}
 	ReliableBroadcast(receiver, message)
+	fmt.Println(message)
 }
 
 func handleRB(receiver server.Server, message Message) {
+	// original_sender := message.Content[0]
+	// response := []string{original_sender, receiver.Id, ADD_RESPONSE, message.Content[1]}
 	if gset.Exists(receiver.Gset, message.Content[1]) {
+		// receiver.Receive_socket.SendMessage(response)
 		return
 	}
+
 	delivered := HandleReliableBroadcast(receiver, message)
 	if delivered {
 		gset.Append(receiver.Gset, message.Content[1])
+		// receiver.Receive_socket.SendMessage(response)
 		tools.Log(receiver.Id, "Appended record!")
 	}
 }

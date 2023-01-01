@@ -38,7 +38,11 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	peer_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-vote"
 	my_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-echo"
 	my_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-vote"
-	count_key := v.Content[0] + "-" + v.Content[1]
+	bare_key := v.Content[0] + "-" + v.Content[1] // sender-message
+
+	if receiver.BRB[bare_key] {
+		return false
+	}
 
 	// add message in message pot and count
 	if v.Tag == BRACHA_BROADCAST_ECHO {
@@ -48,7 +52,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 		receiver.BRB[peer_vote_key] = true
 	}
 
-	echo_count, vote_count := countMessages(receiver.BRB, count_key)
+	echo_count, vote_count := countMessages(receiver.BRB, bare_key)
 
 	// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
 	// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
@@ -82,8 +86,8 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
 	// on receiving <vote, v> from n-f distinct parties:
 	if vote_count >= config.N-config.F {
-		// clean map (not important, just saves memory)
-		receiver.BRB = make(map[string]bool)
+		receiver.BRB[bare_key] = true
+
 		return true
 	}
 
@@ -96,16 +100,16 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 }
 
 // count the messages received for a given v
-func countMessages(pot map[string]bool, count_key string) (int, int) {
+func countMessages(pot map[string]bool, bare_key string) (int, int) {
 	// start counters from 1, assuming caller is true on echo and vote
 	echo_count := 1
 	vote_count := 1
 	for k, v := range pot {
 
-		if strings.Contains(k, count_key) && strings.Contains(k, "echo") && v {
+		if strings.Contains(k, bare_key) && strings.Contains(k, "echo") && v {
 			echo_count++
 		}
-		if strings.Contains(k, count_key) && strings.Contains(k, "vote") && v {
+		if strings.Contains(k, bare_key) && strings.Contains(k, "vote") && v {
 			vote_count++
 		}
 	}
@@ -116,4 +120,15 @@ func sendToAll(receiver server.Server, message []string) {
 	for _, peer_socket := range receiver.Peers {
 		peer_socket.SendMessage(message)
 	}
+}
+
+func saveStateAndCleanUp(pot map[string]bool, bare_key string) {
+
+	for k := range pot {
+		if strings.Contains(k, bare_key) {
+			delete(pot, k)
+		}
+	}
+	pot[bare_key] = true
+
 }
