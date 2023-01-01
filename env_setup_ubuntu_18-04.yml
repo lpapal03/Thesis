@@ -15,6 +15,4 @@
         name: libzmq3-dev
         state: latest
     - name: Clone repository
-      git:
-        repo: https://github.com/loukaspapalazarou/Thesis
-        dest: /path/to/local/repo
+      shell: git clone https://github.com/loukaspapalazarou/Thesis
