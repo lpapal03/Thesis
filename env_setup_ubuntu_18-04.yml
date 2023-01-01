@@ -14,6 +14,10 @@
       apt:
         name: libzmq3-dev
         state: latest
-    - name: Clone repository
-      shell: git clone https://github.com/loukaspapalazarou/Thesis
+    - name: Example clone of a single branch
+      ansible.builtin.git:
+        repo: https://github.com/loukaspapalazarou/Thesis.git
+        dest: /src/ansible-examples
+        single_branch: yes
+        version: master
 
