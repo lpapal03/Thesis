@@ -27,8 +27,9 @@ if __name__ == '__main__':
     f.write("  become: true\n")
     f.write("  tasks:\n")
     f.write("    - name: Start servers\n")
-    f.write("      script: /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/main.go\n")
+    f.write("      command: /usr/local/go/bin/go run /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/main.go\n")
     f.close()
 
     os.system("ansible-playbook -i ./hosts start_servers.yml")
-    # os.remove("hosts")
+    os.remove("hosts")
+    os.remove("start_servers.yml")
