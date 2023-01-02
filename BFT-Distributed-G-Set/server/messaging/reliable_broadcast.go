@@ -5,18 +5,20 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
+	"fmt"
 	"strings"
 )
 
 // Leader, the one who initializes the module
 func ReliableBroadcast(leader server.Server, message Message) {
 
-	tools.Log(leader.Id, "Called Reliable broadcast")
-
 	my_echo_key := message.Sender + "-" + message.Content[0] + "-" + leader.Id + "-echo"
 	my_vote_key := message.Sender + "-" + message.Content[0] + "-" + leader.Id + "-vote"
+	my_init_key := message.Sender + "-" + message.Content[0] + "-" + leader.Id + "-init"
 	leader.BRB[my_echo_key] = true
 	leader.BRB[my_vote_key] = true
+	leader.BRB[my_init_key] = true
+	fmt.Println(my_init_key)
 
 	content := append([]string{message.Sender}, message.Content...)
 
@@ -43,6 +45,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	peer_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-vote"
 	my_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-echo"
 	my_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-vote"
+	my_init_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-init"
 	bare_key := v.Content[0] + "-" + v.Content[1]
 
 	// add message in message pot and count
@@ -60,11 +63,14 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
 	// on receiving <v> from leader
 	if v.Tag == BRACHA_BROADCAST_INIT {
-		receiver.BRB[my_echo_key] = true
-		receiver.BRB[my_vote_key] = true
-		v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
-		sendToAll(receiver, v)
-		receiver.BRB[my_echo_key] = false
+		if receiver.BRB[my_init_key] == false {
+			receiver.BRB[my_echo_key] = true
+			receiver.BRB[my_vote_key] = true
+			v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
+			sendToAll(receiver, v)
+			receiver.BRB[my_echo_key] = false
+			receiver.BRB[my_init_key] = true
+		}
 	}
 
 	// on receiving <echo, v> from n-f distinct parties:

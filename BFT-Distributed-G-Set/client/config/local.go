@@ -8,7 +8,7 @@ var LOCAL_SERVERS = []Node{
 	{Host: "localhost:", Port: "5559"},
 	{Host: "localhost:", Port: "5560"},
 	{Host: "localhost:", Port: "5561"},
-	// {Host: "localhost:", Port: "5562"},
-	// {Host: "localhost:", Port: "5563"},
-	// {Host: "localhost:", Port: "5564"},
+	{Host: "localhost:", Port: "5562"},
+	{Host: "localhost:", Port: "5563"},
+	{Host: "localhost:", Port: "5564"},
 }

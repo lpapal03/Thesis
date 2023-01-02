@@ -4,8 +4,10 @@ import (
 	"frontend/client"
 	"frontend/config"
 	"frontend/tools"
+	"math/rand"
 	"sort"
 	"strings"
+	"time"
 )
 
 // returns true iff we have
@@ -83,13 +85,14 @@ func countAddReplies(replies map[string]bool, record string) int {
 // TODO: Handle responses
 func Add(client client.Client, record string) {
 	tools.Log(client.Id, "Called ADD("+record+")")
-	for i := 0; i < len(client.Servers); i++ {
-		// TargetedAdd(client, *client.Servers[i], record)
-		client.Message_counter++
-		client.Servers[i].SendMessage([]string{ADD, record})
+	//randomly choose 2f+1 servers to send add
+	rand.Seed(time.Now().Unix())
+	receiver_indexes := rand.Perm(len(client.Servers))
+	for i := 0; i < 2*config.F+1; i++ {
+		client.Servers[receiver_indexes[i]].SendMessage([]string{ADD, record})
 	}
-
-	// // WAIT FOR F+1 RESPONSES
+	// client.Servers[0].SendMessage([]string{ADD, record})
+	// WAIT FOR F+1 RESPONSES
 	// replies := make(map[string]bool)
 	// tools.Log(client.Id, "Waiting for f+1 ADD_RESPONSES...")
 	// for {

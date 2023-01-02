@@ -3,12 +3,14 @@ package messaging
 import (
 	"backend/server"
 	"backend/tools"
+	"fmt"
 )
 
 func HandleMessage(server server.Server, msg []string) {
 	message, err := StringToMessage(msg)
 	// if message is not in the right format, discard
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 	tools.Log(server.Id, "Received "+message.Tag+" from "+message.Sender)
