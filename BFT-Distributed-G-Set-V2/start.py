@@ -1,10 +1,5 @@
 import os
 
-if __name__ == '__main__':
-    os.system("go run server/main.go")
-    print('done')import os
-import yaml
-
 def GetHosts():
     hosts = []
     for i in range(9999):
