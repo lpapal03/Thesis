@@ -9,11 +9,22 @@ def GetHosts():
             hosts.append(hostname)
         else:
             return hosts
+
+def StartInteractive():
+    pass
+
+def StartNormal():
+    pass
+
+def StartMutes():
+    pass
     
 
 
 if __name__ == '__main__':
-    # for normal execution
+    # ask scenario
+    # ask N (must be greater than hosts)
+    # begin
     hosts = GetHosts()
     f = open("hosts", "w")
     for h in hosts:
@@ -28,8 +39,10 @@ if __name__ == '__main__':
     f.write("  tasks:\n")
     f.write("    - name: Start servers\n")
     f.write("      command: /usr/local/go/bin/go run /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/main.go\n")
+    f.write('      when: ansible_hostname != "node0"\n')
     f.close()
-
     os.system("ansible-playbook -i ./hosts start_servers.yml")
     os.remove("hosts")
     os.remove("start_servers.yml")
+
+    os.system("go run /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/main.go")
