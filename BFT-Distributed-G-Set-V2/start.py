@@ -11,26 +11,11 @@ def GetHosts():
             return hosts
 
 def StartInteractive():
-    pass
-
-def StartNormal():
-    pass
-
-def StartMutes():
-    pass
-    
-
-
-if __name__ == '__main__':
-    # ask scenario
-    # ask N (must be greater than hosts)
-    # begin
     hosts = GetHosts()
     f = open("hosts", "w")
     for h in hosts:
         f.write(h+"\n")
     f.close
-
     f = open("start_servers.yml", "w")
     f.write("---\n")
     f.write("- name: My Playbook\n")
@@ -44,5 +29,18 @@ if __name__ == '__main__':
     os.system("ansible-playbook -i ./hosts start_servers.yml")
     os.remove("hosts")
     os.remove("start_servers.yml")
+    os.system("go run /users/loukis/Thesis/BFT-Distributed-G-Set-V2/client/main.go")
 
-    os.system("go run /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/main.go")
+def StartNormal():
+    pass
+
+def StartMutes():
+    pass
+    
+ 
+
+if __name__ == '__main__':
+    # ask scenario
+    # ask N (must be greater than hosts)
+    # begin
+    StartInteractive()
