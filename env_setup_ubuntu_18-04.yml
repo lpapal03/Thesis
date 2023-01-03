@@ -16,10 +16,12 @@
         state: latest
     - name: Set git user.name
       shell: git config --global user.name "Loukas Papalazarou"
-      when: ansible_hostname == "node0"
+      vars:
+        ansible_become: false
     - name: Set git user.email
       shell: git config --global user.email loukas.papalazarou.cy@gmail.com
-      when: ansible_hostname == "node0"
+      vars:
+        ansible_become: false
     - name: Example clone of a single branch
       git:
         repo: https://github.com/loukaspapalazarou/Thesis.git
