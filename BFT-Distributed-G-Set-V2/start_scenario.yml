@@ -5,8 +5,8 @@
   tasks:
     - name: Fetch file hosts from node 0
       command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-V2/hosts /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server
-    - name: Navigate to source files directory
-      command: /usr/local/go/bin/go run .
+    - name: Start servers
+      command: nohup /usr/local/go/bin/go run . > /dev/null &
       async: 3
       args:
         chdir: /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/
