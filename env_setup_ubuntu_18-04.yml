@@ -31,10 +31,3 @@
         force: yes
     - name: Transfer ownership to loukis
       shell: chown -R loukis .
-    - name: Go mod init
-      command: /usr/local/go/bin/go mod init backend 
-      chdir: /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/
-    - name: Go mod tidy
-      command: /usr/local/go/bin/go mod tidy 
-      chdir: /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/
-
