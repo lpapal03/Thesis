@@ -2,7 +2,7 @@ package main
 
 import (
 	"backend/server"
-	"fmt"
+	"log"
 	"os"
 	"strings"
 	"time"
@@ -34,9 +34,10 @@ func main() {
 
 	server.Create(hostname, hosts)
 
-	for {
-		fmt.Println("Waiting")
-		time.Sleep(time.Second * 1)
+	time.Sleep(time.Second * 60)
+	_, e := os.Create("GeeksforGeeks.txt")
+	if e != nil {
+		log.Fatal(e)
 	}
 
 }
