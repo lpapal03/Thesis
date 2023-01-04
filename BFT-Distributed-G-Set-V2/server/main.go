@@ -2,8 +2,10 @@ package main
 
 import (
 	"backend/server"
+	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -31,5 +33,10 @@ func main() {
 	}
 
 	server.Create(hostname, hosts)
+
+	for {
+		fmt.Println("Waiting")
+		time.Sleep(time.Second * 1)
+	}
 
 }
