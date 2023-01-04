@@ -6,5 +6,6 @@
     - name: Fetch file hosts from node 0
       command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-V2/hosts /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server
     - name: Navigate to source files directory
-      chdir: /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/
       command: ls
+      args:
+        chdir: /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/
