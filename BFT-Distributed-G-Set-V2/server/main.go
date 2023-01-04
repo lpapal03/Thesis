@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"backend/Thesis/BFT-Distributed-G-Set-V2/server/server"
 	"os"
 	"strings"
 )
@@ -29,8 +29,6 @@ func main() {
 		}
 	}
 
-	// server.Create(hostname, hosts)
-
-	fmt.Println("Hello from", hostname)
+	server.Create(hostname, hosts)
 
 }
