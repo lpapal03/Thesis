@@ -1,0 +1,13 @@
+---
+- name: Fetch hosts file
+  hosts: servers
+  become: true
+  tasks:
+    - name: Fetch file from node0
+    - command: sudo scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-V2/hosts /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server
+- name: Start servers
+  hosts: servers
+  become: true
+  tasks:
+    - name: Start servers
+      command: /usr/local/go/bin/go run /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/main.go
