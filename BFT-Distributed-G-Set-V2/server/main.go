@@ -11,6 +11,7 @@ func main() {
 	// the only thing i know is what i have to do
 	// and the servers in the network
 	hostname, err := os.Hostname()
+
 	if err != nil {
 		panic(err)
 	}
