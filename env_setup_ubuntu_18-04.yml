@@ -2,6 +2,7 @@
 - name: Initialize environment
   hosts: all
   become: yes
+  retries: 0
   tasks:
     - name: Add ZeroMQ repository to sources list
       shell: echo 'deb http://download.opensuse.org/repositories/network:/messaging:/zeromq:/release-stable/xUbuntu_18.04/ /' | tee /etc/apt/sources.list.d/network:messaging:zeromq:release-stable.list

@@ -29,13 +29,14 @@ def StartNormalInteractive(N=None, c=None):
     f.write("- name: Start servers\n")
     f.write("  hosts: servers\n")
     f.write("  become: true\n")
+    f.write("  retries: 0\n")
     f.write("  tasks:\n")
 
     f.write("    - name: Fetch file from" + HOSTNAME + "\n")
-    f.write("      fetch\n")
+    f.write("      fetch:\n")
     f.write("        src: /users/loukis/Thesis/BFT-Distributed-G-Set-V2/hosts\n")
     f.write("        dest: /users/loukis/Thesis/BFT-Distributed-G-Set-V2/hosts\n")
-    f.write("      hosts: " + HOSTNAME + "\n")
+    f.write("      when: ansible_hostname == '"+HOSTNAME+"'")
     
     f.write("    - name: Start servers\n")
     f.write("      command: /usr/local/go/bin/go run /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/main.go\n")
