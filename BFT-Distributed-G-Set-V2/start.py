@@ -33,7 +33,7 @@ def StartNormalInteractive(N=None, c=None):
 
     f.write("    - name: Fetch file from" + HOSTNAME + "\n")
     f.write("      fetch:\n")
-    f.write("        src: /users/loukis/Thesis/BFT-Distributed-G-Set-V2/hosts\n")
+    f.write("        src: /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/hosts\n")
     f.write("        dest: fetched\n")
     f.write("      when: ansible_hostname != '" + HOSTNAME + "'\n")
     
