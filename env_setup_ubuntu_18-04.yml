@@ -28,6 +28,7 @@
         dest: /users/loukis/Thesis
         clone: yes
         update: yes
+        force: yes
     - name: Transfer ownership to loukis
       shell: chown -R loukis .
 
