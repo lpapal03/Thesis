@@ -27,5 +27,13 @@ func main() {
 	client := client.CreateClient(servers)
 	client.Servers[0].SendMessage([]string{"Hello"})
 	fmt.Println("Sent hello")
+	for {
+		sockets, _ := client.Poller.Poll(-1)
+		for _, socket := range sockets {
+			s := socket.Socket
+			msg, _ := s.RecvMessage(0)
+			fmt.Println(msg)
+		}
+	}
 
 }

@@ -2,8 +2,6 @@ package main
 
 import (
 	"backend/server"
-	"fmt"
-	"log"
 	"os"
 	"strings"
 )
@@ -29,13 +27,7 @@ func main() {
 
 	for {
 		msg, _ := server.Receive_socket.RecvMessage(0)
-		fmt.Println(msg)
-		myfile, e := os.Create("log.txt")
-		if e != nil {
-			log.Fatal(e)
-		}
-		myfile.WriteString(strings.Join(msg, " "))
-		myfile.Close()
+		server.Receive_socket.SendMessage([]string{msg[0], msg[1] + "Received"})
 	}
 
 }
