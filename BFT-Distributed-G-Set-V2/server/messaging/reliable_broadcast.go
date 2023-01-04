@@ -1,10 +1,7 @@
 package messaging
 
 import (
-	"backend/config"
-	"backend/gset"
 	"backend/server"
-	"backend/tools"
 	"fmt"
 	"strings"
 )
@@ -37,71 +34,71 @@ func ReliableBroadcast(leader server.Server, message Message) {
 // Called from every server receiving RB messages
 func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
-	if gset.Exists(receiver.Gset, v.Content[1]) {
-		return true
-	}
-
-	peer_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-echo"
-	peer_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-vote"
-	my_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-echo"
-	my_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-vote"
-	my_init_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-init"
-	bare_key := v.Content[0] + "-" + v.Content[1]
-
-	// add message in message pot and count
-	if v.Tag == BRACHA_BROADCAST_ECHO {
-		receiver.BRB[peer_echo_key] = true
-	}
-	if v.Tag == BRACHA_BROADCAST_VOTE {
-		receiver.BRB[peer_vote_key] = true
-	}
-
-	echo_count, vote_count := countMessages(receiver.BRB, bare_key)
-
-	// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
-	// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
-
-	// on receiving <v> from leader
-	if v.Tag == BRACHA_BROADCAST_INIT {
-		if receiver.BRB[my_init_key] == false {
-			receiver.BRB[my_echo_key] = true
-			receiver.BRB[my_vote_key] = true
-			v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
-			sendToAll(receiver, v)
-			receiver.BRB[my_echo_key] = false
-			receiver.BRB[my_init_key] = true
-		}
-	}
-
-	// on receiving <echo, v> from n-f distinct parties:
-	if v.Tag == BRACHA_BROADCAST_ECHO && echo_count >= config.N-config.F {
-		if receiver.BRB[my_vote_key] == true {
-			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
-			sendToAll(receiver, v)
-		}
-		receiver.BRB[my_vote_key] = false
-	}
-
-	// on receiving <echo, v> from f+1 distinct parties:
-	if v.Tag == BRACHA_BROADCAST_ECHO && vote_count >= config.F+1 {
-		if receiver.BRB[my_vote_key] == true {
-			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
-			sendToAll(receiver, v)
-		}
-		receiver.BRB[my_vote_key] = false
-	}
-
-	// on receiving <vote, v> from n-f distinct parties:
-	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
-		tools.Log(receiver.Id, "Delivered "+strings.Join(v.Content, " "))
-		// clean map (not important, just saves memory)
-		potCleanUp(receiver.BRB, bare_key)
-		return true
-	}
-
-	// for k, v := range receiver.BRB {
-	// 	fmt.Println(receiver.Id, k, v)
+	// if gset.Exists(receiver.Gset, v.Content[1]) {
+	// 	return true
 	// }
+
+	// peer_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-echo"
+	// peer_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-vote"
+	// my_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-echo"
+	// my_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-vote"
+	// my_init_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-init"
+	// bare_key := v.Content[0] + "-" + v.Content[1]
+
+	// // add message in message pot and count
+	// if v.Tag == BRACHA_BROADCAST_ECHO {
+	// 	receiver.BRB[peer_echo_key] = true
+	// }
+	// if v.Tag == BRACHA_BROADCAST_VOTE {
+	// 	receiver.BRB[peer_vote_key] = true
+	// }
+
+	// echo_count, vote_count := countMessages(receiver.BRB, bare_key)
+
+	// // tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
+	// // tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
+
+	// // on receiving <v> from leader
+	// if v.Tag == BRACHA_BROADCAST_INIT {
+	// 	if receiver.BRB[my_init_key] == false {
+	// 		receiver.BRB[my_echo_key] = true
+	// 		receiver.BRB[my_vote_key] = true
+	// 		v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
+	// 		sendToAll(receiver, v)
+	// 		receiver.BRB[my_echo_key] = false
+	// 		receiver.BRB[my_init_key] = true
+	// 	}
+	// }
+
+	// // on receiving <echo, v> from n-f distinct parties:
+	// if v.Tag == BRACHA_BROADCAST_ECHO && echo_count >= config.N-config.F {
+	// 	if receiver.BRB[my_vote_key] == true {
+	// 		v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
+	// 		sendToAll(receiver, v)
+	// 	}
+	// 	receiver.BRB[my_vote_key] = false
+	// }
+
+	// // on receiving <echo, v> from f+1 distinct parties:
+	// if v.Tag == BRACHA_BROADCAST_ECHO && vote_count >= config.F+1 {
+	// 	if receiver.BRB[my_vote_key] == true {
+	// 		v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
+	// 		sendToAll(receiver, v)
+	// 	}
+	// 	receiver.BRB[my_vote_key] = false
+	// }
+
+	// // on receiving <vote, v> from n-f distinct parties:
+	// if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
+	// 	tools.Log(receiver.Id, "Delivered "+strings.Join(v.Content, " "))
+	// 	// clean map (not important, just saves memory)
+	// 	potCleanUp(receiver.BRB, bare_key)
+	// 	return true
+	// }
+
+	// // for k, v := range receiver.BRB {
+	// // 	fmt.Println(receiver.Id, k, v)
+	// // }
 
 	return false
 

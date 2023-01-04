@@ -1,7 +1,7 @@
 package main
 
 import (
-	"backend/Thesis/BFT-Distributed-G-Set-V2/server/server"
+	"backend/server"
 	"os"
 	"strings"
 )
