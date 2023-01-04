@@ -1,10 +1,8 @@
 package main
 
 import (
-	"backend/config"
-	"backend/server"
+	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -17,16 +15,17 @@ func main() {
 		panic(err)
 	}
 	hostname = strings.Split(hostname, ".")[0]
-	N, err := strconv.Atoi(os.Args[1])
-	if err != nil {
-		panic(err)
-	}
+	// N, err := strconv.Atoi(os.Args[1])
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	all_servers := []string{}
-	for i := 0; i < N; i++ {
-		p := "node" + strconv.Itoa(i) + ":"
-		all_servers = append(all_servers, p+config.DEFAULT_PORT)
-	}
-	server.Create(hostname, all_servers)
+	// all_servers := []string{}
+	// for i := 0; i < N; i++ {
+	// 	p := "node" + strconv.Itoa(i) + ":"
+	// 	all_servers = append(all_servers, p+config.DEFAULT_PORT)
+	// }
+	// server.Create(hostname, all_servers)
+	fmt.Println("Hello from server", hostname)
 
 }
