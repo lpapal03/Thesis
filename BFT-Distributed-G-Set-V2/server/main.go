@@ -15,7 +15,7 @@ func main() {
 	// }
 	// hostname = strings.Split(hostname, ".")[0]
 
-	data, err := os.ReadFile("/users/loukis/Thesis/BFT-Distributed-G-Set-V2/hosts")
+	data, err := os.ReadFile("/users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/hosts")
 	if err != nil {
 		panic(err)
 	}
