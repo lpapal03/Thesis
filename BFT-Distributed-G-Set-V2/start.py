@@ -31,10 +31,11 @@ def StartNormalInteractive(N=None, c=None):
     f.write("  become: true\n")
     f.write("  tasks:\n")
     f.write("    - name: Start servers\n")
-    f.write("      command: /usr/local/go/bin/go run /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/main.go\n")
+    f.write("      command: /usr/local/go/bin/go run /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server/main.go hosts\n")
     f.close()
-    os.system("ansible-playbook -i ./hosts start_scenario.yml")
-    os.remove("hosts")
+
+    os.system("ansible-playbook -i ./hosts start_scenario.yml -v")
+    # os.remove("hosts")
     os.remove("start_scenario.yml")
     os.system("go run /users/loukis/Thesis/BFT-Distributed-G-Set-V2/client/main.go")
 

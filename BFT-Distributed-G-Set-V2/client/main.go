@@ -1,11 +1,11 @@
 package main
 
 import (
-	"frontend/ui"
+	"fmt"
 )
 
 func main() {
 
-	ui.Start_CLI()
+	fmt.Println("Hello from client")
 
 }

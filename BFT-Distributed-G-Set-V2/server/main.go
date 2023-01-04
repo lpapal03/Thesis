@@ -15,10 +15,13 @@ func main() {
 		panic(err)
 	}
 	hostname = strings.Split(hostname, ".")[0]
-	// N, err := strconv.Atoi(os.Args[1])
-	// if err != nil {
-	// 	panic(err)
-	// }
+
+	config_file := os.Args[1]
+	data, err := os.ReadFile("../" + config_file)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(data)
 
 	// all_servers := []string{}
 	// for i := 0; i < N; i++ {
