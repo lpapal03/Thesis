@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"strings"
-	"backend/server"
 )
 
 func main() {
@@ -20,15 +20,17 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	hosts := strings.Split(strings.ReplaceAll(string(data) , "\n\n", "\n"), "\n")
+	hosts := strings.Split(strings.ReplaceAll(string(data), "\n\n", "\n"), "\n")
 	hosts = hosts[:len(hosts)-1]
-	for i:=0; i<len(hosts); i++{
-		if hosts[i] == "[servers]"{
+	for i := 0; i < len(hosts); i++ {
+		if hosts[i] == "[servers]" {
 			hosts = hosts[i+1:]
 			break
 		}
-	} 
+	}
 
-	server.Create(hostname, hosts)
+	// server.Create(hostname, hosts)
+
+	fmt.Println("Hello from", hostname)
 
 }
