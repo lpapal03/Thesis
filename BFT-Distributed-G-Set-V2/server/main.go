@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -19,16 +20,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(data))
-
-	// files, err := ioutil.ReadDir("./")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// for _, f := range files {
-	// 	fmt.Println(f.Name())
-	// }
+	hosts := strings.Split(string(data), "\n")
+	fmt.Println(hosts)
 
 	// all_servers := []string{}
 	// for i := 0; i < N; i++ {
