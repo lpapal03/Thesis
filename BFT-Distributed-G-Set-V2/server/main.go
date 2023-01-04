@@ -16,12 +16,12 @@ func main() {
 	}
 	hostname = strings.Split(hostname, ".")[0]
 
-	config_file := os.Args[1]
-	data, err := os.ReadFile("../" + config_file)
+	// config_file := os.Args[1]
+	data, err := os.ReadFile(os.Args[1])
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(data)
+	fmt.Println(string(data))
 
 	// all_servers := []string{}
 	// for i := 0; i < N; i++ {
