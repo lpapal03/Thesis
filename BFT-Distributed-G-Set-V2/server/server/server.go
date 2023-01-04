@@ -4,6 +4,8 @@ import (
 	"backend/config"
 	"backend/gset"
 	"backend/tools"
+	"os"
+	"strings"
 
 	zmq "github.com/pebbe/zmq4"
 )
@@ -18,8 +20,15 @@ type Server struct {
 	BRB            map[string]bool
 }
 
-func Create(hostname string, peers []string) Server {
-	id := hostname
+func Create(peers []string) Server {
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		panic(err)
+	}
+	hostname = strings.Split(hostname, ".")[0]
+
+	id := hostname + config.DEFAULT_PORT
 	zctx, _ := zmq.NewContext()
 	server_sockets := make([]*zmq.Socket, 0)
 	my_gset := gset.Create()
