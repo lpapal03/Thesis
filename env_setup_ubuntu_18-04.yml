@@ -1,5 +1,5 @@
 ---
-- name: Install ZeroMQ
+- name: Initialize environment
   hosts: all
   become: yes
   tasks:
