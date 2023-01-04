@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
+	"os"
 )
 
 func main() {
@@ -16,21 +15,20 @@ func main() {
 	// }
 	// hostname = strings.Split(hostname, ".")[0]
 
-	// config_file := os.Args[1]
-	// data, err := os.ReadFile(os.Args[1])
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// fmt.Println(string(data))
-
-	files, err := ioutil.ReadDir("./")
+	data, err := os.ReadFile("/users/loukis/Thesis/BFT-Distributed-G-Set-V2/hosts")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
+	fmt.Println(string(data))
 
-	for _, f := range files {
-		fmt.Println(f.Name())
-	}
+	// files, err := ioutil.ReadDir("./")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// for _, f := range files {
+	// 	fmt.Println(f.Name())
+	// }
 
 	// all_servers := []string{}
 	// for i := 0; i < N; i++ {
