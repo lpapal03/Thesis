@@ -6,4 +6,4 @@
     - name: Fetch file hosts from node 0
       command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-V2/hosts /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server
     - name: Start servers
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server; nohup /usr/local/go/bin/go run . </dev/null >/dev/null 2>&1 & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-V2/server; nohup /usr/local/go/bin/go run .
