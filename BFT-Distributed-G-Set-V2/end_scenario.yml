@@ -1,0 +1,8 @@
+---
+- hosts: servers
+  tasks:
+    - name: Kill all processes on remote server
+      command: killall -9 go
+      become: true
+      async: 1
+      poll: 0

@@ -25,10 +25,10 @@ func main() {
 	}
 
 	client := client.CreateClient(servers)
-	for i:=0; i<len(client.Servers); i++{
-		client.Servers[i].SendMessage([]string{"Hello"})
-	}
-	fmt.Println("Sent hello")
+		for i:=0; i<len(client.Servers); i++{
+			client.Servers[i].SendMessage([]string{"Hello"})
+		}
+	fmt.Println("Sent hello, waiting for reply...")
 	for {
 		sockets, _ := client.Poller.Poll(-1)
 		for _, socket := range sockets {
