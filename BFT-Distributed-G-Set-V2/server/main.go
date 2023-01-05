@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 	"fmt"
+	"strconv"
 )
 
 func main() {
@@ -24,10 +25,12 @@ func main() {
 		}
 	}
 
+	pid := strconv.Itoa(os.Getpid())
+
 	server := server.Create(peers)
 
 	msg, _ := server.Receive_socket.RecvMessage(0)
 	fmt.Println(msg)
-	server.Receive_socket.SendMessage([]string{msg[0], msg[1]+ " World, now server is dead"})
+	server.Receive_socket.SendMessage([]string{msg[0], pid})
 
 }
