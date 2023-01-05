@@ -26,10 +26,8 @@ func main() {
 
 	server := server.Create(peers)
 
-	for {
-		msg, _ := server.Receive_socket.RecvMessage(0)
-		fmt.Println(msg)
-		server.Receive_socket.SendMessage([]string{msg[0], "World"})
-	}
+	msg, _ := server.Receive_socket.RecvMessage(0)
+	fmt.Println(msg)
+	server.Receive_socket.SendMessage([]string{msg[0], msg[1]+ " World, now server is dead"})
 
 }
