@@ -35,7 +35,7 @@ func Create(peers []string) Server {
 	brb := make(map[string]bool)
 	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
 	receive_socket.Bind("tcp://*:" + config.DEFAULT_PORT)
-	tools.Log(id, "Bound tcp://*:"+config.DEFAULT_PORT)
+	tools.Log(hostname, "Bound tcp://*:"+config.DEFAULT_PORT)
 
 	// Connect my dealer sockets to all other servers' router
 	for i := 0; i < len(peers); i++ {

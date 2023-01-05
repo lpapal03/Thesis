@@ -4,6 +4,7 @@ import (
 	"backend/server"
 	"os"
 	"strings"
+	"fmt"
 )
 
 func main() {
@@ -27,7 +28,8 @@ func main() {
 
 	for {
 		msg, _ := server.Receive_socket.RecvMessage(0)
-		server.Receive_socket.SendMessage([]string{msg[0], msg[1] + "Received"})
+		fmt.Println(msg)
+		server.Receive_socket.SendMessage([]string{msg[0], msg[1] + " World"})
 	}
 
 }

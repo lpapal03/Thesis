@@ -1,0 +1,7 @@
+[clients]
+node0
+
+[servers]
+node1
+node2
+node3
