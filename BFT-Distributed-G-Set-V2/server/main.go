@@ -29,7 +29,7 @@ func main() {
 	for {
 		msg, _ := server.Receive_socket.RecvMessage(0)
 		fmt.Println(msg)
-		server.Receive_socket.SendMessage([]string{msg[0], msg[1] + " World"})
+		server.Receive_socket.SendMessage([]string{msg[0], "World"})
 	}
 
 }
