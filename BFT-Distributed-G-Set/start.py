@@ -16,6 +16,8 @@ def StartNormalInteractive(N=None, c=None):
     servers = GetHosts()
 
     f = open("hosts", "w")
+    f.write("[master]\n")
+    f.write("[node0]\n\n")
     f.write("[clients]\n")
     f.write(HOSTNAME + "\n\n")
     f.write("[servers]\n")
@@ -24,7 +26,7 @@ def StartNormalInteractive(N=None, c=None):
             f.write(h+"\n")
     f.close()
 
-    os.system("ansible-playbook -i ./hosts start_scenario.yml -v")
+    os.system("ansible-playbook -i ./hosts ansible/start_scenario.yml -v")
     # os.remove("hosts")
     os.system("cd /users/loukis/Thesis/BFT-Distributed-G-Set/client; /usr/local/go/bin/go run main.go")
 

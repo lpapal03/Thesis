@@ -2,17 +2,17 @@ package main
 
 import (
 	"backend/server"
-	"os"
-	"strings"
 	"fmt"
+	"os"
 	"strconv"
+	"strings"
 )
 
 func main() {
 
 	// the only thing i know is what i have to do
 	// and the servers in the network
-	data, err := os.ReadFile("/users/loukis/Thesis/BFT-Distributed-G-Set/server/hosts")
+	data, err := os.ReadFile("/users/loukis/Thesis/BFT-Distributed-G-Set/hosts")
 	if err != nil {
 		panic(err)
 	}
@@ -29,8 +29,10 @@ func main() {
 
 	server := server.Create(peers)
 
-	msg, _ := server.Receive_socket.RecvMessage(0)
-	fmt.Println(msg)
-	server.Receive_socket.SendMessage([]string{msg[0], pid})
+	for {
+		msg, _ := server.Receive_socket.RecvMessage(0)
+		fmt.Println(msg)
+		server.Receive_socket.SendMessage([]string{msg[0], pid})
+	}
 
 }
