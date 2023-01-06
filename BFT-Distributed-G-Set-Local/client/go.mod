@@ -1,5 +1,5 @@
-module backend
+module frontend
 
-go 1.18
+go 1.19
 
 require github.com/pebbe/zmq4 v1.2.9

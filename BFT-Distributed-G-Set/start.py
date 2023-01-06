@@ -26,7 +26,7 @@ def StartNormalInteractive(N=None, c=None):
 
     os.system("ansible-playbook -i ./hosts start_scenario.yml -v")
     # os.remove("hosts")
-    os.system("cd /users/loukis/Thesis/BFT-Distributed-G-Set-V2/client; /usr/local/go/bin/go run main.go")
+    os.system("cd /users/loukis/Thesis/BFT-Distributed-G-Set/client; /usr/local/go/bin/go run main.go")
 
 def StartMutes(interactive=True, N=None):
     pass

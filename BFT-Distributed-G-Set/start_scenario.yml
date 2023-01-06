@@ -1,0 +1,10 @@
+---
+- name: Start scenario
+  hosts: servers
+  become: true
+  tasks:
+    - name: Fetch file hosts from node 0
+      command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set/hosts /users/loukis/Thesis/BFT-Distributed-G-Set/server
+    - name: Start servers
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . </dev/null >/dev/null 2>&1 & sleep 1
+      become_user: loukis

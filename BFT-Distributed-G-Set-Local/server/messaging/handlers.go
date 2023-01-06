@@ -4,14 +4,13 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
-	"fmt"
 	"strings"
 )
 
 func HandleMessage(server server.Server, msg []string) {
 	message, err := ParseMessageString(msg)
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 	tools.Log(server.Id, "Received "+message.Tag+" from "+message.Sender)
 
