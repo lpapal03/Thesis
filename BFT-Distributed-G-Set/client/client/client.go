@@ -10,38 +10,38 @@ import (
 )
 
 type Client struct {
-	Id              string
+	Hostname        string
 	Zctx            zmq.Context
 	Poller          zmq.Poller
 	Message_counter int
-	Servers         []*zmq.Socket
+	Servers         map[string]*zmq.Socket
 }
 
 func CreateClient(servers []string) Client {
 	// Declare context, poller, router sockets of servers, message counter
 	zctx, _ := zmq.NewContext()
 	poller := zmq.NewPoller()
-	var server_sockets []*zmq.Socket
+	server_sockets := make(map[string]*zmq.Socket)
 
 	hostname, err := os.Hostname()
 	if err != nil {
 		panic(err)
 	}
-	id := strings.Split(hostname, ".")[0]
+	hostname = strings.Split(hostname, ".")[0]
 
 	// Connect client dealer sockets to all servers
 	for i := 0; i < len(servers); i++ {
 		s, _ := zctx.NewSocket(zmq.DEALER)
-		s.SetIdentity(id)
+		s.SetIdentity(hostname)
 		target := "tcp://" + servers[i] + ":" + config.DEFAULT_PORT
 		s.Connect(target)
-		tools.Log(id, "Established connection with "+target)
-		server_sockets = append(server_sockets, s)
+		tools.Log(hostname, "Established connection with "+target)
+		server_sockets[servers[i]] = s
 		poller.Add(s, zmq.POLLIN)
 	}
 
 	return Client{
-		Id:              id,
+		Hostname:        hostname,
 		Zctx:            *zctx,
 		Poller:          *poller,
 		Message_counter: 0,

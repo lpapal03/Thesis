@@ -12,15 +12,14 @@ import (
 
 type Server struct {
 	Zctx           *zmq.Context
-	Peers          []*zmq.Socket
+	Peers          map[string]*zmq.Socket
 	Receive_socket zmq.Socket
 	Hostname       string
-	Id             string
 	Gset           map[string]string
 	BRB            map[string]bool
 }
 
-func Create(peers []string) Server {
+func CreateServer(peers []string) Server {
 
 	hostname, err := os.Hostname()
 	if err != nil {
@@ -28,9 +27,8 @@ func Create(peers []string) Server {
 	}
 	hostname = strings.Split(hostname, ".")[0]
 
-	id := hostname + config.DEFAULT_PORT
 	zctx, _ := zmq.NewContext()
-	server_sockets := make([]*zmq.Socket, 0)
+	server_sockets := make(map[string]*zmq.Socket)
 	my_gset := gset.Create()
 	brb := make(map[string]bool)
 	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
@@ -44,18 +42,17 @@ func Create(peers []string) Server {
 			continue
 		}
 		s, _ := zctx.NewSocket(zmq.DEALER)
-		s.SetIdentity(id)
+		s.SetIdentity(hostname)
 		s.Connect("tcp://" + peers[i])
 		tools.Log(hostname, "Connected to "+peers[i])
 		// append socket to socket list
-		server_sockets = append(server_sockets, s)
+		server_sockets[peers[i]] = s
 	}
 
 	return Server{
 		Zctx:           zctx,
 		Peers:          server_sockets,
 		Receive_socket: *receive_socket,
-		Id:             id,
 		Hostname:       hostname,
 		Gset:           my_gset,
 		BRB:            brb,

@@ -1,30 +1,23 @@
 package main
 
 import (
+	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/server"
 	"fmt"
-	"os"
-	"strings"
 )
 
 func main() {
 
-	// the only thing i know is what i have to do
-	// and the servers in the network
-	data, err := os.ReadFile("/users/loukis/Thesis/BFT-Distributed-G-Set/hosts")
-	if err != nil {
-		panic(err)
-	}
-	hosts := strings.Split(strings.ReplaceAll(string(data), "\n\n", "\n"), "\n")
-	peers := hosts[:len(hosts)-1]
-	for i := 0; i < len(peers); i++ {
-		if peers[i] == "[servers]" {
-			peers = peers[i+1:]
-			break
-		}
-	}
+	filename := "/users/loukis/Thesis/BFT-Distributed-G-Set/hosts"
 
-	server := server.Create(peers)
+	servers := config.GetHosts(filename, "servers")
+
+	config.N = len(servers)
+	config.F = (config.N - 1) / 3
+
+	server := server.CreateServer(servers)
+
+	fmt.Println(server.Peers)
 
 	for {
 		msg, _ := server.Receive_socket.RecvMessage(0)
