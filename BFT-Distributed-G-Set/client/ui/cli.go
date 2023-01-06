@@ -31,15 +31,14 @@ func Start_CLI(c client.Client) {
 			for i := 0; i < len(c.Servers); i++ {
 				c.Servers[i].SendMessage([]string{command})
 			}
-			fmt.Printf("Sent %s, waiting for reply...", command)
-			for {
-				sockets, _ := c.Poller.Poll(-1)
-				for _, socket := range sockets {
-					s := socket.Socket
-					msg, _ := s.RecvMessage(0)
-					fmt.Println(msg)
-				}
+			fmt.Printf("Sent %s, waiting for reply...\n", command)
+			sockets, _ := c.Poller.Poll(-1)
+			for _, socket := range sockets {
+				s := socket.Socket
+				msg, _ := s.RecvMessage(0)
+				fmt.Println(msg)
 			}
 		}
+		fmt.Print("Send to servers:\n> ")
 	}
 }

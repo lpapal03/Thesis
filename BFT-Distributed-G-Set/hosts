@@ -4,6 +4,10 @@ node0
 [clients]
 node0
 
-[servers]
+[servers-normal]
 node1
 node2
+
+[servers-mute]
+
+[servers-malicious]

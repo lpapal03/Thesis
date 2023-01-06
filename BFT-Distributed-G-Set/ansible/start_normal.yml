@@ -1,10 +1,26 @@
 ---
-- name: Start scenario
-  hosts: servers
+- name: Get hosts file from master
+  hosts: all
   become: true
   tasks:
     - name: Fetch file hosts from node 0 (master node)
-      command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set/hosts /users/loukis/Thesis/BFT-Distributed-G-Set
-    - name: Start servers
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . </dev/null >/dev/null 2>&1 & sleep 1
+      command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set/hosts /users/loukis/Thesis/BFT-Distributed-G-Set   
+- name: Start normal servers
+  hosts: servers-normal
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . normal </dev/null >/dev/null 2>&1 & sleep 1
       become_user: loukis
+- name: Start mute servers
+  hosts: servers-mute
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . mute </dev/null >/dev/null 2>&1 & sleep 1
+      become_user: loukis
+- name: Start malicious servers
+  hosts: servers-malicious
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . malicious </dev/null >/dev/null 2>&1 & sleep 1
+      become_user: loukis
+    

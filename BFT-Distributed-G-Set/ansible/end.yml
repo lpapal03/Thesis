@@ -1,7 +1,7 @@
 ---
 - hosts: all
   tasks:
-    - name: Kill all processes on remote server
+    - name: Kill project processes on all machines
       command: killall -9 BFT-Distributed-G-Set
       become: true
       async: 1
