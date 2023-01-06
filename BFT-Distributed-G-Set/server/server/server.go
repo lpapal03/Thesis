@@ -1,9 +1,9 @@
 package server
 
 import (
-	"backend/config"
-	"backend/gset"
-	"backend/tools"
+	"BFT-Distributed-G-Set/config"
+	"BFT-Distributed-G-Set/gset"
+	"BFT-Distributed-G-Set/tools"
 	"os"
 	"strings"
 

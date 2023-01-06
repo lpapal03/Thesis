@@ -1,7 +1,7 @@
 package messaging
 
 import (
-	"backend/server"
+	"BFT-Distributed-G-Set/server"
 	"fmt"
 	"strings"
 )

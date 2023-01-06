@@ -1,8 +1,8 @@
 ---
-- hosts: servers
+- hosts: all
   tasks:
     - name: Kill all processes on remote server
-      command: killall -9 backend
+      command: killall -9 BFT-Distributed-G-Set
       become: true
       async: 1
       poll: 0

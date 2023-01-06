@@ -1,9 +1,9 @@
 package messaging
 
 import (
-	"frontend/client"
-	"frontend/config"
-	"frontend/tools"
+	"BFT-Distributed-G-Set/client"
+	"BFT-Distributed-G-Set/config"
+	"BFT-Distributed-G-Set/tools"
 	"math/rand"
 	"sort"
 	"strings"

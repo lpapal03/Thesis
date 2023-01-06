@@ -1,9 +1,9 @@
 package messaging
 
 import (
-	"backend/gset"
-	"backend/server"
-	"backend/tools"
+	"BFT-Distributed-G-Set/gset"
+	"BFT-Distributed-G-Set/server"
+	"BFT-Distributed-G-Set/tools"
 	"fmt"
 	"strings"
 )

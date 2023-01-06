@@ -1,10 +1,9 @@
 package main
 
 import (
-	"backend/server"
+	"BFT-Distributed-G-Set/server"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -25,14 +24,12 @@ func main() {
 		}
 	}
 
-	pid := strconv.Itoa(os.Getpid())
-
 	server := server.Create(peers)
 
 	for {
 		msg, _ := server.Receive_socket.RecvMessage(0)
 		fmt.Println(msg)
-		server.Receive_socket.SendMessage([]string{msg[0], pid})
+		server.Receive_socket.SendMessage([]string{msg[0], "Received " + msg[1]})
 	}
 
 }

@@ -1,5 +1,5 @@
 [master]
-[node0]
+node0
 
 [clients]
 node0

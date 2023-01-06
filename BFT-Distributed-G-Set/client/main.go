@@ -1,15 +1,14 @@
 package main
 
 import (
-	"fmt"
-	"frontend/client"
+	"BFT-Distributed-G-Set/client"
+	"BFT-Distributed-G-Set/config"
+	"BFT-Distributed-G-Set/ui"
 	"os"
 	"strings"
 )
 
 func main() {
-
-	// fmt.Println("Hello from client")
 
 	data, err := os.ReadFile("/users/loukis/Thesis/BFT-Distributed-G-Set/hosts")
 	if err != nil {
@@ -24,18 +23,10 @@ func main() {
 		}
 	}
 
-	client := client.CreateClient(servers)
-		for i:=0; i<len(client.Servers); i++{
-			client.Servers[i].SendMessage([]string{"Hello"})
-		}
-	fmt.Println("Sent hello, waiting for reply...")
-	for {
-		sockets, _ := client.Poller.Poll(-1)
-		for _, socket := range sockets {
-			s := socket.Socket
-			msg, _ := s.RecvMessage(0)
-			fmt.Println(msg)
-		}
-	}
+	config.N = len(servers)
+	config.F = (config.N - 1) / 3
 
+	client := client.CreateClient(servers)
+
+	ui.Start_CLI(client)
 }

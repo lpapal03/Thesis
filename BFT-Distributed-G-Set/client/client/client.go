@@ -1,8 +1,8 @@
 package client
 
 import (
-	"frontend/config"
-	"frontend/tools"
+	"BFT-Distributed-G-Set/config"
+	"BFT-Distributed-G-Set/tools"
 	"os"
 	"strings"
 

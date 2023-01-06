@@ -1,4 +1,4 @@
-module backend
+module BFT-Distributed-G-Set
 
 go 1.18
 
