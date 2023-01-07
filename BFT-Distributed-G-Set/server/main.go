@@ -20,16 +20,20 @@ func main() {
 
 	s := server.CreateServer(peers)
 
-	behaviour := os.Args[1]
-	switch behaviour {
-	case "normal":
+	if len(os.Args) < 2 {
 		modules.StartNormal(s)
-	case "mute":
-		modules.StartNormal(s)
-	case "malicious":
-		modules.StartNormal(s)
-	default:
-		panic("Invalid argument")
+	} else {
+		behaviour := os.Args[1]
+		switch behaviour {
+		case "normal":
+			modules.StartNormal(s)
+		case "mute":
+			modules.StartNormal(s)
+		case "malicious":
+			modules.StartNormal(s)
+		default:
+			panic("Invalid argument")
+		}
 	}
 
 }
