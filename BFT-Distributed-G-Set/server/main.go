@@ -28,9 +28,9 @@ func main() {
 		case "normal":
 			modules.StartNormal(s)
 		case "mute":
-			modules.StartNormal(s)
+			modules.StartMute(s)
 		case "malicious":
-			modules.StartNormal(s)
+			modules.StartMute(s)
 		default:
 			panic("Invalid argument")
 		}

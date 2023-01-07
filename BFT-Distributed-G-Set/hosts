@@ -6,9 +6,9 @@ node0
 [servers-normal]
 node1
 node2
-node3
-node4
 
 [servers-mute]
+node3
+node4
 
 [servers-malicious]

@@ -4,7 +4,6 @@ import (
 	"BFT-Distributed-G-Set/client"
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/tools"
-	"fmt"
 	"sort"
 	"strings"
 )
@@ -51,7 +50,7 @@ func Get(c client.Client) string {
 		socket.SendMessage([]string{GET})
 	}
 
-	// replies := make(map[string]string)
+	replies := make(map[string]string)
 
 	tools.Log(c.Hostname, "Waiting for valid GET_REPLY")
 	for {
@@ -59,15 +58,14 @@ func Get(c client.Client) string {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
-			fmt.Println(msg)
-			// 	if msg[1] == GET_RESPONSE {
-			// 		replies[msg[0]] = msg[2]
-			// 	}
-			// }
-			// r := findValidReply(replies)
-			// if len(r) > 0 {
-			// 	tools.Log(c.Hostname, "Reply: "+r)
-			// 	return r
+			if msg[1] == GET_RESPONSE {
+				replies[msg[0]] = msg[2]
+			}
+		}
+		r := findValidReply(replies)
+		if len(r) > 0 {
+			tools.Log(c.Hostname, "Reply: "+r)
+			return r
 		}
 	}
 }
