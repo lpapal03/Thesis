@@ -1,5 +1,6 @@
-2023/01/07 10:03:31 | node0 | Established connection with tcp://node1:5555
-2023/01/07 10:03:31 | node0 | Established connection with tcp://node2:5555
-2023/01/07 10:03:31 | node0 | Established connection with tcp://node3:5555
-2023/01/07 10:03:31 | node0 | Established connection with tcp://node4:5555
-2023/01/07 10:03:31 | node0 | Started interactive session
+2023/01/07 11:04:40 | node0 | Established connection with tcp://node1:5555
+2023/01/07 11:04:40 | node0 | Established connection with tcp://node2:5555
+2023/01/07 11:04:40 | node0 | Established connection with tcp://node3:5555
+2023/01/07 11:04:40 | node0 | Established connection with tcp://node4:5555
+2023/01/07 11:04:40 | node0 | Started interactive session
+2023/01/07 11:04:48 | node0 | Called ADD with {hello}, no action

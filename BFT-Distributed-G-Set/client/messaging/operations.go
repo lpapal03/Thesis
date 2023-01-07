@@ -4,10 +4,8 @@ import (
 	"BFT-Distributed-G-Set/client"
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/tools"
-	"math/rand"
 	"sort"
 	"strings"
-	"time"
 )
 
 // returns true iff we have
@@ -15,7 +13,7 @@ import (
 // and f+1 matching
 // returns a valid reply
 func findValidReply(replies map[string]string) string {
-	if len(replies) < config.MEDIUM_THRESHOLD {
+	if len(replies) < 2*config.F+1 {
 		return ""
 	}
 	reply_strings := []string{}
@@ -37,25 +35,24 @@ func findValidReply(replies map[string]string) string {
 			strhi = k
 		}
 	}
-	if valhi >= config.LOW_THRESHOLD {
+	if valhi >= config.F+1 {
 		return strhi
 	}
 	return ""
 }
 
-func Get(client client.Client) string {
+func Get(c client.Client) string {
 
-	for i := 0; i < len(client.Servers); i++ {
-		client.Servers[i].SendMessage([]string{GET})
+	c.Message_counter++
+	for _, socket := range c.Servers {
+		socket.SendMessage([]string{GET})
 	}
 
-	tools.Log(client.Id, "Called GET")
-	client.Message_counter++
 	replies := make(map[string]string)
 
-	tools.Log(client.Id, "Waiting for valid GET_REPLY...")
+	tools.Log(c.Hostname, "Waiting for valid GET_REPLY")
 	for {
-		sockets, _ := client.Poller.Poll(-1)
+		sockets, _ := c.Poller.Poll(-1)
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
@@ -65,7 +62,7 @@ func Get(client client.Client) string {
 		}
 		r := findValidReply(replies)
 		if len(r) > 0 {
-			tools.Log(client.Id, "Reply: "+r)
+			tools.Log(c.Hostname, "Reply: "+r)
 			return r
 		}
 	}
@@ -84,13 +81,13 @@ func countAddReplies(replies map[string]bool, record string) int {
 
 // TODO: Handle responses
 func Add(client client.Client, record string) {
-	tools.Log(client.Id, "Called ADD("+record+")")
-	//randomly choose 2f+1 servers to send add
-	rand.Seed(time.Now().Unix())
-	receiver_indexes := rand.Perm(len(client.Servers))
-	for i := 0; i < 2*config.F+1; i++ {
-		client.Servers[receiver_indexes[i]].SendMessage([]string{ADD, record})
-	}
+	// tools.Log(client.Id, "Called ADD("+record+")")
+	// //randomly choose 2f+1 servers to send add
+	// rand.Seed(time.Now().Unix())
+	// receiver_indexes := rand.Perm(len(client.Servers))
+	// for i := 0; i < 2*config.F+1; i++ {
+	// 	client.Servers[receiver_indexes[i]].SendMessage([]string{ADD, record})
+	// }
 	// client.Servers[0].SendMessage([]string{ADD, record})
 	// WAIT FOR F+1 RESPONSES
 	// replies := make(map[string]bool)
