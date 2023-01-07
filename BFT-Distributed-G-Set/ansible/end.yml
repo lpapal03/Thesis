@@ -1,8 +1,0 @@
----
-- hosts: all
-  tasks:
-    - name: Kill project processes on all machines
-      command: killall -9 BFT-Distributed-G-Set
-      become: true
-      async: 1
-      poll: 0

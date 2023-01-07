@@ -4,7 +4,12 @@
   become: true
   tasks:
     - name: Fetch file hosts from node 0 (master node)
-      command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set/hosts /users/loukis/Thesis/BFT-Distributed-G-Set   
+      command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set/hosts /users/loukis/Thesis/BFT-Distributed-G-Set
+    - name: Kill project processes on all machines
+      command: killall -9 BFT-Distributed-G-Set
+      become: true
+      async: 1
+      poll: 0
 - name: Start normal servers
   hosts: servers-normal
   tasks:
