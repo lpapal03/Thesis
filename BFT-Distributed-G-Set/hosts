@@ -2,7 +2,6 @@
 node0
 
 [clients]
-node0
 
 [servers-normal]
 node1
