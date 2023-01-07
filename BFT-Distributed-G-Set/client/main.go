@@ -19,13 +19,17 @@ func main() {
 
 	c := client.CreateClient(servers)
 
-	behaviour := os.Args[1]
-	switch behaviour {
-	case "interactive":
+	if len(os.Args) < 2 {
 		modules.StartInteractive(c)
-	case "automated":
-		modules.StartAutomated(c)
-	default:
-		panic("Invalid argument")
+	} else {
+		behaviour := os.Args[1]
+		switch behaviour {
+		case "interactive":
+			modules.StartInteractive(c)
+		case "automated":
+			modules.StartAutomated(c)
+		default:
+			panic("Invalid argument")
+		}
 	}
 }
