@@ -30,6 +30,9 @@ func CreateServer(peers []string) Server {
 	zctx, _ := zmq.NewContext()
 	server_sockets := make(map[string]*zmq.Socket)
 	my_gset := gset.Create()
+
+	gset.Append(my_gset, "INIT")
+
 	brb := make(map[string]bool)
 	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
 	receive_socket.Bind("tcp://*:" + config.DEFAULT_PORT)

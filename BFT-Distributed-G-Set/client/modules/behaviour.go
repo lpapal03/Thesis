@@ -23,7 +23,6 @@ func StartInteractive(c client.Client) {
 			return
 		}
 		if command == "g" {
-			tools.Log(c.Hostname, "Called GET, no action")
 			messaging.Get(c)
 		}
 		if command == "a" {
