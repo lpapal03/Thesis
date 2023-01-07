@@ -2,6 +2,7 @@ package main
 
 import (
 	"BFT-Distributed-G-Set/config"
+	"BFT-Distributed-G-Set/modules"
 	"BFT-Distributed-G-Set/server"
 	"BFT-Distributed-G-Set/tools"
 	"os"
@@ -22,11 +23,11 @@ func main() {
 	behaviour := os.Args[1]
 	switch behaviour {
 	case "normal":
-		server.StartNormal(s)
+		modules.StartNormal(s)
 	case "mute":
-		server.StartNormal(s)
+		modules.StartNormal(s)
 	case "malicious":
-		server.StartNormal(s)
+		modules.StartNormal(s)
 	default:
 		panic("Invalid argument")
 	}
