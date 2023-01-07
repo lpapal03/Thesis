@@ -9,9 +9,9 @@ import (
 // Leader, the one who initializes the module
 func ReliableBroadcast(leader server.Server, message Message) {
 
-	my_echo_key := message.Sender + "-" + message.Content[0] + "-" + leader.Id + "-echo"
-	my_vote_key := message.Sender + "-" + message.Content[0] + "-" + leader.Id + "-vote"
-	my_init_key := message.Sender + "-" + message.Content[0] + "-" + leader.Id + "-init"
+	my_echo_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-echo"
+	my_vote_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-vote"
+	my_init_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-init"
 	leader.BRB[my_echo_key] = true
 	leader.BRB[my_vote_key] = true
 	leader.BRB[my_init_key] = true
