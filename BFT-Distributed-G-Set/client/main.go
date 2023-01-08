@@ -10,9 +10,9 @@ import (
 
 func main() {
 	tools.ResetLogFile()
-	filename := "/users/loukis/Thesis/BFT-Distributed-G-Set/hosts"
+	hosts_filename := "/users/loukis/Thesis/BFT-Distributed-G-Set/hosts"
 
-	servers := config.GetHosts(filename, "servers")
+	servers := config.GetHosts(hosts_filename, "servers")
 
 	config.N = len(servers)
 	config.F = (config.N - 1) / 3

@@ -4,9 +4,24 @@ import (
 	"BFT-Distributed-G-Set/client"
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/tools"
+	"fmt"
+	"math/rand"
+	"reflect"
 	"sort"
 	"strings"
+
+	"github.com/pebbe/zmq4"
 )
+
+func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {
+	keys := reflect.ValueOf(m).MapKeys()
+	rand.Shuffle(len(keys), func(i, j int) { keys[i], keys[j] = keys[j], keys[i] })
+	for i := 0; i < amount; i++ {
+		key := keys[i].String()
+		s := m[key]
+		s.SendMessage(message)
+	}
+}
 
 // returns true iff we have
 // more than 2f+1 replies
@@ -46,9 +61,10 @@ func Get(c client.Client) string {
 	tools.Log(c.Hostname, "Called GET")
 
 	c.Message_counter++
-	for _, socket := range c.Servers {
-		socket.SendMessage([]string{GET})
-	}
+	// for _, socket := range c.Servers {
+	// 	socket.SendMessage([]string{GET})
+	// }
+	sendToServers(c.Servers, []string{GET}, 3*config.F+1)
 
 	replies := make(map[string]string)
 
@@ -58,6 +74,7 @@ func Get(c client.Client) string {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
+			fmt.Println(msg)
 			if msg[1] == GET_RESPONSE {
 				replies[msg[0]] = msg[2]
 			}
@@ -68,17 +85,6 @@ func Get(c client.Client) string {
 			return r
 		}
 	}
-}
-
-// the amount of add responses given a record
-func countAddReplies(replies map[string]bool, record string) int {
-	count := 0
-	for k := range replies {
-		if record == strings.Split(k, "-")[1] {
-			count++
-		}
-	}
-	return count
 }
 
 // TODO: Handle responses

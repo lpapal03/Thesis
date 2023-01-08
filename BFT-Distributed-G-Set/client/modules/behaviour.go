@@ -29,7 +29,6 @@ func StartInteractive(c client.Client) {
 			fmt.Print("Record to append > ")
 			scanner.Scan()
 			record = scanner.Text()
-			tools.Log(c.Hostname, "Called ADD with {"+record+"}, no action")
 			messaging.Add(c, record)
 		}
 		if len(command) == 0 {
