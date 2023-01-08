@@ -1,7 +1,7 @@
 [master]
 node0
 
-[clients]
+[clients-automated]
 
 [servers-normal]
 node1

@@ -16,6 +16,6 @@ if __name__ == '__main__':
         if not active:
             break
     f.close()
-    os.system("ansible-playbook -i ./hosts update_repo.yml -v")
+    os.system("ansible-playbook -i ./hosts update_repo.yml")
     os.remove("hosts")
     

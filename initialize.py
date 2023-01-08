@@ -16,7 +16,7 @@ if __name__ == '__main__':
         if not active:
             break
     f.close()
-    os.system("ansible-playbook -i ./hosts env_setup_ubuntu_18-04.yml -v")
+    os.system("ansible-playbook -i ./hosts env_init.yml")
     os.remove("hosts")
     
         
