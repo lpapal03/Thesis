@@ -8,41 +8,40 @@ import (
 
 // Leader, the one who initializes the module
 func ReliableBroadcast(leader server.Server, message Message) {
+	fmt.Println(message)
 
-	my_echo_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-echo"
-	my_vote_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-vote"
-	my_init_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-init"
-	leader.BRB[my_echo_key] = true
-	leader.BRB[my_vote_key] = true
-	leader.BRB[my_init_key] = true
-	fmt.Println(my_init_key)
+	// my_echo_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-echo"
+	// my_vote_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-vote"
+	// my_init_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-init"
+	// leader.BRB[my_echo_key] = true
+	// leader.BRB[my_vote_key] = true
+	// leader.BRB[my_init_key] = true
+	// fmt.Println(my_init_key)
 
-	content := append([]string{message.Sender}, message.Content...)
+	// content := append([]string{message.Sender}, message.Content...)
 
-	// send init to everyone
-	tag := BRACHA_BROADCAST_INIT
-	v := CreateMessageString(tag, content)
-	sendToAll(leader, v)
+	// // send init to everyone
+	// tag := BRACHA_BROADCAST_INIT
+	// v := CreateMessageString(tag, content)
+	// sendToAll(leader, v)
 
-	// send echo to everyone (assume I received INIT from self)
-	tag = BRACHA_BROADCAST_ECHO
-	v = CreateMessageString(tag, content)
-	sendToAll(leader, v)
-	leader.BRB[my_echo_key] = true
+	// // send echo to everyone (assume I received INIT from self)
+	// tag = BRACHA_BROADCAST_ECHO
+	// v = CreateMessageString(tag, content)
+	// sendToAll(leader, v)
+	// leader.BRB[my_echo_key] = true
 }
 
 // Called from every server receiving RB messages
 func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
-	// if gset.Exists(receiver.Gset, v.Content[1]) {
-	// 	return true
-	// }
+	// if my vote and my echo are both false, return false
 
 	// peer_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-echo"
 	// peer_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-vote"
-	// my_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-echo"
-	// my_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-vote"
-	// my_init_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Id + "-init"
+	// my_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Hostname + "-echo"
+	// my_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Hostname + "-vote"
+	// my_init_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Hostname + "-init"
 	// bare_key := v.Content[0] + "-" + v.Content[1]
 
 	// // add message in message pot and count

@@ -34,20 +34,28 @@ func handleGet(receiver server.Server, message Message) {
 }
 
 func handleAdd(receiver server.Server, message Message) {
-	gset.Append(receiver.Gset, message.Content[0])
-	// if !gset.Exists(receiver.Gset, message.Content[0]) {
-	// 	ReliableBroadcast(receiver, message)
-	// }
+	// gset.Append(receiver.Gset, message.Content[0])
+	if !gset.Exists(receiver.Gset, message.Content[0]) {
+		ReliableBroadcast(receiver, message)
+	} else {
+		response := []string{message.Sender, receiver.Hostname, ADD_RESPONSE}
+		receiver.Receive_socket.SendMessage(response)
+	}
 }
 
 func handleRB(receiver server.Server, message Message) {
-	// original_sender := message.Content[0]
-	// response := []string{original_sender, receiver.Id, ADD_RESPONSE, message.Content[1]}
-
 	delivered := HandleReliableBroadcast(receiver, message)
-	if delivered {
+	response := []string{message.Sender, receiver.Hostname, ADD_RESPONSE}
+
+	if delivered && !gset.Exists(receiver.Gset, message.Content[0]) {
 		gset.Append(receiver.Gset, message.Content[1])
-		// receiver.Receive_socket.SendMessage(response)
-		tools.Log(receiver.Hostname, "Appended record!")
+		receiver.Receive_socket.SendMessage(response)
+		tools.Log(receiver.Hostname, "Appended record "+message.Content[0])
+		return
+	}
+	if delivered && gset.Exists(receiver.Gset, message.Content[0]) {
+		receiver.Receive_socket.SendMessage(response)
+		tools.Log(receiver.Hostname, "Record "+message.Content[0]+" already exists")
+		return
 	}
 }

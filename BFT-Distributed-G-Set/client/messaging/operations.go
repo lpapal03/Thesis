@@ -4,7 +4,6 @@ import (
 	"BFT-Distributed-G-Set/client"
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/tools"
-	"fmt"
 	"math/rand"
 	"reflect"
 	"sort"
@@ -57,24 +56,17 @@ func findValidReply(replies map[string]string) string {
 }
 
 func Get(c client.Client) string {
-
 	tools.Log(c.Hostname, "Called GET")
-
 	c.Message_counter++
-	// for _, socket := range c.Servers {
-	// 	socket.SendMessage([]string{GET})
-	// }
 	sendToServers(c.Servers, []string{GET}, 3*config.F+1)
 
 	replies := make(map[string]string)
-
 	tools.Log(c.Hostname, "Waiting for valid GET_REPLY")
 	for {
 		sockets, _ := c.Poller.Poll(-1)
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
-			fmt.Println(msg)
 			if msg[1] == GET_RESPONSE {
 				replies[msg[0]] = msg[2]
 			}
@@ -91,9 +83,7 @@ func Get(c client.Client) string {
 // Do i have to send to 2f+1 or all?
 func Add(c client.Client, record string) {
 	tools.Log(c.Hostname, "Called ADD("+record+")")
-	for _, socket := range c.Servers {
-		socket.SendMessage([]string{ADD, record})
-	}
+	sendToServers(c.Servers, []string{ADD, record}, 2*config.F+1)
 	// WAIT FOR F+1 RESPONSES
 	// replies := make(map[string]bool)
 	// tools.Log(client.Id, "Waiting for f+1 ADD_RESPONSES...")

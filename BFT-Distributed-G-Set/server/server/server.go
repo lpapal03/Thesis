@@ -16,7 +16,9 @@ type Server struct {
 	Receive_socket zmq.Socket
 	Hostname       string
 	Gset           map[string]string
-	BRB            map[string]bool
+
+	Echo_pot map[string]bool
+	Vote_pot map[string]bool
 }
 
 func CreateServer(peers []string) Server {
@@ -33,7 +35,9 @@ func CreateServer(peers []string) Server {
 
 	gset.Append(my_gset, "INIT")
 
-	brb := make(map[string]bool)
+	echo_pot := make(map[string]bool)
+	vote_pot := make(map[string]bool)
+
 	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
 	receive_socket.Bind("tcp://*:" + config.DEFAULT_PORT)
 	tools.Log(hostname, "Bound tcp://*:"+config.DEFAULT_PORT)
@@ -58,6 +62,7 @@ func CreateServer(peers []string) Server {
 		Receive_socket: *receive_socket,
 		Hostname:       hostname,
 		Gset:           my_gset,
-		BRB:            brb,
+		Echo_pot:       echo_pot,
+		Vote_pot:       vote_pot,
 	}
 }
