@@ -22,5 +22,5 @@ func ParseMessageString(m []string) (Message, error) {
 	if tag == GET_RESPONSE || tag == ADD_RESPONSE {
 		return Message{Sender: m[0], Tag: m[1]}, nil
 	}
-	return Message{}, errors.New("Error parsing message")
+	return Message{}, errors.New("error parsing message")
 }
