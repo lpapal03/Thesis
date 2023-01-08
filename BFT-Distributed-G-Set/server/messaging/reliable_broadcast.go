@@ -48,6 +48,11 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 		receiver.Peers_vote[peers_key] = true
 	}
 	// count messages
+	s := ""
+	for k := range receiver.My_echo {
+		s += k + "\n"
+	}
+	tools.Log(receiver.Hostname, s)
 	echo_count, vote_count := countMessages(receiver, peers_key)
 
 	// on receiving <echo, v> from n-f distinct parties:
