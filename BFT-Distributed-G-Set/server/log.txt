@@ -1,6 +1,8 @@
-2023/01/08 08:30:26 | node0 | Bound tcp://*:5555
-2023/01/08 08:30:26 | node0 | Connected to node0:5555
-2023/01/08 08:30:26 | node0 | Connected to node1:5555
-2023/01/08 08:30:26 | node0 | Connected to node2:5555
-2023/01/08 08:30:26 | node0 | Connected to node3:5555
-2023/01/08 08:30:26 | node0 | Connected to node4:5555
+2023/01/08 10:08:08 | node0 | Bound tcp://*:5555
+2023/01/08 10:08:08 | node0 | Connected to node0:5555
+2023/01/08 10:08:08 | node0 | Connected to node1:5555
+2023/01/08 10:08:08 | node0 | Connected to node2:5555
+2023/01/08 10:08:08 | node0 | Connected to node3:5555
+2023/01/08 10:08:08 | node0 | Connected to node4:5555
+2023/01/08 10:08:08 | node0 | Received ADD from node2
+2023/01/08 10:08:08 | node0 | Received BRACHA_BROADCAST_INIT from node0

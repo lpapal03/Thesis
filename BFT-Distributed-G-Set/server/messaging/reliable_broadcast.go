@@ -1,101 +1,96 @@
 package messaging
 
 import (
+	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/server"
-	"strings"
+	"fmt"
 )
 
 // Leader, the one who initializes the module
 func ReliableBroadcast(leader server.Server, message Message) {
-	// send init to everyone
 	content := append([]string{message.Sender}, message.Content...)
 	tag := BRACHA_BROADCAST_INIT
 	v := CreateMessageString(tag, content)
+	// leader with input v
 	sendToAll(leader, v)
 }
 
 // Called from every server receiving RB messages
 func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
-	// if my vote and my echo are both false, return false
+	my_key := v.Content[1]
+	peers_key := v.Sender + "." + v.Content[1]
 
-	// peer_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-echo"
-	// peer_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + v.Sender + "-vote"
-	// my_echo_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Hostname + "-echo"
-	// my_vote_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Hostname + "-vote"
-	// my_init_key := v.Content[0] + "-" + v.Content[1] + "-" + receiver.Hostname + "-init"
-	// bare_key := v.Content[0] + "-" + v.Content[1]
+	fmt.Println(my_key, peers_key)
 
-	// // add message in message pot and count
-	// if v.Tag == BRACHA_BROADCAST_ECHO {
-	// 	receiver.BRB[peer_echo_key] = true
-	// }
-	// if v.Tag == BRACHA_BROADCAST_VOTE {
-	// 	receiver.BRB[peer_vote_key] = true
-	// }
+	// Party j (including the leader)
+	if v.Tag == BRACHA_BROADCAST_INIT && !receiver.My_init[my_key] {
+		receiver.My_echo[my_key] = true
+		receiver.My_vote[my_key] = true
+	}
 
-	// echo_count, vote_count := countMessages(receiver.BRB, bare_key)
+	// on receiving <v> from leader:
+	if v.Tag == BRACHA_BROADCAST_INIT && receiver.My_echo[my_key] {
+		v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
+		sendToAll(receiver, v)
+		receiver.My_echo[my_key] = false
+	}
 
-	// // tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
-	// // tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
+	// count messages
+	if v.Tag == BRACHA_BROADCAST_ECHO {
+		receiver.Peers_echo[peers_key] = true
+	}
+	if v.Tag == BRACHA_BROADCAST_VOTE {
+		receiver.Peers_vote[peers_key] = true
+	}
+	// count messages
+	echo_count, vote_count := countMessages(receiver, peers_key)
 
-	// // on receiving <v> from leader
-	// if v.Tag == BRACHA_BROADCAST_INIT {
-	// 	if receiver.BRB[my_init_key] == false {
-	// 		receiver.BRB[my_echo_key] = true
-	// 		receiver.BRB[my_vote_key] = true
-	// 		v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
-	// 		sendToAll(receiver, v)
-	// 		receiver.BRB[my_echo_key] = false
-	// 		receiver.BRB[my_init_key] = true
-	// 	}
-	// }
+	// on receiving <echo, v> from n-f distinct parties:
+	if v.Tag == BRACHA_BROADCAST_ECHO && echo_count > config.N-config.F {
+		if receiver.My_vote[my_key] {
+			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
+			sendToAll(receiver, v)
+			receiver.My_vote[my_key] = false
+		}
+	}
 
-	// // on receiving <echo, v> from n-f distinct parties:
-	// if v.Tag == BRACHA_BROADCAST_ECHO && echo_count >= config.N-config.F {
-	// 	if receiver.BRB[my_vote_key] == true {
-	// 		v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
-	// 		sendToAll(receiver, v)
-	// 	}
-	// 	receiver.BRB[my_vote_key] = false
-	// }
+	// on receiving <vote, v> from f+1 distinct parties:
+	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count > config.F+1 {
+		if receiver.My_vote[my_key] {
+			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
+			sendToAll(receiver, v)
+			receiver.My_vote[my_key] = false
+		}
+	}
 
-	// // on receiving <echo, v> from f+1 distinct parties:
-	// if v.Tag == BRACHA_BROADCAST_ECHO && vote_count >= config.F+1 {
-	// 	if receiver.BRB[my_vote_key] == true {
-	// 		v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
-	// 		sendToAll(receiver, v)
-	// 	}
-	// 	receiver.BRB[my_vote_key] = false
-	// }
-
-	// // on receiving <vote, v> from n-f distinct parties:
-	// if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
-	// 	tools.Log(receiver.Id, "Delivered "+strings.Join(v.Content, " "))
-	// 	// clean map (not important, just saves memory)
-	// 	potCleanUp(receiver.BRB, bare_key)
-	// 	return true
-	// }
-
-	// // for k, v := range receiver.BRB {
-	// // 	fmt.Println(receiver.Id, k, v)
-	// // }
+	// on receiving <vote, v> from n-f distinct parties:
+	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count > config.N-config.F {
+		return true
+	}
 
 	return false
 
 }
 
+func countMessages(s server.Server, key string) (int, int) {
+	echo_count := 0
+	vote_count := 0
+	for k, v := range s.Peers_echo {
+		if k == key && v {
+			echo_count++
+		}
+	}
+	for k, v := range s.Peers_vote {
+		if k == key && v {
+			vote_count++
+		}
+	}
+	return echo_count, vote_count
+}
+
 func sendToAll(receiver server.Server, message []string) {
 	for _, peer_socket := range receiver.Peers {
 		peer_socket.SendMessage(message)
-	}
-}
-
-func potCleanUp(pot map[string]bool, bare_key string) {
-
-	for k := range pot {
-		if strings.Contains(k, bare_key) {
-			delete(pot, k)
-		}
 	}
 }
