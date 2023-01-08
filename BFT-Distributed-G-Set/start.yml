@@ -3,6 +3,15 @@
   hosts: all
   become: true
   tasks:
+    - name: Update repository
+      git:
+        repo: https://github.com/loukaspapalazarou/Thesis.git
+        dest: /users/loukis/Thesis
+        clone: yes
+        update: yes
+        force: yes
+    - name: Transfer ownership to loukis
+      shell: chown -R loukis .
     - name: Fetch file hosts from node 0 (master node)
       command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set/hosts /users/loukis/Thesis/BFT-Distributed-G-Set
     - name: Kill project processes on all machines
