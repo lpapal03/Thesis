@@ -23,8 +23,6 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	my_key := v.Content[1]
 	peers_key := v.Sender + "." + v.Content[1]
 
-	tools.Log(receiver.Hostname, my_key+" - "+peers_key)
-
 	// Party j (including the leader)
 	if v.Tag == BRACHA_BROADCAST_INIT && !receiver.My_init[my_key] {
 		receiver.My_init[my_key] = true
@@ -49,14 +47,10 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 		receiver.Peers_vote[peers_key] = true
 	}
 	// count messages
-	s := ""
-	for k := range receiver.Peers_echo {
-		s += k + "\n"
-	}
-	tools.Log(receiver.Hostname, s)
 	echo_count, vote_count := countMessages(receiver, my_key)
 
 	// on receiving <echo, v> from n-f distinct parties:
+	tools.Log(receiver.Hostname, strconv.Itoa(config.N-config.F))
 	if v.Tag == BRACHA_BROADCAST_ECHO && echo_count >= config.N-config.F {
 		if receiver.My_vote[my_key] {
 			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
