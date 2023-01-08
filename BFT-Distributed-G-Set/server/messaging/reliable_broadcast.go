@@ -2,34 +2,16 @@ package messaging
 
 import (
 	"BFT-Distributed-G-Set/server"
-	"fmt"
 	"strings"
 )
 
 // Leader, the one who initializes the module
 func ReliableBroadcast(leader server.Server, message Message) {
-	fmt.Println(message)
-
-	// my_echo_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-echo"
-	// my_vote_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-vote"
-	// my_init_key := message.Sender + "-" + message.Content[0] + "-" + leader.Hostname + "-init"
-	// leader.BRB[my_echo_key] = true
-	// leader.BRB[my_vote_key] = true
-	// leader.BRB[my_init_key] = true
-	// fmt.Println(my_init_key)
-
-	// content := append([]string{message.Sender}, message.Content...)
-
-	// // send init to everyone
-	// tag := BRACHA_BROADCAST_INIT
-	// v := CreateMessageString(tag, content)
-	// sendToAll(leader, v)
-
-	// // send echo to everyone (assume I received INIT from self)
-	// tag = BRACHA_BROADCAST_ECHO
-	// v = CreateMessageString(tag, content)
-	// sendToAll(leader, v)
-	// leader.BRB[my_echo_key] = true
+	// send init to everyone
+	content := append([]string{message.Sender}, message.Content...)
+	tag := BRACHA_BROADCAST_INIT
+	v := CreateMessageString(tag, content)
+	sendToAll(leader, v)
 }
 
 // Called from every server receiving RB messages
@@ -101,23 +83,6 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
 	return false
 
-}
-
-// count the messages received for a given v
-func countMessages(pot map[string]bool, count_key string) (int, int) {
-	// start counters from 1, assuming caller is true on echo and vote
-	echo_count := 1
-	vote_count := 1
-	for k, v := range pot {
-
-		if strings.Contains(k, count_key) && strings.Contains(k, "echo") && v {
-			echo_count++
-		}
-		if strings.Contains(k, count_key) && strings.Contains(k, "vote") && v {
-			vote_count++
-		}
-	}
-	return echo_count, vote_count
 }
 
 func sendToAll(receiver server.Server, message []string) {

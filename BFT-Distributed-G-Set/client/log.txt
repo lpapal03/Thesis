@@ -1,7 +1,6 @@
-2023/01/08 05:58:19 | node0 | Established connection with tcp://node1:5555
-2023/01/08 05:58:19 | node0 | Established connection with tcp://node2:5555
-2023/01/08 05:58:19 | node0 | Established connection with tcp://node3:5555
-2023/01/08 05:58:19 | node0 | Established connection with tcp://node4:5555
-2023/01/08 05:58:19 | node0 | Started interactive session
-2023/01/08 05:58:20 | node0 | Called GET
-2023/01/08 05:58:20 | node0 | Waiting for valid GET_REPLY
+2023/01/08 05:59:31 | node0 | Established connection with tcp://node1:5555
+2023/01/08 05:59:31 | node0 | Established connection with tcp://node2:5555
+2023/01/08 05:59:31 | node0 | Established connection with tcp://node3:5555
+2023/01/08 05:59:31 | node0 | Established connection with tcp://node4:5555
+2023/01/08 05:59:31 | node0 | Started interactive session
+2023/01/08 05:59:33 | node0 | Called ADD(123)

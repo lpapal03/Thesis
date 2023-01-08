@@ -5,6 +5,7 @@ import (
 	"BFT-Distributed-G-Set/modules"
 	"BFT-Distributed-G-Set/server"
 	"BFT-Distributed-G-Set/tools"
+	"fmt"
 	"os"
 )
 
@@ -19,6 +20,11 @@ func main() {
 	config.F = (config.N - 1) / 3
 
 	s := server.CreateServer(peers)
+
+	m, e := s.Peers["node0"].SendMessage([]string{"Hello"})
+	fmt.Println("test", m, e)
+	msg, err := s.Receive_socket.RecvMessage(0)
+	fmt.Println(msg, err)
 
 	if len(os.Args) < 2 {
 		modules.StartNormal(s)
