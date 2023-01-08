@@ -1,0 +1,12 @@
+---
+- name: Update repository
+  hosts: all
+  become: true
+  tasks:
+    - name: Clone repo
+      git:
+        repo: https://github.com/loukaspapalazarou/Thesis.git
+        dest: /users/loukis/Thesis
+        clone: yes
+        update: yes
+        force: yes

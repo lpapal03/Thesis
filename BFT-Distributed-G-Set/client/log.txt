@@ -1,7 +1,12 @@
-2023/01/08 11:35:47 | node0 | Established connection with tcp://node1:5555
-2023/01/08 11:35:47 | node0 | Established connection with tcp://node2:5555
-2023/01/08 11:35:47 | node0 | Established connection with tcp://node3:5555
-2023/01/08 11:35:47 | node0 | Established connection with tcp://node4:5555
-2023/01/08 11:35:47 | node0 | Started interactive session
-2023/01/08 11:35:51 | node0 | Called GET
-2023/01/08 11:35:51 | node0 | Waiting for valid GET_REPLY
+2023/01/08 11:04:24 | node0 | Established connection with tcp://node1:5555
+2023/01/08 11:04:24 | node0 | Established connection with tcp://node2:5555
+2023/01/08 11:04:24 | node0 | Established connection with tcp://node3:5555
+2023/01/08 11:04:24 | node0 | Established connection with tcp://node4:5555
+2023/01/08 11:04:24 | node0 | Started interactive session
+2023/01/08 11:04:26 | node0 | Called GET
+2023/01/08 11:04:26 | node0 | Waiting for valid GET_REPLY
+2023/01/08 11:04:26 | node0 | Reply: {1} {INIT}
+2023/01/08 11:04:28 | node0 | Called GET
+2023/01/08 11:04:28 | node0 | Waiting for valid GET_REPLY
+2023/01/08 11:04:28 | node0 | Reply: {1} {INIT}
+2023/01/08 11:04:31 | node0 | Called ADD(45)
