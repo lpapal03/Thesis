@@ -4,7 +4,6 @@ import (
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/server"
 	"BFT-Distributed-G-Set/tools"
-	"fmt"
 	"strconv"
 )
 
@@ -23,7 +22,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	my_key := v.Content[1]
 	peers_key := v.Sender + "." + v.Content[1]
 
-	fmt.Println(my_key, peers_key)
+	tools.Log(receiver.Hostname, my_key+" - "+peers_key)
 
 	// Party j (including the leader)
 	if v.Tag == BRACHA_BROADCAST_INIT && !receiver.My_init[my_key] {
@@ -49,7 +48,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	}
 	// count messages
 	s := ""
-	for k := range receiver.My_echo {
+	for k := range receiver.Peers_echo {
 		s += k + "\n"
 	}
 	tools.Log(receiver.Hostname, s)
