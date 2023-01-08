@@ -5,6 +5,7 @@ import (
 	"BFT-Distributed-G-Set/server"
 	"BFT-Distributed-G-Set/tools"
 	"strconv"
+	"strings"
 )
 
 // Leader, the one who initializes the module
@@ -52,7 +53,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 		s += k + "\n"
 	}
 	tools.Log(receiver.Hostname, s)
-	echo_count, vote_count := countMessages(receiver, peers_key)
+	echo_count, vote_count := countMessages(receiver, my_key)
 
 	// on receiving <echo, v> from n-f distinct parties:
 	if v.Tag == BRACHA_BROADCAST_ECHO && echo_count > config.N-config.F {
@@ -84,16 +85,16 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
 }
 
-func countMessages(s server.Server, key string) (int, int) {
+func countMessages(s server.Server, msg string) (int, int) {
 	echo_count := 0
 	vote_count := 0
 	for k, v := range s.Peers_echo {
-		if k == key && v {
+		if strings.Contains(k, msg) && v {
 			echo_count++
 		}
 	}
 	for k, v := range s.Peers_vote {
-		if k == key && v {
+		if strings.Contains(k, msg) && v {
 			vote_count++
 		}
 	}
