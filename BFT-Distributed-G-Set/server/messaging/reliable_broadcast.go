@@ -27,6 +27,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
 	// Party j (including the leader)
 	if v.Tag == BRACHA_BROADCAST_INIT && !receiver.My_init[my_key] {
+		receiver.My_init[my_key] = true
 		receiver.My_echo[my_key] = true
 		receiver.My_vote[my_key] = true
 	}
@@ -56,7 +57,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	echo_count, vote_count := countMessages(receiver, my_key)
 
 	// on receiving <echo, v> from n-f distinct parties:
-	if v.Tag == BRACHA_BROADCAST_ECHO && echo_count > config.N-config.F {
+	if v.Tag == BRACHA_BROADCAST_ECHO && echo_count >= config.N-config.F {
 		if receiver.My_vote[my_key] {
 			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
 			sendToAll(receiver, v)
@@ -65,7 +66,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	}
 
 	// on receiving <vote, v> from f+1 distinct parties:
-	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count > config.F+1 {
+	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.F+1 {
 		if receiver.My_vote[my_key] {
 			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
 			sendToAll(receiver, v)
@@ -74,7 +75,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	}
 
 	// on receiving <vote, v> from n-f distinct parties:
-	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count > config.N-config.F {
+	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
 		return true
 	}
 
