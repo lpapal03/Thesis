@@ -3,8 +3,6 @@ package messaging
 import (
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/server"
-	"BFT-Distributed-G-Set/tools"
-	"strconv"
 	"strings"
 )
 
@@ -50,7 +48,6 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	echo_count, vote_count := countMessages(receiver, my_key)
 
 	// on receiving <echo, v> from n-f distinct parties:
-	tools.Log(receiver.Hostname, strconv.Itoa(config.N-config.F))
 	if v.Tag == BRACHA_BROADCAST_ECHO && echo_count >= config.N-config.F {
 		if receiver.My_vote[my_key] {
 			v := CreateMessageString(BRACHA_BROADCAST_VOTE, v.Content)
