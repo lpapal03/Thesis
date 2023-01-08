@@ -46,15 +46,15 @@ func handleRB(receiver server.Server, message Message) {
 	delivered := HandleReliableBroadcast(receiver, message)
 	response := []string{message.Sender, receiver.Hostname, ADD_RESPONSE}
 
-	if delivered && !gset.Exists(receiver.Gset, message.Content[0]) {
+	if delivered && !gset.Exists(receiver.Gset, message.Content[1]) {
 		gset.Append(receiver.Gset, message.Content[1])
 		receiver.Receive_socket.SendMessage(response)
-		tools.Log(receiver.Hostname, "Appended record "+message.Content[0])
+		tools.Log(receiver.Hostname, "Appended record "+message.Content[1])
 		return
 	}
-	if delivered && gset.Exists(receiver.Gset, message.Content[0]) {
+	if delivered && gset.Exists(receiver.Gset, message.Content[1]) {
 		receiver.Receive_socket.SendMessage(response)
-		tools.Log(receiver.Hostname, "Record "+message.Content[0]+" already exists")
+		tools.Log(receiver.Hostname, "Record "+message.Content[1]+" already exists")
 		return
 	}
 }

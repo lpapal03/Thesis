@@ -4,6 +4,7 @@ import (
 	"BFT-Distributed-G-Set/client"
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/tools"
+	"fmt"
 	"math/rand"
 	"reflect"
 	"sort"
@@ -87,19 +88,17 @@ func Add(c client.Client, record string) {
 	// WAIT FOR F+1 RESPONSES
 	// replies := make(map[string]bool)
 	// tools.Log(client.Id, "Waiting for f+1 ADD_RESPONSES...")
-	// for {
-	// 	sockets, _ := client.Poller.Poll(-1)
-	// 	for _, socket := range sockets {
-	// 		s := socket.Socket
-	// 		msg, _ := s.RecvMessage(0)
-	// 		fmt.Println(msg)
-	// 		if msg[1] == ADD_RESPONSE {
-	// 			replies[msg[0]+"-"+msg[2]] = true
-	// 		}
-	// 	}
-	// 	if countAddReplies(replies, record) >= config.F+1 {
-	// 		tools.Log(client.Id, "Record appended")
-	// 		return
-	// 	}
-	// }
+	for {
+		sockets, _ := c.Poller.Poll(-1)
+		for _, socket := range sockets {
+			s := socket.Socket
+			msg, _ := s.RecvMessage(0)
+			fmt.Println(msg)
+		}
+		// 	if countAddReplies(replies, record) >= config.F+1 {
+		// 		tools.Log(client.Id, "Record appended")
+		// 		return
+		// 	}
+		// }
+	}
 }

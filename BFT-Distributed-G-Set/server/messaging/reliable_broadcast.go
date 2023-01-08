@@ -73,8 +73,8 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 		return true
 	}
 
-	tools.Log(receiver.Hostname, "Echo: "+strconv.Itoa(echo_count))
-	tools.Log(receiver.Hostname, "Vote: "+strconv.Itoa(vote_count))
+	// tools.Log(receiver.Hostname, "Echo: "+strconv.Itoa(echo_count))
+	// tools.Log(receiver.Hostname, "Vote: "+strconv.Itoa(vote_count))
 
 	return false
 
