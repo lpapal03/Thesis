@@ -3,7 +3,9 @@ package messaging
 import (
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/server"
+	"BFT-Distributed-G-Set/tools"
 	"fmt"
+	"strconv"
 )
 
 // Leader, the one who initializes the module
@@ -30,10 +32,12 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	}
 
 	// on receiving <v> from leader:
-	if v.Tag == BRACHA_BROADCAST_INIT && receiver.My_echo[my_key] {
-		v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
-		sendToAll(receiver, v)
-		receiver.My_echo[my_key] = false
+	if v.Tag == BRACHA_BROADCAST_INIT {
+		if receiver.My_echo[my_key] {
+			v := CreateMessageString(BRACHA_BROADCAST_ECHO, v.Content)
+			sendToAll(receiver, v)
+			receiver.My_echo[my_key] = false
+		}
 	}
 
 	// count messages
@@ -68,6 +72,9 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count > config.N-config.F {
 		return true
 	}
+
+	tools.Log(receiver.Hostname, "Echo: "+strconv.Itoa(echo_count))
+	tools.Log(receiver.Hostname, "Vote: "+strconv.Itoa(vote_count))
 
 	return false
 
