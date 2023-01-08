@@ -4,7 +4,6 @@ import (
 	"BFT-Distributed-G-Set/client"
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/tools"
-	"fmt"
 	"math/rand"
 	"reflect"
 	"sort"
@@ -27,7 +26,7 @@ func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {
 // more than 2f+1 replies
 // and f+1 matching
 // returns a valid reply
-func findValidReply(replies map[string]string) string {
+func findGetValidReply(replies map[string]string) string {
 	if len(replies) < 2*config.F+1 {
 		return ""
 	}
@@ -72,7 +71,7 @@ func Get(c client.Client) string {
 				replies[msg[0]] = msg[2]
 			}
 		}
-		r := findValidReply(replies)
+		r := findGetValidReply(replies)
 		if len(r) > 0 {
 			tools.Log(c.Hostname, "Reply: "+r)
 			return r
@@ -86,19 +85,20 @@ func Add(c client.Client, record string) {
 	tools.Log(c.Hostname, "Called ADD("+record+")")
 	sendToServers(c.Servers, []string{ADD, record}, 2*config.F+1)
 	// WAIT FOR F+1 RESPONSES
-	// replies := make(map[string]bool)
-	// tools.Log(client.Id, "Waiting for f+1 ADD_RESPONSES...")
+	replies := make(map[string]bool)
+	tools.Log(c.Hostname, "Waiting for f+1 ADD replies")
 	for {
 		sockets, _ := c.Poller.Poll(-1)
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
-			fmt.Println(msg)
+			if msg[1] == ADD_RESPONSE && msg[2] == record {
+				replies[msg[0]] = true
+			}
 		}
-		// 	if countAddReplies(replies, record) >= config.F+1 {
-		// 		tools.Log(client.Id, "Record appended")
-		// 		return
-		// 	}
-		// }
+		if len(replies) >= config.F+1 {
+			tools.Log(c.Hostname, "Record {"+record+"} appended")
+			return
+		}
 	}
 }

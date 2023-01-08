@@ -45,7 +45,6 @@ func handleAdd(receiver server.Server, message Message) {
 func handleRB(receiver server.Server, message Message) {
 	delivered := HandleReliableBroadcast(receiver, message)
 	response := []string{message.Content[0], receiver.Hostname, ADD_RESPONSE, message.Content[1]}
-	tools.Log(receiver.Hostname, strings.Join(response, "-"))
 
 	if delivered && !gset.Exists(receiver.Gset, message.Content[1]) {
 		gset.Append(receiver.Gset, message.Content[1])
