@@ -36,7 +36,7 @@ func handleAdd(receiver server.Server, message Message) {
 	if !gset.Exists(receiver.Gset, message.Content[0]) {
 		ReliableBroadcast(receiver, message)
 	} else {
-		response := []string{message.Content[0], receiver.Hostname, ADD_RESPONSE, message.Content[0]}
+		response := []string{message.Sender, receiver.Hostname, ADD_RESPONSE, message.Content[0]}
 		receiver.Receive_socket.SendMessage(response)
 	}
 }

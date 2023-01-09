@@ -4,6 +4,7 @@ import (
 	"BFT-Distributed-G-Set/client"
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/tools"
+	"fmt"
 	"math/rand"
 	"reflect"
 	"sort"
@@ -92,6 +93,7 @@ func Add(c client.Client, record string) {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
+			fmt.Println(msg)
 			if msg[1] == ADD_RESPONSE && msg[2] == record {
 				replies[msg[0]] = true
 			}

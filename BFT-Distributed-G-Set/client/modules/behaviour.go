@@ -9,7 +9,6 @@ import (
 	"math/rand"
 	"os"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -39,7 +38,7 @@ func StartInteractive(c client.Client) {
 			if isRecordValid(record) {
 				messaging.Add(c, record)
 			} else {
-				fmt.Print("Record cannot be empty or contain only spaces")
+				fmt.Print("Record cannot be empty or contain only spaces\n")
 			}
 		}
 		if len(command) == 0 {
@@ -52,22 +51,15 @@ func StartInteractive(c client.Client) {
 
 func StartAutomated(c client.Client) {
 
-	var wg sync.WaitGroup
-	wg.Add(2)
+	for i := 0; i < 100; i++ {
+		rand.Seed(time.Now().UnixNano())
+		n := rand.Intn(2)
 
-	go func(c client.Client) {
-		defer wg.Done()
-		for i := 0; i < 20; i++ {
+		if n == 0 {
 			messaging.Get(c)
-			rand.Seed(time.Now().UnixNano())
-			t := rand.Intn(4)
-			time.Sleep(time.Duration(t) * time.Second)
 		}
-	}(c)
 
-	go func(c client.Client) {
-		defer wg.Done()
-		for i := 0; i < 20; i++ {
+		if n == 1 {
 			rand.Seed(time.Now().UnixNano())
 			n := rand.Intn(6)
 			b := make([]byte, n)
@@ -78,12 +70,11 @@ func StartAutomated(c client.Client) {
 			if isRecordValid(s) {
 				messaging.Add(c, s)
 			}
-			rand.Seed(time.Now().UnixNano())
-			t := rand.Intn(4)
-			time.Sleep(time.Duration(t) * time.Second)
 		}
-	}(c)
 
-	wg.Wait()
+		rand.Seed(time.Now().UnixNano())
+		t := rand.Intn(3)
+		time.Sleep(time.Duration(t) * time.Second)
 
+	}
 }
