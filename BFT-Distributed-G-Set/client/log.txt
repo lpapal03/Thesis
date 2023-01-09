@@ -1,12 +1,21 @@
-2023/01/09 01:59:37 | node0 | Established connection with tcp://node1:5555
-2023/01/09 01:59:37 | node0 | Established connection with tcp://node2:5555
-2023/01/09 01:59:37 | node0 | Established connection with tcp://node3:5555
-2023/01/09 01:59:37 | node0 | Established connection with tcp://node4:5555
-2023/01/09 01:59:37 | node0 | Established connection with tcp://node5:5555
-2023/01/09 01:59:37 | node0 | Established connection with tcp://node6:5555
-2023/01/09 01:59:37 | node0 | Established connection with tcp://node7:5555
-2023/01/09 01:59:37 | node0 | Established connection with tcp://node8:5555
-2023/01/09 01:59:37 | node0 | Established connection with tcp://node9:5555
-2023/01/09 01:59:37 | node0 | Started interactive session
-2023/01/09 01:59:39 | node0 | Called ADD(123)
-2023/01/09 01:59:39 | node0 | Waiting for f+1 ADD replies
+2023/01/09 02:02:28 | node0 | Established connection with tcp://node1:5555
+2023/01/09 02:02:28 | node0 | Established connection with tcp://node2:5555
+2023/01/09 02:02:28 | node0 | Established connection with tcp://node3:5555
+2023/01/09 02:02:28 | node0 | Established connection with tcp://node4:5555
+2023/01/09 02:02:28 | node0 | Established connection with tcp://node5:5555
+2023/01/09 02:02:28 | node0 | Established connection with tcp://node6:5555
+2023/01/09 02:02:28 | node0 | Established connection with tcp://node7:5555
+2023/01/09 02:02:28 | node0 | Established connection with tcp://node8:5555
+2023/01/09 02:02:28 | node0 | Established connection with tcp://node9:5555
+2023/01/09 02:02:28 | node0 | Started interactive session
+2023/01/09 02:02:30 | node0 | Called GET
+2023/01/09 02:02:30 | node0 | Waiting for valid GET_REPLY
+2023/01/09 02:02:30 | node0 | Reply: {INIT}
+2023/01/09 02:02:33 | node0 | Called ADD(123)
+2023/01/09 02:02:33 | node0 | Waiting for f+1 ADD replies
+2023/01/09 02:02:33 | node0 | Record {123} appended
+2023/01/09 02:02:36 | node0 | Called GET
+2023/01/09 02:02:36 | node0 | Waiting for valid GET_REPLY
+2023/01/09 02:02:36 | node0 | Reply: {123} {INIT}
+2023/01/09 02:02:38 | node0 | Called ADD(123)
+2023/01/09 02:02:38 | node0 | Waiting for f+1 ADD replies
