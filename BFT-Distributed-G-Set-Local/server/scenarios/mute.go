@@ -5,10 +5,12 @@ import (
 	"backend/messaging"
 	"backend/server"
 	"backend/tools"
+
+	zmq "github.com/pebbe/zmq4"
 )
 
-func Mute_listener_task(listener config.Node, peers []config.Node) {
-	server := server.Create(listener, peers)
+func Mute_listener_task(listener config.Node, peers []config.Node, zctx *zmq.Context) {
+	server := server.CreateServer(listener, peers, zctx)
 	for {
 		msg, _ := server.Receive_socket.RecvMessage(0)
 		message, err := messaging.ParseMessageString(msg)

@@ -7,7 +7,9 @@ import (
 	"frontend/config"
 	"frontend/messaging"
 	"os"
+	"strconv"
 	"strings"
+	"time"
 )
 
 func Start_CLI() {
@@ -30,6 +32,13 @@ func Start_CLI() {
 	servers := config.SERVERS
 	client := client.Create(id, servers)
 
+	time.Sleep(time.Second * 1)
+	for i := 0; i < 100; i++ {
+		messaging.Add(client, strconv.Itoa(i))
+		time.Sleep(time.Millisecond * 500)
+		messaging.Get(client)
+	}
+	return
 	// var command string
 	// var record string
 	fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")

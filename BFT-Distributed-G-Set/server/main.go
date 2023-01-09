@@ -6,10 +6,11 @@ import (
 	"BFT-Distributed-G-Set/server"
 	"BFT-Distributed-G-Set/tools"
 	"os"
+	"runtime/debug"
 )
 
 func main() {
-
+	debug.SetGCPercent(-1)
 	tools.ResetLogFile()
 	hosts_filename := "/users/loukis/Thesis/BFT-Distributed-G-Set/hosts"
 

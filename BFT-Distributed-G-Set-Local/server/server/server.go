@@ -14,6 +14,7 @@ type Server struct {
 	Receive_socket zmq.Socket
 	Id             string
 	Gset           map[string]string
+	Port           string
 
 	My_init    map[string]bool
 	My_echo    map[string]bool
@@ -22,9 +23,9 @@ type Server struct {
 	Peers_vote map[string]bool
 }
 
-func Create(node config.Node, peers []config.Node) Server {
+func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context) Server {
 	id := node.Host + node.Port
-	zctx, _ := zmq.NewContext()
+	port := node.Port
 	server_sockets := make(map[string]*zmq.Socket)
 	my_gset := gset.Create()
 	my_init := make(map[string]bool)
@@ -50,6 +51,7 @@ func Create(node config.Node, peers []config.Node) Server {
 		Peers:          server_sockets,
 		Receive_socket: *receive_socket,
 		Id:             id,
+		Port:           port,
 		Gset:           my_gset,
 		My_init:        my_init,
 		My_echo:        my_echo,

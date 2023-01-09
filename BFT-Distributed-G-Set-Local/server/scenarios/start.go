@@ -3,13 +3,16 @@ package scenarios
 import (
 	"backend/config"
 	"fmt"
+
+	zmq "github.com/pebbe/zmq4"
 )
 
 func Start(servers []config.Node, scenario string) {
+	zctx, _ := zmq.NewContext()
 	// all servers act normal
 	if scenario == "NORMAL" {
 		for i := 0; i < config.N; i++ {
-			go Normal_listener_task(servers[i], servers)
+			go Normal_listener_task(servers[i], servers, zctx)
 		}
 		for {
 		}
@@ -18,12 +21,12 @@ func Start(servers []config.Node, scenario string) {
 	if scenario == "MUTES" {
 		// f mute
 		for i := 1; i < config.F+1; i++ {
-			go Mute_listener_task(servers[i], servers)
+			go Mute_listener_task(servers[i], servers, zctx)
 			fmt.Println("Mute: ", servers[i])
 		}
 		// n-f normal
 		for i := config.F + 1; i < config.N; i++ {
-			go Normal_listener_task(servers[i], servers)
+			go Normal_listener_task(servers[i], servers, zctx)
 			fmt.Println("Normal: ", servers[i])
 		}
 		for {
