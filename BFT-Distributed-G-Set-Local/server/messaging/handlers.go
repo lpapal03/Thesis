@@ -7,19 +7,19 @@ import (
 	"strings"
 )
 
-func HandleMessage(server server.Server, msg []string) {
+func HandleMessage(s server.Server, msg []string) {
 	message, err := ParseMessageString(msg)
 	if err != nil {
 		panic(err)
 	}
-	tools.Log(server.Id, "Received "+message.Tag+" from "+message.Sender)
+	tools.Log(s.Id, "Received "+message.Tag+" from "+message.Sender)
 
 	if message.Tag == GET {
-		handleGet(server, message)
+		handleGet(s, message)
 	} else if message.Tag == ADD {
-		handleAdd(server, message)
+		handleAdd(s, message)
 	} else if strings.Contains(message.Tag, BRACHA_BROADCAST) {
-		handleRB(server, message)
+		handleRB(s, message)
 	}
 
 }
@@ -35,17 +35,25 @@ func handleGet(receiver server.Server, message Message) {
 func handleAdd(receiver server.Server, message Message) {
 	if !gset.Exists(receiver.Gset, message.Content[0]) {
 		ReliableBroadcast(receiver, message)
+	} else {
+		response := []string{message.Sender, receiver.Id, ADD_RESPONSE, message.Content[0]}
+		receiver.Receive_socket.SendMessage(response)
 	}
 }
 
 func handleRB(receiver server.Server, message Message) {
-	// original_sender := message.Content[0]
-	// response := []string{original_sender, receiver.Id, ADD_RESPONSE, message.Content[1]}
-
 	delivered := HandleReliableBroadcast(receiver, message)
-	if delivered {
+	response := []string{message.Content[0], receiver.Id, ADD_RESPONSE, message.Content[1]}
+
+	if delivered && !gset.Exists(receiver.Gset, message.Content[1]) {
 		gset.Append(receiver.Gset, message.Content[1])
-		// receiver.Receive_socket.SendMessage(response)
-		tools.Log(receiver.Id, "Appended record!")
+		receiver.Receive_socket.SendMessage(response)
+		tools.Log(receiver.Id, "Appended record "+message.Content[1])
+		return
+	}
+	if delivered && gset.Exists(receiver.Gset, message.Content[1]) {
+		receiver.Receive_socket.SendMessage(response)
+		tools.Log(receiver.Id, "Record "+message.Content[1]+" already exists")
+		return
 	}
 }
