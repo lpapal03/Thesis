@@ -31,7 +31,7 @@
       raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . malicious </dev/null >/dev/null 2>&1 & sleep 1
       become_user: loukis
 - name: Start automated clients. Interactive clients should be started manually
-  hosts: clients
+  hosts: clients-automated
   tasks:
     - name: Start server
       raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/client; nohup /usr/local/go/bin/go run . automated </dev/null >/dev/null 2>&1 & sleep 1
