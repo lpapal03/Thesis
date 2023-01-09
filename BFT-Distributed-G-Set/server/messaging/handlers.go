@@ -10,6 +10,7 @@ import (
 func HandleMessage(s server.Server, msg []string) {
 	message, err := ParseMessageString(msg)
 	if err != nil {
+		tools.Log(err)
 		panic(err)
 	}
 	tools.Log(s.Hostname, "Received "+message.Tag+" from "+message.Sender)
