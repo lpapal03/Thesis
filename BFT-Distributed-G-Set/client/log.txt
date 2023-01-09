@@ -1,282 +1,37 @@
-2023/01/09 03:43:02 | node0 | Established connection with tcp://node1:5555
-2023/01/09 03:43:02 | node0 | Established connection with tcp://node2:5555
-2023/01/09 03:43:02 | node0 | Established connection with tcp://node3:5555
-2023/01/09 03:43:02 | node0 | Established connection with tcp://node4:5555
-2023/01/09 03:43:02 | node0 | Established connection with tcp://node5:5555
-2023/01/09 03:43:02 | node0 | Established connection with tcp://node6:5555
-2023/01/09 03:43:02 | node0 | Established connection with tcp://node7:5555
-2023/01/09 03:43:02 | node0 | Established connection with tcp://node8:5555
-2023/01/09 03:43:02 | node0 | Established connection with tcp://node9:5555
-2023/01/09 03:43:02 | node0 | Called GET
-2023/01/09 03:43:02 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:02 | node0 | Reply: {1} {2} {INIT}
-2023/01/09 03:43:04 | node0 | Called GET
-2023/01/09 03:43:04 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:04 | node0 | Reply: {1} {2} {INIT}
-2023/01/09 03:43:06 | node0 | Called GET
-2023/01/09 03:43:06 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:06 | node0 | Reply: {1} {2} {INIT}
-2023/01/09 03:43:07 | node0 | Called GET
-2023/01/09 03:43:07 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:07 | node0 | Reply: {1} {2} {INIT}
-2023/01/09 03:43:07 | node0 | Called ADD(aub)
-2023/01/09 03:43:07 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:07 | node0 | Record {aub} appended
-2023/01/09 03:43:08 | node0 | Called GET
-2023/01/09 03:43:08 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:08 | node0 | Reply: {1} {2} {INIT} {aub}
-2023/01/09 03:43:11 | node0 | Called ADD(z)
-2023/01/09 03:43:11 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:11 | node0 | Record {z} appended
-2023/01/09 03:43:13 | node0 | Called GET
-2023/01/09 03:43:13 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:13 | node0 | Reply: {1} {2} {INIT} {aub} {z}
-2023/01/09 03:43:14 | node0 | Called ADD(wmn)
-2023/01/09 03:43:14 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:14 | node0 | Record {wmn} appended
-2023/01/09 03:43:16 | node0 | Called GET
-2023/01/09 03:43:16 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:16 | node0 | Reply: {1} {2} {INIT} {aub} {wmn} {z}
-2023/01/09 03:43:17 | node0 | Called ADD(wce)
-2023/01/09 03:43:17 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:17 | node0 | Record {wce} appended
-2023/01/09 03:43:18 | node0 | Called GET
-2023/01/09 03:43:18 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:18 | node0 | Reply: {1} {2} {INIT} {aub} {wce} {wmn} {z}
-2023/01/09 03:43:19 | node0 | Called GET
-2023/01/09 03:43:19 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:19 | node0 | Reply: {1} {2} {INIT} {aub} {wce} {wmn} {z}
-2023/01/09 03:43:19 | node0 | Called GET
-2023/01/09 03:43:19 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:19 | node0 | Reply: {1} {2} {INIT} {aub} {wce} {wmn} {z}
-2023/01/09 03:43:20 | node0 | Called GET
-2023/01/09 03:43:20 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:20 | node0 | Reply: {1} {2} {INIT} {aub} {wce} {wmn} {z}
-2023/01/09 03:43:22 | node0 | Called ADD(vtjai)
-2023/01/09 03:43:22 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:22 | node0 | Record {vtjai} appended
-2023/01/09 03:43:23 | node0 | Called GET
-2023/01/09 03:43:23 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:23 | node0 | Reply: {1} {2} {INIT} {aub} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:23 | node0 | Called ADD(j)
-2023/01/09 03:43:23 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:23 | node0 | Record {j} appended
-2023/01/09 03:43:24 | node0 | Called ADD(cabt)
-2023/01/09 03:43:24 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:24 | node0 | Record {cabt} appended
-2023/01/09 03:43:25 | node0 | Called GET
-2023/01/09 03:43:25 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:25 | node0 | Reply: {1} {2} {INIT} {aub} {cabt} {j} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:26 | node0 | Called ADD(bzwym)
-2023/01/09 03:43:26 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:26 | node0 | Record {bzwym} appended
-2023/01/09 03:43:27 | node0 | Called GET
-2023/01/09 03:43:27 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:27 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {j} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:29 | node0 | Called GET
-2023/01/09 03:43:29 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:29 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {j} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:29 | node0 | Called ADD(vke)
-2023/01/09 03:43:29 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:29 | node0 | Record {vke} appended
-2023/01/09 03:43:30 | node0 | Called ADD(mvtof)
-2023/01/09 03:43:30 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:30 | node0 | Record {mvtof} appended
-2023/01/09 03:43:30 | node0 | Called ADD(rerbg)
-2023/01/09 03:43:30 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:30 | node0 | Record {rerbg} appended
-2023/01/09 03:43:31 | node0 | Called GET
-2023/01/09 03:43:31 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:31 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {j} {mvtof} {rerbg} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:31 | node0 | Called GET
-2023/01/09 03:43:31 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:31 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {j} {mvtof} {rerbg} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:33 | node0 | Called ADD(uh)
-2023/01/09 03:43:33 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:33 | node0 | Record {uh} appended
-2023/01/09 03:43:33 | node0 | Called ADD(sj)
-2023/01/09 03:43:33 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:33 | node0 | Record {sj} appended
-2023/01/09 03:43:35 | node0 | Called GET
-2023/01/09 03:43:35 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:35 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {j} {mvtof} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:35 | node0 | Called GET
-2023/01/09 03:43:35 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:35 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {j} {mvtof} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:37 | node0 | Called GET
-2023/01/09 03:43:37 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:37 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {j} {mvtof} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:39 | node0 | Called ADD(e)
-2023/01/09 03:43:39 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:39 | node0 | Record {e} appended
-2023/01/09 03:43:39 | node0 | Called GET
-2023/01/09 03:43:39 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:39 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {e} {j} {mvtof} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:41 | node0 | Called GET
-2023/01/09 03:43:41 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:41 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {e} {j} {mvtof} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:43 | node0 | Called ADD(ngovc)
-2023/01/09 03:43:43 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:43 | node0 | Record {ngovc} appended
-2023/01/09 03:43:43 | node0 | Called GET
-2023/01/09 03:43:43 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:43 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:44 | node0 | Called GET
-2023/01/09 03:43:44 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:44 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:46 | node0 | Called GET
-2023/01/09 03:43:46 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:46 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:47 | node0 | Called GET
-2023/01/09 03:43:47 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:47 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:47 | node0 | Called GET
-2023/01/09 03:43:47 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:47 | node0 | Reply: {1} {2} {INIT} {aub} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:48 | node0 | Called ADD(ao)
-2023/01/09 03:43:48 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:48 | node0 | Record {ao} appended
-2023/01/09 03:43:50 | node0 | Called GET
-2023/01/09 03:43:50 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:50 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:51 | node0 | Called GET
-2023/01/09 03:43:51 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:51 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {rerbg} {sj} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:51 | node0 | Called ADD(bdfje)
-2023/01/09 03:43:51 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:51 | node0 | Record {bdfje} appended
-2023/01/09 03:43:52 | node0 | Called ADD(tv)
-2023/01/09 03:43:52 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:52 | node0 | Record {tv} appended
-2023/01/09 03:43:53 | node0 | Called GET
-2023/01/09 03:43:53 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:53 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:54 | node0 | Called GET
-2023/01/09 03:43:54 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:54 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:56 | node0 | Called GET
-2023/01/09 03:43:56 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:56 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:43:58 | node0 | Called ADD(qctov)
-2023/01/09 03:43:58 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:43:58 | node0 | Record {qctov} appended
-2023/01/09 03:43:58 | node0 | Called GET
-2023/01/09 03:43:58 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:43:58 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {qctov} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:00 | node0 | Called GET
-2023/01/09 03:44:00 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:00 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {qctov} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:02 | node0 | Called GET
-2023/01/09 03:44:02 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:02 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {qctov} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:02 | node0 | Called GET
-2023/01/09 03:44:02 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:02 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {qctov} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:03 | node0 | Called GET
-2023/01/09 03:44:03 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:03 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {qctov} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:03 | node0 | Called GET
-2023/01/09 03:44:03 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:03 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {qctov} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:06 | node0 | Called GET
-2023/01/09 03:44:06 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:06 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {qctov} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:07 | node0 | Called GET
-2023/01/09 03:44:07 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:07 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {cabt} {e} {j} {mvtof} {ngovc} {qctov} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:09 | node0 | Called ADD(b)
-2023/01/09 03:44:09 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:09 | node0 | Record {b} appended
-2023/01/09 03:44:10 | node0 | Called GET
-2023/01/09 03:44:10 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:10 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {b} {cabt} {e} {j} {mvtof} {ngovc} {qctov} {rerbg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:12 | node0 | Called ADD(gfe)
-2023/01/09 03:44:12 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:12 | node0 | Record {gfe} appended
-2023/01/09 03:44:14 | node0 | Called ADD(dzj)
-2023/01/09 03:44:14 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:14 | node0 | Record {dzj} appended
-2023/01/09 03:44:16 | node0 | Called ADD(hsga)
-2023/01/09 03:44:16 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:16 | node0 | Record {hsga} appended
-2023/01/09 03:44:17 | node0 | Called ADD(rkfcg)
-2023/01/09 03:44:17 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:17 | node0 | Record {rkfcg} appended
-2023/01/09 03:44:19 | node0 | Called GET
-2023/01/09 03:44:19 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:19 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {b} {cabt} {dzj} {e} {gfe} {hsga} {j} {mvtof} {ngovc} {qctov} {rerbg} {rkfcg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:21 | node0 | Called ADD(eevyt)
-2023/01/09 03:44:21 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:21 | node0 | Record {eevyt} appended
-2023/01/09 03:44:22 | node0 | Called GET
-2023/01/09 03:44:22 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:22 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {b} {cabt} {dzj} {eevyt} {e} {gfe} {hsga} {j} {mvtof} {ngovc} {qctov} {rerbg} {rkfcg} {sj} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:24 | node0 | Called ADD(tea)
-2023/01/09 03:44:24 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:24 | node0 | Record {tea} appended
-2023/01/09 03:44:24 | node0 | Called ADD(o)
-2023/01/09 03:44:24 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:24 | node0 | Record {o} appended
-2023/01/09 03:44:25 | node0 | Called ADD(qohs)
-2023/01/09 03:44:25 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:25 | node0 | Record {qohs} appended
-2023/01/09 03:44:26 | node0 | Called GET
-2023/01/09 03:44:26 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:26 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {b} {cabt} {dzj} {eevyt} {e} {gfe} {hsga} {j} {mvtof} {ngovc} {o} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:28 | node0 | Called GET
-2023/01/09 03:44:28 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:28 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bzwym} {b} {cabt} {dzj} {eevyt} {e} {gfe} {hsga} {j} {mvtof} {ngovc} {o} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:28 | node0 | Called ADD(bgb)
-2023/01/09 03:44:28 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:28 | node0 | Record {bgb} appended
-2023/01/09 03:44:28 | node0 | Called GET
-2023/01/09 03:44:28 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:28 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bgb} {bzwym} {b} {cabt} {dzj} {eevyt} {e} {gfe} {hsga} {j} {mvtof} {ngovc} {o} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:28 | node0 | Called GET
-2023/01/09 03:44:28 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:28 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bgb} {bzwym} {b} {cabt} {dzj} {eevyt} {e} {gfe} {hsga} {j} {mvtof} {ngovc} {o} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:28 | node0 | Called ADD(fb)
-2023/01/09 03:44:28 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:28 | node0 | Record {fb} appended
-2023/01/09 03:44:29 | node0 | Called GET
-2023/01/09 03:44:29 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:29 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bgb} {bzwym} {b} {cabt} {dzj} {eevyt} {e} {fb} {gfe} {hsga} {j} {mvtof} {ngovc} {o} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:31 | node0 | Called GET
-2023/01/09 03:44:31 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:31 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bgb} {bzwym} {b} {cabt} {dzj} {eevyt} {e} {fb} {gfe} {hsga} {j} {mvtof} {ngovc} {o} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:31 | node0 | Called GET
-2023/01/09 03:44:31 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:31 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bgb} {bzwym} {b} {cabt} {dzj} {eevyt} {e} {fb} {gfe} {hsga} {j} {mvtof} {ngovc} {o} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:31 | node0 | Called ADD(owpp)
-2023/01/09 03:44:31 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:31 | node0 | Record {owpp} appended
-2023/01/09 03:44:32 | node0 | Called ADD(cte)
-2023/01/09 03:44:32 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:32 | node0 | Record {cte} appended
-2023/01/09 03:44:34 | node0 | Called ADD(fzw)
-2023/01/09 03:44:34 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:34 | node0 | Record {fzw} appended
-2023/01/09 03:44:36 | node0 | Called GET
-2023/01/09 03:44:36 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:36 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bgb} {bzwym} {b} {cabt} {cte} {dzj} {eevyt} {e} {fb} {fzw} {gfe} {hsga} {j} {mvtof} {ngovc} {owpp} {o} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:37 | node0 | Called GET
-2023/01/09 03:44:37 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:37 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bgb} {bzwym} {b} {cabt} {cte} {dzj} {eevyt} {e} {fb} {fzw} {gfe} {hsga} {j} {mvtof} {ngovc} {owpp} {o} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:37 | node0 | Called GET
-2023/01/09 03:44:37 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:37 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bgb} {bzwym} {b} {cabt} {cte} {dzj} {eevyt} {e} {fb} {fzw} {gfe} {hsga} {j} {mvtof} {ngovc} {owpp} {o} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:38 | node0 | Called ADD(nymbu)
-2023/01/09 03:44:38 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:38 | node0 | Record {nymbu} appended
-2023/01/09 03:44:39 | node0 | Called ADD(qci)
-2023/01/09 03:44:39 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:39 | node0 | Record {qci} appended
-2023/01/09 03:44:40 | node0 | Called GET
-2023/01/09 03:44:40 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:40 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bgb} {bzwym} {b} {cabt} {cte} {dzj} {eevyt} {e} {fb} {fzw} {gfe} {hsga} {j} {mvtof} {ngovc} {nymbu} {owpp} {o} {qci} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:42 | node0 | Called GET
-2023/01/09 03:44:42 | node0 | Waiting for valid GET_REPLY
-2023/01/09 03:44:42 | node0 | Reply: {1} {2} {INIT} {ao} {aub} {bdfje} {bgb} {bzwym} {b} {cabt} {cte} {dzj} {eevyt} {e} {fb} {fzw} {gfe} {hsga} {j} {mvtof} {ngovc} {nymbu} {owpp} {o} {qci} {qctov} {qohs} {rerbg} {rkfcg} {sj} {tea} {tv} {uh} {vke} {vtjai} {wce} {wmn} {z}
-2023/01/09 03:44:42 | node0 | Called ADD(m)
-2023/01/09 03:44:42 | node0 | Waiting for f+1 ADD replies
-2023/01/09 03:44:42 | node0 | Record {m} appended
+2023/01/09 06:10:15 | node0 | Established connection with tcp://node1:5555
+2023/01/09 06:10:15 | node0 | Established connection with tcp://node2:5555
+2023/01/09 06:10:15 | node0 | Established connection with tcp://node3:5555
+2023/01/09 06:10:15 | node0 | Established connection with tcp://node4:5555
+2023/01/09 06:10:15 | node0 | Established connection with tcp://node5:5555
+2023/01/09 06:10:15 | node0 | Established connection with tcp://node6:5555
+2023/01/09 06:10:15 | node0 | Established connection with tcp://node7:5555
+2023/01/09 06:10:15 | node0 | Called ADD(node0-0)
+2023/01/09 06:10:15 | node0 | Waiting for f+1 ADD replies
+2023/01/09 06:10:15 | node0 | Record {node0-0} appended
+2023/01/09 06:10:15 | node0 | Called GET
+2023/01/09 06:10:15 | node0 | Waiting for valid GET_REPLY
+2023/01/09 06:10:15 | node0 | Reply: {INIT} {i} {jzipp} {node0-0} {nq} {obx} {qmaeh} {s} {u} {xldor}
+2023/01/09 06:10:17 | node0 | Called ADD(node0-2)
+2023/01/09 06:10:17 | node0 | Waiting for f+1 ADD replies
+2023/01/09 06:10:17 | node0 | Record {node0-2} appended
+2023/01/09 06:10:17 | node0 | Called ADD(node0-3)
+2023/01/09 06:10:17 | node0 | Waiting for f+1 ADD replies
+2023/01/09 06:10:17 | node0 | Record {node0-3} appended
+2023/01/09 06:10:19 | node0 | Called GET
+2023/01/09 06:10:19 | node0 | Waiting for valid GET_REPLY
+2023/01/09 06:10:19 | node0 | Reply: {INIT} {e} {i} {jzipp} {node0-0} {node0-2} {node0-3} {nq} {obx} {qmaeh} {s} {u} {xldor}
+2023/01/09 06:10:19 | node0 | Called GET
+2023/01/09 06:10:19 | node0 | Waiting for valid GET_REPLY
+2023/01/09 06:10:19 | node0 | Reply: {INIT} {e} {i} {jzipp} {node0-0} {node0-2} {node0-3} {nq} {obx} {qmaeh} {s} {u} {xldor}
+2023/01/09 06:10:20 | node0 | Called GET
+2023/01/09 06:10:20 | node0 | Waiting for valid GET_REPLY
+2023/01/09 06:10:20 | node0 | Reply: {INIT} {e} {i} {jzipp} {node0-0} {node0-2} {node0-3} {nq} {obx} {qmaeh} {s} {u} {xldor}
+2023/01/09 06:10:20 | node0 | Called ADD(node0-7)
+2023/01/09 06:10:20 | node0 | Waiting for f+1 ADD replies
+2023/01/09 06:10:20 | node0 | Record {node0-7} appended
+2023/01/09 06:10:21 | node0 | Called ADD(node0-8)
+2023/01/09 06:10:21 | node0 | Waiting for f+1 ADD replies
+2023/01/09 06:10:21 | node0 | Record {node0-8} appended
+2023/01/09 06:10:23 | node0 | Called GET
+2023/01/09 06:10:23 | node0 | Waiting for valid GET_REPLY
+2023/01/09 06:10:23 | node0 | Reply: {INIT} {e} {hgf} {i} {jzipp} {nimv} {node0-0} {node0-2} {node0-3} {node0-7} {node0-8} {nq} {obx} {qmaeh} {s} {u} {xldor}

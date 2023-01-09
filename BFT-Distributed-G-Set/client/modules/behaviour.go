@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -49,9 +50,19 @@ func StartInteractive(c client.Client) {
 	}
 }
 
+func randomString() string {
+	rand.Seed(time.Now().UnixNano())
+	n := rand.Intn(6)
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = 'a' + byte(rand.Intn(26))
+	}
+	return string(b)
+}
+
 func StartAutomated(c client.Client) {
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10; i++ {
 		rand.Seed(time.Now().UnixNano())
 		n := rand.Intn(2)
 
@@ -60,13 +71,8 @@ func StartAutomated(c client.Client) {
 		}
 
 		if n == 1 {
-			rand.Seed(time.Now().UnixNano())
-			n := rand.Intn(6)
-			b := make([]byte, n)
-			for i := range b {
-				b[i] = 'a' + byte(rand.Intn(26))
-			}
-			s := string(b)
+			// s := randomString()
+			s := c.Hostname + "-" + strconv.Itoa(i)
 			if isRecordValid(s) {
 				messaging.Add(c, s)
 			}
