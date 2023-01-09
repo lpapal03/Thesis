@@ -33,7 +33,6 @@ func handleGet(receiver server.Server, message Message) {
 }
 
 func handleAdd(receiver server.Server, message Message) {
-	// gset.Append(receiver.Gset, message.Content[0])
 	if !gset.Exists(receiver.Gset, message.Content[0]) {
 		ReliableBroadcast(receiver, message)
 	} else {

@@ -1,7 +1,12 @@
-2023/01/08 11:34:10 | node0 | Bound tcp://*:5555
-2023/01/08 11:34:10 | node0 | Connected to node0:5555
-2023/01/08 11:34:10 | node0 | Connected to node1:5555
-2023/01/08 11:34:10 | node0 | Connected to node2:5555
-2023/01/08 11:34:10 | node0 | Connected to node3:5555
-2023/01/08 11:34:10 | node0 | Connected to node4:5555
-2023/01/08 11:34:10 | node0 | Started with NORMAL behaviour
+2023/01/09 02:20:13 | node0 | Bound tcp://*:5555
+2023/01/09 02:20:13 | node0 | Connected to node0:5555
+2023/01/09 02:20:13 | node0 | Connected to node1:5555
+2023/01/09 02:20:13 | node0 | Connected to node2:5555
+2023/01/09 02:20:13 | node0 | Connected to node3:5555
+2023/01/09 02:20:13 | node0 | Connected to node4:5555
+2023/01/09 02:20:13 | node0 | Connected to node5:5555
+2023/01/09 02:20:13 | node0 | Connected to node6:5555
+2023/01/09 02:20:13 | node0 | Connected to node7:5555
+2023/01/09 02:20:13 | node0 | Connected to node8:5555
+2023/01/09 02:20:13 | node0 | Connected to node9:5555
+2023/01/09 02:20:13 | node0 | Started with NORMAL behaviour
