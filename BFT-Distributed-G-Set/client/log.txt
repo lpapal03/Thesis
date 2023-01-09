@@ -1,29 +1,12 @@
-2023/01/08 11:35:42 | node0 | Established connection with tcp://node1:5555
-2023/01/08 11:35:42 | node0 | Established connection with tcp://node2:5555
-2023/01/08 11:35:42 | node0 | Established connection with tcp://node3:5555
-2023/01/08 11:35:42 | node0 | Established connection with tcp://node4:5555
-2023/01/08 11:35:42 | node0 | Established connection with tcp://node5:5555
-2023/01/08 11:35:42 | node0 | Established connection with tcp://node6:5555
-2023/01/08 11:35:42 | node0 | Established connection with tcp://node7:5555
-2023/01/08 11:35:42 | node0 | Started interactive session
-2023/01/08 11:37:39 | node0 | Called ADD(123)
-2023/01/08 11:37:39 | node0 | Waiting for f+1 ADD_RESPONSES...
-2023/01/08 11:37:39 | node0 | Record {123} appended
-2023/01/08 11:37:40 | node0 | Called GET
-2023/01/08 11:37:40 | node0 | Waiting for valid GET_REPLY
-2023/01/08 11:37:40 | node0 | Reply: {123} {1} {2} {3} {8} {INIT} {fgfg}
-2023/01/08 11:37:52 | node0 | Called GET
-2023/01/08 11:37:52 | node0 | Waiting for valid GET_REPLY
-2023/01/08 11:37:52 | node0 | Reply: {123} {1} {2} {3} {8} {INIT} {fgfg}
-2023/01/08 11:37:56 | node0 | Called ADD(loukis)
-2023/01/08 11:37:56 | node0 | Waiting for f+1 ADD_RESPONSES...
-2023/01/08 11:37:56 | node0 | Record {loukis} appended
-2023/01/08 11:38:05 | node0 | Called GET
-2023/01/08 11:38:05 | node0 | Waiting for valid GET_REPLY
-2023/01/08 11:38:05 | node0 | Reply: {123} {1} {2} {3} {8} {INIT} {fgfg} {loukis}
-2023/01/08 11:38:10 | node0 | Called ADD(cccc)
-2023/01/08 11:38:10 | node0 | Waiting for f+1 ADD_RESPONSES...
-2023/01/08 11:38:10 | node0 | Record {cccc} appended
-2023/01/08 11:38:12 | node0 | Called GET
-2023/01/08 11:38:12 | node0 | Waiting for valid GET_REPLY
-2023/01/08 11:38:12 | node0 | Reply: {123} {1} {2} {3} {8} {INIT} {cccc} {fgfg} {loukis}
+2023/01/09 01:59:37 | node0 | Established connection with tcp://node1:5555
+2023/01/09 01:59:37 | node0 | Established connection with tcp://node2:5555
+2023/01/09 01:59:37 | node0 | Established connection with tcp://node3:5555
+2023/01/09 01:59:37 | node0 | Established connection with tcp://node4:5555
+2023/01/09 01:59:37 | node0 | Established connection with tcp://node5:5555
+2023/01/09 01:59:37 | node0 | Established connection with tcp://node6:5555
+2023/01/09 01:59:37 | node0 | Established connection with tcp://node7:5555
+2023/01/09 01:59:37 | node0 | Established connection with tcp://node8:5555
+2023/01/09 01:59:37 | node0 | Established connection with tcp://node9:5555
+2023/01/09 01:59:37 | node0 | Started interactive session
+2023/01/09 01:59:39 | node0 | Called ADD(123)
+2023/01/09 01:59:39 | node0 | Waiting for f+1 ADD replies
