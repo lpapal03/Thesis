@@ -1,37 +1,10 @@
-2023/01/09 06:10:15 | node0 | Established connection with tcp://node1:5555
-2023/01/09 06:10:15 | node0 | Established connection with tcp://node2:5555
-2023/01/09 06:10:15 | node0 | Established connection with tcp://node3:5555
-2023/01/09 06:10:15 | node0 | Established connection with tcp://node4:5555
-2023/01/09 06:10:15 | node0 | Established connection with tcp://node5:5555
-2023/01/09 06:10:15 | node0 | Established connection with tcp://node6:5555
-2023/01/09 06:10:15 | node0 | Established connection with tcp://node7:5555
-2023/01/09 06:10:15 | node0 | Called ADD(node0-0)
-2023/01/09 06:10:15 | node0 | Waiting for f+1 ADD replies
-2023/01/09 06:10:15 | node0 | Record {node0-0} appended
-2023/01/09 06:10:15 | node0 | Called GET
-2023/01/09 06:10:15 | node0 | Waiting for valid GET_REPLY
-2023/01/09 06:10:15 | node0 | Reply: {INIT} {i} {jzipp} {node0-0} {nq} {obx} {qmaeh} {s} {u} {xldor}
-2023/01/09 06:10:17 | node0 | Called ADD(node0-2)
-2023/01/09 06:10:17 | node0 | Waiting for f+1 ADD replies
-2023/01/09 06:10:17 | node0 | Record {node0-2} appended
-2023/01/09 06:10:17 | node0 | Called ADD(node0-3)
-2023/01/09 06:10:17 | node0 | Waiting for f+1 ADD replies
-2023/01/09 06:10:17 | node0 | Record {node0-3} appended
-2023/01/09 06:10:19 | node0 | Called GET
-2023/01/09 06:10:19 | node0 | Waiting for valid GET_REPLY
-2023/01/09 06:10:19 | node0 | Reply: {INIT} {e} {i} {jzipp} {node0-0} {node0-2} {node0-3} {nq} {obx} {qmaeh} {s} {u} {xldor}
-2023/01/09 06:10:19 | node0 | Called GET
-2023/01/09 06:10:19 | node0 | Waiting for valid GET_REPLY
-2023/01/09 06:10:19 | node0 | Reply: {INIT} {e} {i} {jzipp} {node0-0} {node0-2} {node0-3} {nq} {obx} {qmaeh} {s} {u} {xldor}
-2023/01/09 06:10:20 | node0 | Called GET
-2023/01/09 06:10:20 | node0 | Waiting for valid GET_REPLY
-2023/01/09 06:10:20 | node0 | Reply: {INIT} {e} {i} {jzipp} {node0-0} {node0-2} {node0-3} {nq} {obx} {qmaeh} {s} {u} {xldor}
-2023/01/09 06:10:20 | node0 | Called ADD(node0-7)
-2023/01/09 06:10:20 | node0 | Waiting for f+1 ADD replies
-2023/01/09 06:10:20 | node0 | Record {node0-7} appended
-2023/01/09 06:10:21 | node0 | Called ADD(node0-8)
-2023/01/09 06:10:21 | node0 | Waiting for f+1 ADD replies
-2023/01/09 06:10:21 | node0 | Record {node0-8} appended
-2023/01/09 06:10:23 | node0 | Called GET
-2023/01/09 06:10:23 | node0 | Waiting for valid GET_REPLY
-2023/01/09 06:10:23 | node0 | Reply: {INIT} {e} {hgf} {i} {jzipp} {nimv} {node0-0} {node0-2} {node0-3} {node0-7} {node0-8} {nq} {obx} {qmaeh} {s} {u} {xldor}
+2023/01/09 12:09:38 | node0 | Established connection with tcp://node1:5555
+2023/01/09 12:09:38 | node0 | Established connection with tcp://node2:5555
+2023/01/09 12:09:38 | node0 | Established connection with tcp://node3:5555
+2023/01/09 12:09:38 | node0 | Established connection with tcp://node4:5555
+2023/01/09 12:09:38 | node0 | Established connection with tcp://node5:5555
+2023/01/09 12:09:38 | node0 | Established connection with tcp://node6:5555
+2023/01/09 12:09:38 | node0 | Established connection with tcp://node7:5555
+2023/01/09 12:09:38 | node0 | Started interactive session
+2023/01/09 12:09:39 | node0 | Called GET
+2023/01/09 12:09:39 | node0 | Waiting for valid GET_REPLY

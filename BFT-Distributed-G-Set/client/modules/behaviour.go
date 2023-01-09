@@ -62,7 +62,7 @@ func randomString() string {
 
 func StartAutomated(c client.Client) {
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 100; i++ {
 		rand.Seed(time.Now().UnixNano())
 		n := rand.Intn(2)
 
