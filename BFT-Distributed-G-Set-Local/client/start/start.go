@@ -66,7 +66,7 @@ func StartAutomated(client_count, request_count int) {
 
 			time.Sleep(time.Second * 1)
 			for r := 0; r < request_count; r++ {
-				messaging.Add(client, id+"."+strconv.Itoa(r))
+				messaging.Add(client, id+"-ADD-"+strconv.Itoa(r))
 				time.Sleep(time.Millisecond * 500)
 				messaging.Get(client)
 			}
