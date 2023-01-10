@@ -14,18 +14,10 @@ var (
 	SERVERS          []Node
 )
 
-func SetServers(mode string) []Node {
+func SetServers() []Node {
+	SERVERS = LOCAL_SERVERS
 
-	if mode == "LOCAL" {
-		N = len(LOCAL_SERVERS)
-		SERVERS = LOCAL_SERVERS
-
-	} else if mode == "REMOTE" {
-		N = len(REMOTE_SERVERS)
-		SERVERS = REMOTE_SERVERS
-	} else {
-		panic("Mode not supported!")
-	}
+	N = len(SERVERS)
 
 	F = (N - 1) / 3
 	// 3f+1

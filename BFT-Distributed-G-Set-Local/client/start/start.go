@@ -1,4 +1,4 @@
-package ui
+package start
 
 import (
 	"bufio"
@@ -9,38 +9,26 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
-func Start_CLI() {
+func StartInteractive() {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	var id string
 	var command string
 	var record string
 
-	// fmt.Print("Your ID\n> ")
-	// scanner.Scan()
-	// id = scanner.Text()
-	// fmt.Println("ID set to '" + scanner.Text() + "'")
-
-	// FOR TESTING
-	id = "c1"
-	fmt.Println("ID set to '" + id + "'")
+	fmt.Print("Your ID\n> ")
+	scanner.Scan()
+	id = scanner.Text()
+	fmt.Println("ID set to '" + id + "'\n")
 
 	config.CreateScenario("NORMAL", "LOCAL")
 	servers := config.SERVERS
 	client := client.Create(id, servers)
 
-	time.Sleep(time.Second * 1)
-	for i := 0; i < 100; i++ {
-		messaging.Add(client, strconv.Itoa(i))
-		time.Sleep(time.Millisecond * 500)
-		messaging.Get(client)
-	}
-	return
-	// var command string
-	// var record string
 	fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
 	for scanner.Scan() {
 		command = strings.ToLower(scanner.Text())
@@ -51,7 +39,7 @@ func Start_CLI() {
 			messaging.Get(client)
 		}
 		if command == "a" {
-			fmt.Print("Record to append\n> ")
+			fmt.Print("Record to append > ")
 			scanner.Scan()
 			record = scanner.Text()
 			messaging.Add(client, record)
@@ -62,4 +50,28 @@ func Start_CLI() {
 			fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
 		}
 	}
+}
+
+func StartAutomated(client_count, request_count int) {
+	var wg sync.WaitGroup
+	wg.Add(client_count)
+	for i := 0; i < client_count; i++ {
+		id := "c" + strconv.Itoa(i)
+		go func(id string) {
+			defer wg.Done()
+			fmt.Println("ID set to '" + id + "'")
+			config.CreateScenario("NORMAL", "LOCAL")
+			servers := config.SERVERS
+			client := client.Create(id, servers)
+
+			time.Sleep(time.Second * 1)
+			for r := 0; r < request_count; r++ {
+				messaging.Add(client, id+"."+strconv.Itoa(r))
+				time.Sleep(time.Millisecond * 500)
+				messaging.Get(client)
+			}
+			return
+		}(id)
+	}
+	wg.Wait()
 }

@@ -8,7 +8,6 @@ import (
 
 func main() {
 	debug.SetGCPercent(-1)
-	servers := config.SetServers("LOCAL")
-	scenarios.Start(servers, "NORMAL")
-
+	servers := config.SetServers()
+	scenarios.Start(servers, "MUTES")
 }

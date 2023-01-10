@@ -8,10 +8,10 @@ import (
 )
 
 func HandleMessage(s server.Server, msg []string) {
-	message, _ := ParseMessageString(msg)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	message, err := ParseMessageString(msg)
+	if err != nil {
+		panic(err)
+	}
 	tools.Log(s.Id, "Received "+message.Tag+" "+strings.Join(message.Content, ".")+" from "+message.Sender)
 
 	if message.Tag == GET {
@@ -42,7 +42,6 @@ func handleAdd(receiver server.Server, message Message) {
 }
 
 func handleRB(receiver server.Server, message Message) {
-
 	response := []string{message.Content[0], receiver.Id, ADD_RESPONSE, message.Content[1]}
 
 	if gset.Exists(receiver.Gset, message.Content[1]) {
