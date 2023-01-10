@@ -33,7 +33,7 @@ func StartInteractive() {
 	for scanner.Scan() {
 		command = strings.ToLower(scanner.Text())
 		if command == "e" {
-			return
+			os.Exit(0)
 		}
 		if command == "g" {
 			messaging.Get(client)
@@ -67,7 +67,7 @@ func StartAutomated(client_count, request_count int) {
 			time.Sleep(time.Second * 1)
 			for r := 0; r < request_count; r++ {
 				messaging.Add(client, id+"-ADD-"+strconv.Itoa(r))
-				time.Sleep(time.Millisecond * 500)
+				// time.Sleep(time.Millisecond * 500)
 				messaging.Get(client)
 			}
 			return
