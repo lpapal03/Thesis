@@ -12,14 +12,14 @@ type Client struct {
 	Zctx            zmq.Context
 	Poller          zmq.Poller
 	Message_counter int
-	Servers         []*zmq.Socket
+	Servers         map[string]*zmq.Socket
 }
 
 func Create(id string, servers []config.Node) Client {
 	// Declare context, poller, router sockets of servers, message counter
 	zctx, _ := zmq.NewContext()
 	poller := zmq.NewPoller()
-	var server_sockets []*zmq.Socket
+	server_sockets := make(map[string]*zmq.Socket)
 
 	// Connect client dealer sockets to all servers
 	for i := 0; i < len(servers); i++ {
@@ -28,7 +28,7 @@ func Create(id string, servers []config.Node) Client {
 		target := "tcp://" + servers[i].Host + servers[i].Port
 		s.Connect(target)
 		tools.Log(id, "Established connection with "+target)
-		server_sockets = append(server_sockets, s)
+		server_sockets[target] = s
 		poller.Add(s, zmq.POLLIN)
 	}
 
