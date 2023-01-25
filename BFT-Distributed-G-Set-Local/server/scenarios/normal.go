@@ -1,20 +1,20 @@
 package scenarios
 
 import (
-	"backend/config"
 	"backend/messaging"
 	"backend/server"
+	"fmt"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
-func Normal_listener_task(listener config.Node, peers []config.Node, zctx *zmq.Context) {
-	server := server.CreateServer(listener, peers, zctx)
+func Normal_listener_task(s *server.Server) {
 	for {
-		message, err := server.Receive_socket.RecvMessage(0)
+		message, err := s.Receive_socket.RecvMessage(0)
 		if err != nil {
+			fmt.Println(zmq.AsErrno(err))
 			panic(err)
 		}
-		messaging.HandleMessage(server, message)
+		messaging.HandleMessage(s, message)
 	}
 }

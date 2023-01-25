@@ -7,7 +7,7 @@ import (
 )
 
 // Leader, the one who initializes the module
-func ReliableBroadcast(leader server.Server, message Message) {
+func ReliableBroadcast(leader *server.Server, message Message) {
 	content := append([]string{message.Sender}, message.Content...)
 	tag := BRACHA_BROADCAST_INIT
 	v := CreateMessageString(tag, content)
@@ -16,7 +16,7 @@ func ReliableBroadcast(leader server.Server, message Message) {
 }
 
 // Called from every server receiving RB messages
-func HandleReliableBroadcast(receiver server.Server, v Message) bool {
+func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 
 	my_key := v.Content[1]
 	peers_key := v.Sender + "." + v.Content[1]
@@ -77,7 +77,7 @@ func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
 }
 
-func countMessages(s server.Server, msg string) (int, int) {
+func countMessages(s *server.Server, msg string) (int, int) {
 	echo_count := 0
 	vote_count := 0
 	for k, v := range s.Peers_echo {
@@ -93,7 +93,7 @@ func countMessages(s server.Server, msg string) (int, int) {
 	return echo_count, vote_count
 }
 
-func sendToAll(receiver server.Server, message []string) {
+func sendToAll(receiver *server.Server, message []string) {
 	for _, peer_socket := range receiver.Peers {
 		peer_socket.SendMessage(message)
 	}

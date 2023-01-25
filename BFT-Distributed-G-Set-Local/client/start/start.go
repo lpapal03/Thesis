@@ -6,12 +6,20 @@ import (
 	"frontend/client"
 	"frontend/config"
 	"frontend/messaging"
+	"frontend/tools"
+	"math/rand"
 	"os"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 )
+
+func waitRandomly(min, max int) {
+	rand.Seed(time.Now().UnixNano())
+	r := rand.Intn(max - min)
+	time.Sleep(time.Duration(min+r) * time.Millisecond)
+}
 
 func StartInteractive() {
 
@@ -66,9 +74,11 @@ func StartAutomated(client_count, request_count int) {
 			time.Sleep(time.Second * 1)
 			for r := 0; r < request_count; r++ {
 				messaging.Add(client, id+"-ADD-"+strconv.Itoa(r))
-				// time.Sleep(time.Millisecond * 500)
+				waitRandomly(1000, 2000)
 				messaging.Get(client)
+				waitRandomly(1000, 2000)
 			}
+			tools.Log(id, "Done")
 			wg.Done()
 		}(id)
 	}

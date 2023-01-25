@@ -14,7 +14,7 @@ var (
 	SERVERS          []Node
 )
 
-func SetServers() []Node {
+func SetServerNodes() []Node {
 	SERVERS = LOCAL_SERVERS
 
 	N = len(SERVERS)

@@ -23,7 +23,7 @@ type Server struct {
 	Peers_vote map[string]bool
 }
 
-func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context) Server {
+func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context) *Server {
 	id := node.Host + node.Port
 	port := node.Port
 	server_sockets := make(map[string]*zmq.Socket)
@@ -46,8 +46,7 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context) Serv
 		server_sockets["tcp://localhost:"+peers[i].Port] = s
 	}
 
-	return Server{
-		Zctx:           zctx,
+	return &Server{
 		Peers:          server_sockets,
 		Receive_socket: *receive_socket,
 		Id:             id,
