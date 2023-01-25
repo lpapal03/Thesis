@@ -58,7 +58,6 @@ func StartAutomated(client_count, request_count int) {
 	for i := 0; i < client_count; i++ {
 		id := "c" + strconv.Itoa(i)
 		go func(id string) {
-			defer wg.Done()
 			fmt.Println("ID set to '" + id + "'")
 			config.CreateScenario("NORMAL", "LOCAL")
 			servers := config.SERVERS
@@ -70,7 +69,7 @@ func StartAutomated(client_count, request_count int) {
 				// time.Sleep(time.Millisecond * 500)
 				messaging.Get(client)
 			}
-			return
+			wg.Done()
 		}(id)
 	}
 	wg.Wait()
