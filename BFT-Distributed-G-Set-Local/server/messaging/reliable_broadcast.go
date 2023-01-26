@@ -3,6 +3,8 @@ package messaging
 import (
 	"backend/config"
 	"backend/server"
+	"backend/tools"
+	"strconv"
 	"strings"
 )
 
@@ -67,11 +69,9 @@ func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 
 	// on receiving <vote, v> from n-f distinct parties:
 	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
+		tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
 		return true
 	}
-
-	// tools.Log(receiver.Hostname, "Echo: "+strconv.Itoa(echo_count))
-	// tools.Log(receiver.Hostname, "Vote: "+strconv.Itoa(vote_count))
 
 	return false
 
