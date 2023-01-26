@@ -21,7 +21,7 @@ func ReliableBroadcast(leader *server.Server, message Message) {
 func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 
 	my_key := v.Content[1]
-	peers_key := v.Sender + "." + v.Content[1]
+	peers_key := v.Sender + "{" + v.Content[1] + "}"
 
 	// Party j (including the leader)
 	if v.Tag == BRACHA_BROADCAST_INIT && !receiver.My_init[my_key] {
@@ -70,6 +70,7 @@ func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 	// on receiving <vote, v> from n-f distinct parties:
 	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
 		tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
+		cleaup(receiver, peers_key)
 		return true
 	}
 
@@ -96,5 +97,19 @@ func countMessages(s *server.Server, msg string) (int, int) {
 func sendToAll(receiver *server.Server, message []string) {
 	for _, peer_socket := range receiver.Peers {
 		peer_socket.SendMessage(message)
+	}
+}
+
+// delete all echo and vote of a message after being done with it
+func cleaup(s *server.Server, key string) {
+	for k := range s.Peers_echo {
+		if strings.Contains(k, key) {
+			delete(s.Peers_echo, k)
+		}
+	}
+	for k := range s.Peers_vote {
+		if strings.Contains(k, key) {
+			delete(s.My_vote, k)
+		}
 	}
 }
