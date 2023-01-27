@@ -1,15 +1,13 @@
 package messaging
 
 import (
-	"backend/config"
-	"backend/server"
-	"backend/tools"
-	"strconv"
+	"BFT-Distributed-G-Set/config"
+	"BFT-Distributed-G-Set/server"
 	"strings"
 )
 
 // Leader, the one who initializes the module
-func ReliableBroadcast(leader *server.Server, message Message) {
+func ReliableBroadcast(leader server.Server, message Message) {
 	content := append([]string{message.Sender}, message.Content...)
 	tag := BRACHA_BROADCAST_INIT
 	v := CreateMessageString(tag, content)
@@ -18,10 +16,10 @@ func ReliableBroadcast(leader *server.Server, message Message) {
 }
 
 // Called from every server receiving RB messages
-func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
+func HandleReliableBroadcast(receiver server.Server, v Message) bool {
 
 	my_key := v.Content[1]
-	peers_key := v.Sender + "{" + v.Content[1] + "}"
+	peers_key := v.Sender + "." + v.Content[1]
 
 	// Party j (including the leader)
 	if v.Tag == BRACHA_BROADCAST_INIT && !receiver.My_init[my_key] {
@@ -69,48 +67,34 @@ func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 
 	// on receiving <vote, v> from n-f distinct parties:
 	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
-		tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
-		tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
-		cleaup(receiver, peers_key)
 		return true
 	}
+
+	// tools.Log(receiver.Hostname, "Echo: "+strconv.Itoa(echo_count))
+	// tools.Log(receiver.Hostname, "Vote: "+strconv.Itoa(vote_count))
 
 	return false
 
 }
 
-func countMessages(s *server.Server, msg string) (int, int) {
+func countMessages(s server.Server, msg string) (int, int) {
 	echo_count := 0
 	vote_count := 0
 	for k, v := range s.Peers_echo {
-		if strings.Contains(k, "{"+msg+"}") && v {
+		if strings.Contains(k, msg) && v {
 			echo_count++
 		}
 	}
 	for k, v := range s.Peers_vote {
-		if strings.Contains(k, "{"+msg+"}") && v {
+		if strings.Contains(k, msg) && v {
 			vote_count++
 		}
 	}
 	return echo_count, vote_count
 }
 
-func sendToAll(receiver *server.Server, message []string) {
+func sendToAll(receiver server.Server, message []string) {
 	for _, peer_socket := range receiver.Peers {
 		peer_socket.SendMessage(message)
-	}
-}
-
-// delete all echo and vote of a message after being done with it
-func cleaup(s *server.Server, key string) {
-	for k := range s.Peers_echo {
-		if strings.Contains(k, key) {
-			delete(s.Peers_echo, k)
-		}
-	}
-	for k := range s.Peers_vote {
-		if strings.Contains(k, key) {
-			delete(s.My_vote, k)
-		}
 	}
 }

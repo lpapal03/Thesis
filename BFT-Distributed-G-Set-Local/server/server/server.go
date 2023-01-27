@@ -11,16 +11,15 @@ import (
 type Server struct {
 	Zctx           *zmq.Context
 	Peers          map[string]*zmq.Socket
-	Receive_socket zmq.Socket
+	Receive_socket *zmq.Socket
 	Id             string
 	Gset           map[string]string
 	Port           string
-
-	My_init    map[string]bool
-	My_echo    map[string]bool
-	My_vote    map[string]bool
-	Peers_echo map[string]bool
-	Peers_vote map[string]bool
+	My_init        map[string]bool
+	My_echo        map[string]bool
+	My_vote        map[string]bool
+	Peers_echo     map[string]bool
+	Peers_vote     map[string]bool
 }
 
 func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context) *Server {
@@ -39,7 +38,10 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context) *Ser
 
 	// Connect my dealer sockets to all other servers' router
 	for i := 0; i < len(peers); i++ {
-		s, _ := zctx.NewSocket(zmq.DEALER)
+		s, err := zctx.NewSocket(zmq.DEALER)
+		if err != nil {
+			panic(err)
+		}
 		s.SetIdentity(id)
 		s.Connect("tcp://localhost:" + peers[i].Port)
 		// append socket to socket list
@@ -48,7 +50,7 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context) *Ser
 
 	return &Server{
 		Peers:          server_sockets,
-		Receive_socket: *receive_socket,
+		Receive_socket: receive_socket,
 		Id:             id,
 		Port:           port,
 		Gset:           my_gset,

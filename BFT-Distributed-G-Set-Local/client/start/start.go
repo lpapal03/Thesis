@@ -6,12 +6,10 @@ import (
 	"frontend/client"
 	"frontend/config"
 	"frontend/messaging"
-	"frontend/tools"
 	"math/rand"
 	"os"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -61,26 +59,36 @@ func StartInteractive() {
 }
 
 func StartAutomated(client_count, request_count int) {
-	var wg sync.WaitGroup
-	wg.Add(client_count)
-	for i := 0; i < client_count; i++ {
-		id := "c" + strconv.Itoa(i)
-		go func(id string) {
-			fmt.Println("ID set to '" + id + "'")
-			config.CreateScenario("NORMAL", "LOCAL")
-			servers := config.SERVERS
-			client := client.Create(id, servers)
 
-			time.Sleep(time.Second * 1)
-			for r := 0; r < request_count; r++ {
-				messaging.Add(client, id+"-ADD-"+strconv.Itoa(r))
-				waitRandomly(1000, 2000)
-				messaging.Get(client)
-				waitRandomly(1000, 2000)
-			}
-			tools.Log(id, "Done")
-			wg.Done()
-		}(id)
+	config.CreateScenario("NORMAL", "LOCAL")
+	servers := config.SERVERS
+	client := client.Create("c", servers)
+	for i := 0; i < request_count; i++ {
+		messaging.Add(client, client.Id+"-"+strconv.Itoa(i))
+		// waitRandomly(1000, 2000)
+		messaging.Get(client)
 	}
-	wg.Wait()
+
+	// var wg sync.WaitGroup
+	// wg.Add(client_count)
+	// for i := 0; i < client_count; i++ {
+	// 	id := "c" + strconv.Itoa(i)
+	// 	go func(id string) {
+	// 		fmt.Println("ID set to '" + id + "'")
+	// 		config.CreateScenario("NORMAL", "LOCAL")
+	// 		servers := config.SERVERS
+	// 		client := client.Create(id, servers)
+
+	// 		time.Sleep(time.Second * 1)
+	// 		for r := 0; r < request_count; r++ {
+	// 			messaging.Add(client, id+"-"+strconv.Itoa(r))
+	// 			// waitRandomly(1000, 2000)
+	// 			messaging.Get(client)
+	// 			// waitRandomly(1000, 2000)
+	// 		}
+	// 		tools.Log(id, "Done")
+	// 		wg.Done()
+	// 	}(id)
+	// }
+	// wg.Wait()
 }

@@ -4,13 +4,10 @@ import (
 	"fmt"
 	"frontend/start"
 	"os"
-	"runtime/debug"
 	"strconv"
 )
 
 func main() {
-
-	debug.SetGCPercent(-1)
 
 	if len(os.Args) < 2 {
 		start.StartInteractive()

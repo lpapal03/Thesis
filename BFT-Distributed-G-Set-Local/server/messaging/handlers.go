@@ -12,7 +12,7 @@ func HandleMessage(s *server.Server, msg []string) {
 	if err != nil {
 		panic(err)
 	}
-	tools.Log(s.Id, "Received "+message.Tag+" "+strings.Join(message.Content, ".")+" from "+message.Sender)
+	tools.Log(s.Id, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
 
 	if message.Tag == GET {
 		handleGet(s, message)

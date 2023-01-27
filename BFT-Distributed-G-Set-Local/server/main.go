@@ -4,15 +4,16 @@ import (
 	"backend/config"
 	"backend/scenarios"
 	"os"
-	"runtime/debug"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
 func main() {
-	debug.SetGCPercent(-1)
 
-	zctx, _ := zmq.NewContext()
+	zctx, err := zmq.NewContext()
+	if err != nil {
+		panic(err)
+	}
 	servers := config.SetServerNodes()
 
 	if len(os.Args) < 2 {
