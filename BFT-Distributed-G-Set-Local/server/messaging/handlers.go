@@ -12,8 +12,11 @@ func HandleMessage(s *server.Server, msg []string) {
 	if err != nil {
 		panic(err)
 	}
-	tools.Log(s.Id, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
-
+	if message.Tag == GET {
+		tools.Log(s.Id, "Received "+message.Tag+"from "+message.Sender)
+	} else {
+		tools.Log(s.Id, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
+	}
 	if message.Tag == GET {
 		handleGet(s, message)
 	} else if message.Tag == ADD {
