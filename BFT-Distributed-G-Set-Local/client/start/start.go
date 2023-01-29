@@ -33,7 +33,7 @@ func StartInteractive() {
 	id = scanner.Text()
 	fmt.Println("ID set to '" + id + "'\n")
 
-	config.CreateScenario("NORMAL", "LOCAL")
+	config.Initialize()
 	servers := config.SERVERS
 	client := client.CreateClient(id, servers)
 
@@ -62,7 +62,7 @@ func StartInteractive() {
 
 func automated_client_task(id string, req_count int) {
 	fmt.Println("ID set to '" + id + "'")
-	config.CreateScenario("NORMAL", "LOCAL")
+	config.Initialize()
 	servers := config.SERVERS
 	client := client.CreateClient(id, servers)
 
@@ -82,8 +82,8 @@ func StartAutomated(client_count, request_count int) {
 	for i := 0; i < client_count; i++ {
 		id := "c" + strconv.Itoa(i)
 		go func(id string) {
-			fmt.Println("ID set to '" + id + "'")
-			config.CreateScenario("NORMAL", "LOCAL")
+			tools.Log(id, "Id set")
+			config.Initialize()
 			servers := config.SERVERS
 			client := client.CreateClient(id, servers)
 

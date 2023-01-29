@@ -55,7 +55,7 @@ func findGetValidReply(replies map[string]string) string {
 	return ""
 }
 
-func Get(c client.Client) string {
+func Get(c *client.Client) string {
 	tools.Log(c.Hostname, "Called GET")
 	c.Message_counter++
 	sendToServers(c.Servers, []string{GET}, 3*config.F+1)
@@ -81,7 +81,7 @@ func Get(c client.Client) string {
 
 // TODO: Handle responses
 // Do i have to send to 2f+1 or all?
-func Add(c client.Client, record string) {
+func Add(c *client.Client, record string) {
 	tools.Log(c.Hostname, "Called ADD("+record+")")
 	sendToServers(c.Servers, []string{ADD, record}, 2*config.F+1)
 	// WAIT FOR F+1 RESPONSES

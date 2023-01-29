@@ -10,12 +10,12 @@ import (
 type Client struct {
 	Id              string
 	Zctx            *zmq.Context
-	Poller          zmq.Poller
+	Poller          *zmq.Poller
 	Message_counter int
 	Servers         map[string]*zmq.Socket
 }
 
-func CreateClient(id string, servers []config.Node) Client {
+func CreateClient(id string, servers []config.Node) *Client {
 	// Declare context, poller, router sockets of servers, message counter
 	zctx, _ := zmq.NewContext()
 	poller := zmq.NewPoller()
@@ -32,10 +32,10 @@ func CreateClient(id string, servers []config.Node) Client {
 		poller.Add(s, zmq.POLLIN)
 	}
 
-	return Client{
+	return &Client{
 		Id:              id,
 		Zctx:            zctx,
-		Poller:          *poller,
+		Poller:          poller,
 		Message_counter: 0,
 		Servers:         server_sockets}
 

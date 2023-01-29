@@ -13,7 +13,7 @@ import (
 type Server struct {
 	Zctx           *zmq.Context
 	Peers          map[string]*zmq.Socket
-	Receive_socket zmq.Socket
+	Receive_socket *zmq.Socket
 	Hostname       string
 	Gset           map[string]string
 
@@ -24,7 +24,7 @@ type Server struct {
 	Peers_vote map[string]bool
 }
 
-func CreateServer(peers []string) Server {
+func CreateServer(peers []string) *Server {
 
 	hostname, err := os.Hostname()
 	if err != nil {
@@ -58,10 +58,10 @@ func CreateServer(peers []string) Server {
 		server_sockets[peers[i]] = s
 	}
 
-	return Server{
+	return &Server{
 		Zctx:           zctx,
 		Peers:          server_sockets,
-		Receive_socket: *receive_socket,
+		Receive_socket: receive_socket,
 		Hostname:       hostname,
 		Gset:           my_gset,
 		My_init:        my_init,

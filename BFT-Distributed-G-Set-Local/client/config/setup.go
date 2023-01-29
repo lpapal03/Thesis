@@ -14,24 +14,10 @@ var (
 	SERVERS          []Node
 )
 
-func CreateScenario(scenario, mode string) {
+func Initialize() {
 
-	if mode == "LOCAL" {
-		N = len(LOCAL_SERVERS)
-		SERVERS = LOCAL_SERVERS
-
-	} else if mode == "REMOTE" {
-		N = len(REMOTE_SERVERS)
-		SERVERS = REMOTE_SERVERS
-	} else {
-		panic("Mode not supported!")
-	}
-
-	if scenario == "NORMAL" {
-
-	} else {
-		panic("Scenario not supported!")
-	}
+	N = len(LOCAL_SERVERS)
+	SERVERS = LOCAL_SERVERS
 
 	F = (N - 1) / 3
 	// 3f+1

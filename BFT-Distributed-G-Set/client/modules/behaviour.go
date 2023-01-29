@@ -17,7 +17,7 @@ func isRecordValid(r string) bool {
 	return !(r == "" || strings.TrimSpace(r) == "")
 }
 
-func StartInteractive(c client.Client) {
+func StartInteractive(c *client.Client) {
 	tools.Log(c.Hostname, "Started interactive session")
 	scanner := bufio.NewScanner(os.Stdin)
 	var command string
@@ -60,7 +60,7 @@ func randomString() string {
 	return string(b)
 }
 
-func StartAutomated(c client.Client) {
+func StartAutomated(c *client.Client) {
 
 	for i := 0; i < 100; i++ {
 		rand.Seed(time.Now().UnixNano())
