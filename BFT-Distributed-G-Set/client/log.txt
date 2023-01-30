@@ -1,12 +1,13 @@
-2023/01/30 12:51:47 | node0 | Established connection with tcp://node1:5555
-2023/01/30 12:51:47 | node0 | Established connection with tcp://node2:5555
-2023/01/30 12:51:47 | node0 | Established connection with tcp://node3:5555
-2023/01/30 12:51:47 | node0 | Established connection with tcp://node4:5555
-2023/01/30 12:51:47 | node0 | Established connection with tcp://node5:5555
-2023/01/30 12:51:47 | node0 | Established connection with tcp://node6:5555
-2023/01/30 12:51:47 | node0 | Established connection with tcp://node7:5555
-2023/01/30 12:51:47 | node0 | Established connection with tcp://node8:5555
-2023/01/30 12:51:47 | node0 | Established connection with tcp://node9:5555
-2023/01/30 12:51:47 | node0 | Started interactive session
-2023/01/30 12:51:48 | node0 | Called GET
-2023/01/30 12:51:48 | node0 | Waiting for valid GET_REPLY
+2023/01/30 12:58:25 | node0 | Established connection with tcp://node1:5555
+2023/01/30 12:58:25 | node0 | Established connection with tcp://node2:5555
+2023/01/30 12:58:25 | node0 | Established connection with tcp://node3:5555
+2023/01/30 12:58:25 | node0 | Established connection with tcp://node4:5555
+2023/01/30 12:58:25 | node0 | Established connection with tcp://node5:5555
+2023/01/30 12:58:25 | node0 | Established connection with tcp://node6:5555
+2023/01/30 12:58:25 | node0 | Established connection with tcp://node7:5555
+2023/01/30 12:58:25 | node0 | Established connection with tcp://node8:5555
+2023/01/30 12:58:25 | node0 | Established connection with tcp://node9:5555
+2023/01/30 12:58:25 | node0 | Started interactive session
+2023/01/30 12:58:26 | node0 | Called GET
+2023/01/30 12:58:26 | node0 | Waiting for valid GET_REPLY
+2023/01/30 12:58:26 | node0 | Reply: {}

@@ -7,6 +7,14 @@
       shell: chown -R loukis .
     - name: Fetch file hosts from node 0 (master node)
       command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set/hosts /users/loukis/Thesis/BFT-Distributed-G-Set
+    - name: Remove output files
+      file: 
+        path: "/users/loukis/Thesis/BFT-Distributed-G-Set/server/stdoutfile"
+        state: absent
+    - name: Remove error files
+      file: 
+        path: "/users/loukis/Thesis/BFT-Distributed-G-Set/server/stderrfile"
+        state: absent
     - name: Kill project processes on all machines
       command: killall -9 BFT-Distributed-G-Set
       become: true
@@ -16,19 +24,19 @@
   hosts: servers-normal
   tasks:
     - name: Start server
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . normal </dev/null >/dev/null 2>&1 & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . normal > stdoutfile 2> stderrfile & sleep 1
       become_user: loukis
 - name: Start mute servers
   hosts: servers-mute
   tasks:
     - name: Start server
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . mute </dev/null >/dev/null 2>&1 & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . mute > stdoutfile 2> stderrfile & sleep 1
       become_user: loukis
 - name: Start malicious servers
   hosts: servers-malicious
   tasks:
     - name: Start server
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . malicious </dev/null >/dev/null 2>&1 & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set/server; nohup /usr/local/go/bin/go run . malicious > stdoutfile 2> stderrfile & & sleep 1
       become_user: loukis
 - name: Start automated clients. Interactive clients should be started manually
   hosts: clients-automated
