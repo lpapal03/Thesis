@@ -4,12 +4,15 @@ import (
 	"BFT-Distributed-G-Set/gset"
 	"BFT-Distributed-G-Set/server"
 	"BFT-Distributed-G-Set/tools"
+	"fmt"
 	"strings"
 )
 
 func HandleMessage(s *server.Server, msg []string) {
+	fmt.Println(msg)
 	message, err := ParseMessageString(msg)
 	if err != nil {
+		fmt.Println("Error msg: ", msg)
 		panic(err)
 	}
 	if message.Tag == GET {
