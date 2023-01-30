@@ -1,13 +1,16 @@
-2023/01/30 12:58:25 | node0 | Established connection with tcp://node1:5555
-2023/01/30 12:58:25 | node0 | Established connection with tcp://node2:5555
-2023/01/30 12:58:25 | node0 | Established connection with tcp://node3:5555
-2023/01/30 12:58:25 | node0 | Established connection with tcp://node4:5555
-2023/01/30 12:58:25 | node0 | Established connection with tcp://node5:5555
-2023/01/30 12:58:25 | node0 | Established connection with tcp://node6:5555
-2023/01/30 12:58:25 | node0 | Established connection with tcp://node7:5555
-2023/01/30 12:58:25 | node0 | Established connection with tcp://node8:5555
-2023/01/30 12:58:25 | node0 | Established connection with tcp://node9:5555
-2023/01/30 12:58:25 | node0 | Started interactive session
-2023/01/30 12:58:26 | node0 | Called GET
-2023/01/30 12:58:26 | node0 | Waiting for valid GET_REPLY
-2023/01/30 12:58:26 | node0 | Reply: {}
+2023/01/30 13:33:04 | node0 | Established connection with tcp://node1:5555
+2023/01/30 13:33:04 | node0 | Established connection with tcp://node2:5555
+2023/01/30 13:33:04 | node0 | Established connection with tcp://node3:5555
+2023/01/30 13:33:04 | node0 | Established connection with tcp://node4:5555
+2023/01/30 13:33:04 | node0 | Established connection with tcp://node5:5555
+2023/01/30 13:33:04 | node0 | Established connection with tcp://node6:5555
+2023/01/30 13:33:04 | node0 | Established connection with tcp://node7:5555
+2023/01/30 13:33:04 | node0 | Established connection with tcp://node8:5555
+2023/01/30 13:33:04 | node0 | Established connection with tcp://node9:5555
+2023/01/30 13:33:04 | node0 | Started interactive session
+2023/01/30 13:33:05 | node0 | Called ADD(1)
+2023/01/30 13:33:05 | node0 | Waiting for f+1 ADD replies
+2023/01/30 13:33:06 | node0 | Record {1} appended
+2023/01/30 13:34:27 | node0 | Called GET
+2023/01/30 13:34:27 | node0 | Waiting for valid GET_REPLY
+2023/01/30 13:34:27 | node0 | Reply: {1} {node0-10} {node0-11} {node0-12} {node0-14} {node0-18} {node0-19} {node0-20} {node0-21} {node0-22} {node0-25} {node0-28} {node0-29} {node0-2} {node0-33} {node0-41} {node0-42} {node0-46} {node0-48} {node0-50} {node0-51} {node0-53} {node0-54} {node0-59} {node0-5} {node0-66} {node0-67} {node0-69} {node0-71} {node0-75} {node0-77} {node0-78} {node0-79} {node0-81} {node0-83} {node0-84} {node0-85} {node0-8} {node0-90} {node0-93} {node0-94} {node0-98} {node0-9}
