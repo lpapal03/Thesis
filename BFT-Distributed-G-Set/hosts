@@ -2,8 +2,6 @@
 node0
 
 [clients-automated]
-node8
-node9
 
 [servers-normal]
 node1
@@ -15,5 +13,7 @@ node6
 node7
 
 [servers-mute]
+node8
+node9
 
 [servers-malicious]

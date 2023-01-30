@@ -6,6 +6,7 @@ import (
 	"BFT-Distributed-G-Set/modules"
 	"BFT-Distributed-G-Set/tools"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -27,9 +28,17 @@ func main() {
 		case "interactive":
 			modules.StartInteractive(c)
 		case "automated":
-			modules.StartAutomated(c)
+			if len(os.Args) > 2 {
+				request_count, err := strconv.Atoi(os.Args[2])
+				if err != nil {
+					panic("Invalid arguments")
+				}
+				modules.StartAutomated(c, request_count)
+			} else {
+				modules.StartAutomated(c, 20)
+			}
 		default:
-			panic("Invalid argument")
+			panic("Invalid arguments")
 		}
 	}
 }

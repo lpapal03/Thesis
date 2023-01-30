@@ -16,12 +16,11 @@ type Server struct {
 	Receive_socket *zmq.Socket
 	Hostname       string
 	Gset           map[string]string
-
-	My_init    map[string]bool
-	My_echo    map[string]bool
-	My_vote    map[string]bool
-	Peers_echo map[string]bool
-	Peers_vote map[string]bool
+	My_init        map[string]bool
+	My_echo        map[string]bool
+	My_vote        map[string]bool
+	Peers_echo     map[string]bool
+	Peers_vote     map[string]bool
 }
 
 func CreateServer(peers []string) *Server {
@@ -35,9 +34,6 @@ func CreateServer(peers []string) *Server {
 	zctx, _ := zmq.NewContext()
 	server_sockets := make(map[string]*zmq.Socket)
 	my_gset := gset.Create()
-
-	gset.Append(my_gset, "INIT")
-
 	my_init := make(map[string]bool)
 	my_echo := make(map[string]bool)
 	my_vote := make(map[string]bool)

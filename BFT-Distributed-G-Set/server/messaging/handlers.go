@@ -13,7 +13,7 @@ func HandleMessage(s *server.Server, msg []string) {
 		panic(err)
 	}
 	if message.Tag == GET {
-		tools.Log(s.Hostname, "Received "+message.Tag+"from "+message.Sender)
+		tools.Log(s.Hostname, "Received "+message.Tag+" from "+message.Sender)
 	} else {
 		tools.Log(s.Hostname, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
 	}

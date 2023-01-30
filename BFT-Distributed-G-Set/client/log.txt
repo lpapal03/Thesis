@@ -1,10 +1,69 @@
-2023/01/09 12:09:38 | node0 | Established connection with tcp://node1:5555
-2023/01/09 12:09:38 | node0 | Established connection with tcp://node2:5555
-2023/01/09 12:09:38 | node0 | Established connection with tcp://node3:5555
-2023/01/09 12:09:38 | node0 | Established connection with tcp://node4:5555
-2023/01/09 12:09:38 | node0 | Established connection with tcp://node5:5555
-2023/01/09 12:09:38 | node0 | Established connection with tcp://node6:5555
-2023/01/09 12:09:38 | node0 | Established connection with tcp://node7:5555
-2023/01/09 12:09:38 | node0 | Started interactive session
-2023/01/09 12:09:39 | node0 | Called GET
-2023/01/09 12:09:39 | node0 | Waiting for valid GET_REPLY
+2023/01/30 02:32:44 | node0 | Established connection with tcp://node1:5555
+2023/01/30 02:32:44 | node0 | Established connection with tcp://node2:5555
+2023/01/30 02:32:44 | node0 | Established connection with tcp://node3:5555
+2023/01/30 02:32:44 | node0 | Established connection with tcp://node4:5555
+2023/01/30 02:32:44 | node0 | Established connection with tcp://node5:5555
+2023/01/30 02:32:44 | node0 | Established connection with tcp://node6:5555
+2023/01/30 02:32:44 | node0 | Established connection with tcp://node7:5555
+2023/01/30 02:32:44 | node0 | Established connection with tcp://node8:5555
+2023/01/30 02:32:44 | node0 | Established connection with tcp://node9:5555
+2023/01/30 02:32:44 | node0 | Called GET
+2023/01/30 02:32:44 | node0 | Waiting for valid GET_REPLY
+2023/01/30 02:32:44 | node0 | Reply: {123} {INIT} {node0-0} {node0-10} {node0-11} {node0-12} {node0-14} {node0-15} {node0-16} {node0-18} {node0-1} {node0-5} {node0-6} {node0-7} {node0-8} {node0-9}
+2023/01/30 02:32:46 | node0 | Called ADD(node0-1)
+2023/01/30 02:32:46 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:32:46 | node0 | Record {node0-1} appended
+2023/01/30 02:32:46 | node0 | Called GET
+2023/01/30 02:32:46 | node0 | Waiting for valid GET_REPLY
+2023/01/30 02:32:46 | node0 | Reply: {123} {INIT} {node0-0} {node0-10} {node0-11} {node0-12} {node0-14} {node0-15} {node0-16} {node0-18} {node0-1} {node0-5} {node0-6} {node0-7} {node0-8} {node0-9}
+2023/01/30 02:32:48 | node0 | Called GET
+2023/01/30 02:32:48 | node0 | Waiting for valid GET_REPLY
+2023/01/30 02:32:48 | node0 | Reply: {123} {INIT} {node0-0} {node0-10} {node0-11} {node0-12} {node0-14} {node0-15} {node0-16} {node0-18} {node0-1} {node0-5} {node0-6} {node0-7} {node0-8} {node0-9}
+2023/01/30 02:32:48 | node0 | Called ADD(node0-4)
+2023/01/30 02:32:48 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:32:48 | node0 | Record {node0-4} appended
+2023/01/30 02:32:49 | node0 | Called ADD(node0-5)
+2023/01/30 02:32:49 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:32:49 | node0 | Record {node0-5} appended
+2023/01/30 02:32:50 | node0 | Called GET
+2023/01/30 02:32:50 | node0 | Waiting for valid GET_REPLY
+2023/01/30 02:32:50 | node0 | Reply: {123} {INIT} {node0-0} {node0-10} {node0-11} {node0-12} {node0-14} {node0-15} {node0-16} {node0-18} {node0-1} {node0-4} {node0-5} {node0-6} {node0-7} {node0-8} {node0-9}
+2023/01/30 02:32:51 | node0 | Called ADD(node0-7)
+2023/01/30 02:32:51 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:32:51 | node0 | Record {node0-7} appended
+2023/01/30 02:32:52 | node0 | Called ADD(node0-8)
+2023/01/30 02:32:52 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:32:52 | node0 | Record {node0-8} appended
+2023/01/30 02:32:52 | node0 | Called GET
+2023/01/30 02:32:52 | node0 | Waiting for valid GET_REPLY
+2023/01/30 02:32:52 | node0 | Reply: {123} {INIT} {node0-0} {node0-10} {node0-11} {node0-12} {node0-14} {node0-15} {node0-16} {node0-18} {node0-1} {node0-4} {node0-5} {node0-6} {node0-7} {node0-8} {node0-9}
+2023/01/30 02:32:54 | node0 | Called ADD(node0-10)
+2023/01/30 02:32:54 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:32:54 | node0 | Record {node0-10} appended
+2023/01/30 02:32:54 | node0 | Called ADD(node0-11)
+2023/01/30 02:32:54 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:32:54 | node0 | Record {node0-11} appended
+2023/01/30 02:32:54 | node0 | Called ADD(node0-12)
+2023/01/30 02:32:54 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:32:54 | node0 | Record {node0-12} appended
+2023/01/30 02:32:55 | node0 | Called ADD(node0-13)
+2023/01/30 02:32:55 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:32:55 | node0 | Record {node0-13} appended
+2023/01/30 02:32:56 | node0 | Called GET
+2023/01/30 02:32:56 | node0 | Waiting for valid GET_REPLY
+2023/01/30 02:32:56 | node0 | Reply: {123} {INIT} {node0-0} {node0-10} {node0-11} {node0-12} {node0-13} {node0-14} {node0-15} {node0-16} {node0-18} {node0-1} {node0-4} {node0-5} {node0-6} {node0-7} {node0-8} {node0-9}
+2023/01/30 02:32:56 | node0 | Called ADD(node0-15)
+2023/01/30 02:32:56 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:32:56 | node0 | Record {node0-15} appended
+2023/01/30 02:32:58 | node0 | Called GET
+2023/01/30 02:32:58 | node0 | Waiting for valid GET_REPLY
+2023/01/30 02:32:58 | node0 | Reply: {123} {INIT} {node0-0} {node0-10} {node0-11} {node0-12} {node0-13} {node0-14} {node0-15} {node0-16} {node0-18} {node0-1} {node0-4} {node0-5} {node0-6} {node0-7} {node0-8} {node0-9}
+2023/01/30 02:32:59 | node0 | Called GET
+2023/01/30 02:32:59 | node0 | Waiting for valid GET_REPLY
+2023/01/30 02:32:59 | node0 | Reply: {123} {INIT} {node0-0} {node0-10} {node0-11} {node0-12} {node0-13} {node0-14} {node0-15} {node0-16} {node0-18} {node0-1} {node0-4} {node0-5} {node0-6} {node0-7} {node0-8} {node0-9}
+2023/01/30 02:33:00 | node0 | Called ADD(node0-18)
+2023/01/30 02:33:00 | node0 | Waiting for f+1 ADD replies
+2023/01/30 02:33:00 | node0 | Record {node0-18} appended
+2023/01/30 02:33:00 | node0 | Called GET
+2023/01/30 02:33:00 | node0 | Waiting for valid GET_REPLY
+2023/01/30 02:33:00 | node0 | Reply: {123} {INIT} {node0-0} {node0-10} {node0-11} {node0-12} {node0-13} {node0-14} {node0-15} {node0-16} {node0-18} {node0-1} {node0-4} {node0-5} {node0-6} {node0-7} {node0-8} {node0-9}
