@@ -4,16 +4,19 @@ import (
 	"BFT-Distributed-G-Set/gset"
 	"BFT-Distributed-G-Set/server"
 	"BFT-Distributed-G-Set/tools"
+	"fmt"
 	"strings"
 )
 
 func HandleMessage(s *server.Server, msg []string) {
+	fmt.Println(msg)
 	message, err := ParseMessageString(msg)
 	if err != nil {
-		panic(err)
+		fmt.Println("Error msg: ", msg)
+		return
 	}
 	if message.Tag == GET {
-		tools.Log(s.Hostname, "Received "+message.Tag+"from "+message.Sender)
+		tools.Log(s.Hostname, "Received "+message.Tag+" from "+message.Sender)
 	} else {
 		tools.Log(s.Hostname, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
 	}

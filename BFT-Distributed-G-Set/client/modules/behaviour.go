@@ -60,9 +60,9 @@ func randomString() string {
 	return string(b)
 }
 
-func StartAutomated(c *client.Client) {
+func StartAutomated(c *client.Client, req_count int) {
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < req_count; i++ {
 		rand.Seed(time.Now().UnixNano())
 		n := rand.Intn(2)
 
