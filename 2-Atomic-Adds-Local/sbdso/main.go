@@ -14,12 +14,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	servers := config.SetServerNodes()
+	server_nodes, bdso_networks := config.SetServerNodes()
 
 	if len(os.Args) < 2 {
-		scenarios.Start(servers, "NORMAL", zctx)
+		scenarios.Start(server_nodes, "NORMAL", zctx, bdso_networks)
 	} else if os.Args[1] == "mutes" || os.Args[1] == "m" {
-		scenarios.Start(servers, "MUTES", zctx)
+		scenarios.Start(server_nodes, "MUTES", zctx, bdso_networks)
 	}
 
 	select {}

@@ -10,7 +10,7 @@ import (
 )
 
 func Mute_listener_task(listener config.Node, peers []config.Node, zctx *zmq.Context) {
-	server := server.CreateServer(listener, peers, zctx)
+	server := server.CreateServer(listener, peers, zctx, nil)
 	for {
 		msg, _ := server.Receive_socket.RecvMessage(0)
 		message, err := messaging.ParseMessageString(msg)

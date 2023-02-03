@@ -2,9 +2,9 @@ package config
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -23,8 +23,10 @@ var (
 )
 
 func parseHostsFile(fileName string, bdso string) ([]Node, error) {
-	// var nodes []Node
-	var tag string
+	var nodes []Node
+	var tagFound bool
+	var min_port int
+	var max_port int
 	file, err := os.Open(fileName)
 	if err != nil {
 		return nil, err
@@ -35,11 +37,26 @@ func parseHostsFile(fileName string, bdso string) ([]Node, error) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.Contains(line, "["+bdso+"]") {
-			tag = line[1 : len(line)-1]
-			fmt.Println(tag)
+			tagFound = true
+			continue
+		}
+		if tagFound {
+			port_range := strings.Split(line, "-")
+			min_port, err = strconv.Atoi(port_range[0])
+			if err != nil {
+				panic(err)
+			}
+			max_port, err = strconv.Atoi(port_range[1])
+			if err != nil {
+				panic(err)
+			}
+			break
 		}
 	}
-	return []Node{}, nil
+	for p := min_port; p <= max_port; p++ {
+		nodes = append(nodes, Node{Host: "localhost:", Port: strconv.Itoa(p)})
+	}
+	return nodes, nil
 }
 
 func SetServerNodes() []Node {
