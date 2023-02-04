@@ -2,6 +2,7 @@ package config
 
 import (
 	"bufio"
+	"errors"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -36,7 +37,7 @@ func parseHostsFile(fileName string, bdso string) ([]Node, error) {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if strings.Contains(line, "[sbdso]") {
+		if strings.Contains(line, "["+bdso+"]") {
 			tagFound = true
 			continue
 		}
@@ -53,26 +54,27 @@ func parseHostsFile(fileName string, bdso string) ([]Node, error) {
 			break
 		}
 	}
-	for p := min_port; p <= max_port; p++ {
+	for p := min_port; p < max_port; p++ {
 		nodes = append(nodes, Node{Host: "localhost:", Port: strconv.Itoa(p)})
 	}
-	return nodes, nil
+	if len(nodes) != 0 {
+		return nodes, nil
+	}
+	return nil, errors.New("Network does not exist")
 }
 
-func Initialize() {
+func Initialize(network_name string) {
 
 	working_dir, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 	parent_dir := filepath.Dir(working_dir)
-	bdso_name := filepath.Base(working_dir)
 
-	SERVERS, err = parseHostsFile(parent_dir+"/hosts", bdso_name)
+	SERVERS, err = parseHostsFile(parent_dir+"/hosts", network_name)
 	if err != nil {
 		panic(err)
 	}
-
 	N = len(SERVERS)
 
 	F = (N - 1) / 3

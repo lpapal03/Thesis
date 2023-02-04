@@ -115,10 +115,11 @@ func AddAtomic(c *client.Client, record string) {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
-			// fmt.Println(msg)
-			msg_signatue := strings.Split(msg[2], ";")[2]
-			if msg[1] == ADD_ATOMIC_RESPONSE && orig_signature == msg_signatue {
-				replies[msg[0]] = true
+			if msg[1] == ADD_ATOMIC_RESPONSE {
+				msg_signatue := strings.Split(msg[2], ";")[2]
+				if orig_signature == msg_signatue {
+					replies[msg[0]] = true
+				}
 			}
 		}
 		if len(replies) >= config.F+1 {

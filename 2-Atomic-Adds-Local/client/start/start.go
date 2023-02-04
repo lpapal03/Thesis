@@ -73,7 +73,8 @@ func waitRandomly(min, max int) {
 	time.Sleep(time.Duration(min+r) * time.Millisecond)
 }
 
-func StartInteractive(zctx *zmq.Context) {
+func StartInteractive(zctx *zmq.Context, network_name string) {
+	config.Initialize(network_name)
 
 	scanner := bufio.NewScanner(os.Stdin)
 	var id string
@@ -90,7 +91,6 @@ func StartInteractive(zctx *zmq.Context) {
 	}
 	fmt.Println("ID set to '" + id + "'\n")
 
-	config.Initialize()
 	servers := config.SERVERS
 	client := client.CreateClient(id, servers, zctx)
 
@@ -132,14 +132,14 @@ func StartInteractive(zctx *zmq.Context) {
 	}
 }
 
-func StartAutomated(zctx *zmq.Context, client_count, request_count int) {
+func StartAutomated(zctx *zmq.Context, client_count, request_count int, network_name string) {
 	var wg sync.WaitGroup
 	wg.Add(client_count)
 	for i := 0; i < client_count; i++ {
 		id := "c" + strconv.Itoa(i)
 		go func(id string) {
 			tools.Log(id, "Id set")
-			config.Initialize()
+			config.Initialize(network_name)
 			servers := config.SERVERS
 			client := client.CreateClient(id, servers, zctx)
 

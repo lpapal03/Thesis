@@ -60,6 +60,7 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context, bdso
 			if err != nil {
 				panic(err)
 			}
+			s.SetIdentity(id)
 			s.Connect("tcp://localhost:" + node_id.Port)
 			bdso_net[network_name]["tcp://localhost:"+node_id.Port] = s
 			tools.Log(id, "Connected to "+"tcp://localhost:"+node_id.Port+" of network "+network_name)

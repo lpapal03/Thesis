@@ -22,6 +22,8 @@ func HandleMessage(s *server.Server, msg []string) {
 	} else {
 		tools.Log(s.Id, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
 	}
+
+	// handle
 	if message.Tag == GET {
 		handleGet(s, message)
 	} else if message.Tag == ADD {
@@ -58,20 +60,20 @@ func handleRB(receiver *server.Server, message Message) {
 	}
 
 	delivered := HandleReliableBroadcast(receiver, message)
-
 	if delivered && !gset.Exists(receiver.Gset, message.Content[1]) {
-
 		gset.Add(receiver.Gset, message.Content[1])
-		msg_signatue := strings.Split(message.Content[1], ";")[2]
-		r1, r2 := gset.CheckAtomic(receiver.Gset, msg_signatue)
-		if len(r1) > 0 && len(r2) > 0 {
-			handleAtomicAdd(receiver, r1, r2)
+		if strings.Contains(message.Content[1], ";") {
+			msg_signatue := strings.Split(message.Content[1], ";")[2]
+			r1, r2 := gset.CheckAtomic(receiver.Gset, msg_signatue)
+			if len(r1) > 0 && len(r2) > 0 {
+				handleAtomicAdd(receiver, r1, r2)
+			}
 		}
-
 		receiver.Receive_socket.SendMessage(response)
 		tools.Log(receiver.Id, "Appended record {"+message.Content[1]+"}")
 		return
 	}
+
 	if delivered && gset.Exists(receiver.Gset, message.Content[1]) {
 		receiver.Receive_socket.SendMessage(response)
 		tools.Log(receiver.Id, "Record {"+message.Content[1]+"} already exists")
