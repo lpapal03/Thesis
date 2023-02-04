@@ -79,7 +79,6 @@ func Get(c *client.Client) string {
 	}
 }
 
-// TODO: Handle responses
 // Do i have to send to 2f+1 or all?
 func Add(c *client.Client, record string) {
 	tools.Log(c.Id, "Called ADD("+record+")")
@@ -98,6 +97,32 @@ func Add(c *client.Client, record string) {
 		}
 		if len(replies) >= config.F+1 {
 			tools.Log(c.Id, "Record {"+record+"} appended")
+			return
+		}
+	}
+}
+
+func AddAtomic(c *client.Client, record string) {
+	tools.Log(c.Id, "Called ADD_ATOMIC("+record+")")
+	record = "atomic;" + c.Id + ";" + record
+	orig_signature := strings.Split(record, ";")[2]
+	sendToServers(c.Servers, []string{ADD, record}, 2*config.F+1)
+	// WAIT FOR F+1 RESPONSES
+	replies := make(map[string]bool)
+	tools.Log(c.Id, "Waiting for f+1 ADD_ATOMIC replies")
+	for {
+		sockets, _ := c.Poller.Poll(-1)
+		for _, socket := range sockets {
+			s := socket.Socket
+			msg, _ := s.RecvMessage(0)
+			// fmt.Println(msg)
+			msg_signatue := strings.Split(msg[2], ";")[2]
+			if msg[1] == ADD_ATOMIC_RESPONSE && orig_signature == msg_signatue {
+				replies[msg[0]] = true
+			}
+		}
+		if len(replies) >= config.F+1 {
+			tools.Log(c.Id, "Record {"+record+"} appended to destination")
 			return
 		}
 	}

@@ -15,15 +15,17 @@ type Client struct {
 	Servers         map[string]*zmq.Socket
 }
 
-func CreateClient(id string, servers []config.Node) *Client {
+func CreateClient(id string, servers []config.Node, zctx *zmq.Context) *Client {
 	// Declare context, poller, router sockets of servers, message counter
-	zctx, _ := zmq.NewContext()
 	poller := zmq.NewPoller()
 	server_sockets := make(map[string]*zmq.Socket)
 
 	// Connect client dealer sockets to all servers
 	for i := 0; i < len(servers); i++ {
-		s, _ := zctx.NewSocket(zmq.DEALER)
+		s, err := zctx.NewSocket(zmq.DEALER)
+		if err != nil {
+			panic(err)
+		}
 		s.SetIdentity(id)
 		target := "tcp://" + servers[i].Host + servers[i].Port
 		s.Connect(target)

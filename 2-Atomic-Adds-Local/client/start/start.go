@@ -13,7 +13,59 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	zmq "github.com/pebbe/zmq4"
 )
+
+func isMessageValid(msg string) bool {
+	if msg == "" {
+		return false
+	}
+	if strings.Contains(msg, " ") {
+		return false
+	}
+	if strings.Contains(msg, ".") {
+		return false
+	}
+	if strings.Contains(msg, "{") {
+		return false
+	}
+	if strings.Contains(msg, "}") {
+		return false
+	}
+	if strings.Contains(msg, ";") {
+		return false
+	}
+	return true
+}
+
+func isAtomicMessageValid(msg string) bool {
+	if msg == "" {
+		return false
+	}
+	if strings.Contains(msg, " ") {
+		return false
+	}
+	if strings.Contains(msg, ".") {
+		return false
+	}
+	if strings.Contains(msg, "{") {
+		return false
+	}
+	if strings.Contains(msg, "}") {
+		return false
+	}
+	parts := strings.Split(msg, ";")
+	if len(parts) != 3 {
+		return false
+	}
+	for _, p := range parts {
+		if len(p) < 1 {
+			return false
+		}
+	}
+	return true
+}
 
 func waitRandomly(min, max int) {
 	rand.Seed(time.Now().UnixNano())
@@ -21,7 +73,7 @@ func waitRandomly(min, max int) {
 	time.Sleep(time.Duration(min+r) * time.Millisecond)
 }
 
-func StartInteractive() {
+func StartInteractive(zctx *zmq.Context) {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	var id string
@@ -31,13 +83,18 @@ func StartInteractive() {
 	fmt.Print("Your ID\n> ")
 	scanner.Scan()
 	id = scanner.Text()
+	for !isMessageValid(id) {
+		fmt.Print("Invalid ID, try again\n> ")
+		scanner.Scan()
+		id = scanner.Text()
+	}
 	fmt.Println("ID set to '" + id + "'\n")
 
 	config.Initialize()
 	servers := config.SERVERS
-	client := client.CreateClient(id, servers)
+	client := client.CreateClient(id, servers, zctx)
 
-	fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
+	fmt.Print("Type 'g' for GET, 'a' for ADD, 'at' for ATOMIC-ADD or 'e' for EXIT\n> ")
 	for scanner.Scan() {
 		command = strings.ToLower(scanner.Text())
 		if command == "e" {
@@ -50,33 +107,32 @@ func StartInteractive() {
 			fmt.Print("Record to append > ")
 			scanner.Scan()
 			record = scanner.Text()
-			messaging.Add(client, record)
+			if isMessageValid(record) {
+				messaging.Add(client, record)
+			} else {
+				fmt.Println("Invalid message")
+			}
+		}
+		if command == "at" {
+			fmt.Println("Format of atomic records: signature;destination;message")
+			fmt.Print("Record to append atomically > ")
+			scanner.Scan()
+			record = scanner.Text()
+			if isAtomicMessageValid(record) {
+				messaging.AddAtomic(client, record)
+			} else {
+				fmt.Println("Invalid message")
+			}
 		}
 		if len(command) == 0 {
 			fmt.Print("> ")
 		} else {
-			fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
+			fmt.Print("Type 'g' for GET, 'a' for ADD, 'at' for ATOMIC-ADD or 'e' for EXIT\n> ")
 		}
 	}
 }
 
-func automated_client_task(id string, req_count int) {
-	fmt.Println("ID set to '" + id + "'")
-	config.Initialize()
-	servers := config.SERVERS
-	client := client.CreateClient(id, servers)
-
-	time.Sleep(time.Second * 1)
-	for r := 0; r < req_count; r++ {
-		messaging.Add(client, id+"-"+strconv.Itoa(r))
-		// waitRandomly(1000, 2000)
-		messaging.Get(client)
-		// waitRandomly(1000, 2000)
-	}
-	tools.Log(id, "Done")
-}
-
-func StartAutomated(client_count, request_count int) {
+func StartAutomated(zctx *zmq.Context, client_count, request_count int) {
 	var wg sync.WaitGroup
 	wg.Add(client_count)
 	for i := 0; i < client_count; i++ {
@@ -85,7 +141,7 @@ func StartAutomated(client_count, request_count int) {
 			tools.Log(id, "Id set")
 			config.Initialize()
 			servers := config.SERVERS
-			client := client.CreateClient(id, servers)
+			client := client.CreateClient(id, servers, zctx)
 
 			time.Sleep(time.Second * 1)
 			for r := 0; r < request_count; r++ {
