@@ -105,7 +105,7 @@ func Add(c *client.Client, record string) {
 func AddAtomic(c *client.Client, record string) {
 	tools.Log(c.Id, "Called ADD_ATOMIC("+record+")")
 	record = "atomic;" + c.Id + ";" + record
-	orig_signature := strings.Split(record, ";")[2]
+	// orig_signature := strings.Split(record, ";")[2]
 	sendToServers(c.Servers, []string{ADD, record}, 2*config.F+1)
 	// WAIT FOR F+1 RESPONSES
 	replies := make(map[string]bool)
@@ -116,8 +116,7 @@ func AddAtomic(c *client.Client, record string) {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
 			if msg[1] == ADD_ATOMIC_RESPONSE {
-				msg_signatue := strings.Split(msg[2], ";")[2]
-				if orig_signature == msg_signatue {
+				if msg[2] == record {
 					replies[msg[0]] = true
 				}
 			}

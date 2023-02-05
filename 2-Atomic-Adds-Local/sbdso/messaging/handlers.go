@@ -93,21 +93,25 @@ func handleAtomicAdd(s *server.Server, r1, r2 string) {
 
 	// handle 1
 	response = []string{client1, s.Id, ADD_ATOMIC_RESPONSE, r1}
+	Add(s, msg1, dest1)
 	s.Receive_socket.SendMessage(response)
 	tools.Log(s.Id, "Sent ADD_ATOMIC_RESPONSE to "+client1)
-	Add(s, msg1, dest1)
 
 	// handle 2
 	response = []string{client2, s.Id, ADD_ATOMIC_RESPONSE, r2}
+	Add(s, msg2, dest2)
 	s.Receive_socket.SendMessage(response)
 	tools.Log(s.Id, "Sent ADD_ATOMIC_RESPONSE to "+client2)
-	Add(s, msg2, dest2)
 
 }
 
 func Add(s *server.Server, record, destination string) {
 	tools.Log(s.Id, "Called ADD("+record+") with destination:"+destination)
-	sendToServers(s.Bdso_networks[destination], []string{ADD, record}, 2*config.F+1)
+	val, ok := s.Bdso_networks[destination]
+	// If the key exists
+	if ok {
+		sendToServers(val, []string{ADD, record}, 2*config.F+1)
+	}
 }
 
 func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {

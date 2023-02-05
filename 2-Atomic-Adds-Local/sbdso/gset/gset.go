@@ -81,8 +81,11 @@ func CheckAtomic(gset map[string]string, signature string) (string, string) {
 			parts1 := strings.Split(v1, ";")
 			parts2 := strings.Split(v2, ";")
 			if parts1[0] == "atomic" && parts2[0] == "atomic" && parts1[1] != parts2[1] && parts1[2] == parts2[2] && parts1[2] == signature && parts1[3] != parts2[3] {
-				// delete(gset, k1)
-				// delete(gset, k2)
+				gset[k1] = strings.Replace(v1, "atomic", "atomic-complete", -1)
+				gset[k2] = strings.Replace(v2, "atomic", "atomic-complete", -1)
+				for _, v := range gset {
+					fmt.Println(v)
+				}
 				return v1, v2
 			}
 

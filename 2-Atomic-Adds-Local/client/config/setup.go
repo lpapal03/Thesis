@@ -23,6 +23,28 @@ var (
 	SERVERS          []Node
 )
 
+func NetworkExists(filename, net_name string) bool {
+	working_dir, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	parent_dir := filepath.Dir(working_dir)
+	file, err := os.Open(parent_dir + "/" + filename)
+	if err != nil {
+		return false
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "["+net_name+"]") {
+			return true
+		}
+	}
+	return false
+}
+
 func parseHostsFile(fileName string, bdso string) ([]Node, error) {
 	var nodes []Node
 	var tagFound bool
