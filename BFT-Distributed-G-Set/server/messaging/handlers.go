@@ -16,9 +16,9 @@ func HandleMessage(s *server.Server, msg []string) {
 		return
 	}
 	if message.Tag == GET {
-		tools.Log(s.Hostname, "Received "+message.Tag+" from "+message.Sender)
+		tools.Log(s.Id, "Received "+message.Tag+" from "+message.Sender)
 	} else {
-		tools.Log(s.Hostname, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
+		tools.Log(s.Id, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
 	}
 	if message.Tag == GET {
 		handleGet(s, message)
@@ -33,22 +33,22 @@ func HandleMessage(s *server.Server, msg []string) {
 // Handle get request. I need sender_id to know where
 // my response will go to
 func handleGet(receiver *server.Server, message Message) {
-	response := []string{message.Sender, receiver.Hostname, GET_RESPONSE, gset.GsetToString(receiver.Gset, false)}
+	response := []string{message.Sender, receiver.Id, GET_RESPONSE, gset.GsetToString(receiver.Gset, false)}
 	receiver.Receive_socket.SendMessage(response)
-	tools.Log(receiver.Hostname, GET_RESPONSE+" to "+message.Sender)
+	tools.Log(receiver.Id, GET_RESPONSE+" to "+message.Sender)
 }
 
 func handleAdd(receiver *server.Server, message Message) {
 	if !gset.Exists(receiver.Gset, message.Content[0]) {
 		ReliableBroadcast(receiver, message)
 	} else {
-		response := []string{message.Sender, receiver.Hostname, ADD_RESPONSE, message.Content[0]}
+		response := []string{message.Sender, receiver.Id, ADD_RESPONSE, message.Content[0]}
 		receiver.Receive_socket.SendMessage(response)
 	}
 }
 
 func handleRB(receiver *server.Server, message Message) {
-	response := []string{message.Content[0], receiver.Hostname, ADD_RESPONSE, message.Content[1]}
+	response := []string{message.Content[0], receiver.Id, ADD_RESPONSE, message.Content[1]}
 
 	if gset.Exists(receiver.Gset, message.Content[1]) {
 		receiver.Receive_socket.SendMessage(response)
@@ -60,12 +60,12 @@ func handleRB(receiver *server.Server, message Message) {
 	if delivered && !gset.Exists(receiver.Gset, message.Content[1]) {
 		gset.Append(receiver.Gset, message.Content[1])
 		receiver.Receive_socket.SendMessage(response)
-		tools.Log(receiver.Hostname, "Appended record {"+message.Content[1]+"}")
+		tools.Log(receiver.Id, "Appended record {"+message.Content[1]+"}")
 		return
 	}
 	if delivered && gset.Exists(receiver.Gset, message.Content[1]) {
 		receiver.Receive_socket.SendMessage(response)
-		tools.Log(receiver.Hostname, "Record {"+message.Content[1]+"} already exists")
+		tools.Log(receiver.Id, "Record {"+message.Content[1]+"} already exists")
 		return
 	}
 }

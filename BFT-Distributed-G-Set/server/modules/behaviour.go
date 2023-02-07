@@ -36,7 +36,7 @@ func StartNormal(servers []config.Node, default_port, num_threads int) {
 }
 
 func StartMute(s *server.Server) {
-	tools.Log(s.Hostname, "Started with MUTE behaviour")
+	tools.Log(s.Id, "Started with MUTE behaviour")
 	for {
 		msg, _ := s.Receive_socket.RecvMessage(0)
 		fmt.Println("Received", msg, " No action")
@@ -44,6 +44,6 @@ func StartMute(s *server.Server) {
 }
 
 func StartMalicious(s *server.Server) {
-	tools.Log(s.Hostname, "Started with MALICIOUS behaviour")
+	tools.Log(s.Id, "Started with MALICIOUS behaviour")
 
 }

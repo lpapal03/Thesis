@@ -12,7 +12,7 @@ type Server struct {
 	Id             string
 	Peers          map[string]*zmq.Socket
 	Receive_socket *zmq.Socket
-	Hostname       string
+	Host           string
 	Port           string
 	Gset           map[string]string
 	My_init        map[string]bool
@@ -58,7 +58,7 @@ func CreateServer(me config.Node, peers []config.Node) *Server {
 		Id:             my_id,
 		Peers:          server_sockets,
 		Receive_socket: receive_socket,
-		Hostname:       me.Host,
+		Host:           me.Host,
 		Port:           me.Port,
 		Gset:           my_gset,
 		My_init:        my_init,
