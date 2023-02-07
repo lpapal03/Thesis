@@ -1,16 +1,15 @@
-2023/01/30 13:49:51 | node0 | Established connection with tcp://node1:5555
-2023/01/30 13:49:51 | node0 | Established connection with tcp://node2:5555
-2023/01/30 13:49:51 | node0 | Established connection with tcp://node3:5555
-2023/01/30 13:49:51 | node0 | Established connection with tcp://node4:5555
-2023/01/30 13:49:51 | node0 | Established connection with tcp://node5:5555
-2023/01/30 13:49:51 | node0 | Established connection with tcp://node6:5555
-2023/01/30 13:49:51 | node0 | Established connection with tcp://node7:5555
-2023/01/30 13:49:51 | node0 | Established connection with tcp://node8:5555
-2023/01/30 13:49:51 | node0 | Established connection with tcp://node9:5555
-2023/01/30 13:49:51 | node0 | Started interactive session
-2023/01/30 13:49:52 | node0 | Called GET
-2023/01/30 13:49:52 | node0 | Waiting for valid GET_REPLY
-2023/01/30 13:49:52 | node0 | Reply: {1} {loukis} {node0-0} {node0-12} {node0-14} {node0-16} {node0-17} {node0-19} {node0-20} {node0-22} {node0-23} {node0-24} {node0-25} {node0-2} {node0-30} {node0-34} {node0-38} {node0-39} {node0-40} {node0-41} {node0-42} {node0-44} {node0-45} {node0-4} {node0-51} {node0-52} {node0-53} {node0-57} {node0-5} {node0-61} {node0-67} {node0-6} {node0-70} {node0-71} {node0-73} {node0-75} {node0-76} {node0-77} {node0-79} {node0-7} {node0-81} {node0-83} {node0-86} {node0-87} {node0-88} {node0-8} {node0-90} {node0-92} {node0-93} {node0-94} {node0-99} {node0-9}
-2023/01/30 13:52:11 | node0 | Called GET
-2023/01/30 13:52:11 | node0 | Waiting for valid GET_REPLY
-2023/01/30 13:52:11 | node0 | Reply: {1} {loukis} {node0-0} {node0-12} {node0-14} {node0-16} {node0-17} {node0-19} {node0-20} {node0-22} {node0-23} {node0-24} {node0-25} {node0-2} {node0-30} {node0-34} {node0-38} {node0-39} {node0-40} {node0-41} {node0-42} {node0-44} {node0-45} {node0-4} {node0-51} {node0-52} {node0-53} {node0-57} {node0-5} {node0-61} {node0-67} {node0-6} {node0-70} {node0-71} {node0-73} {node0-75} {node0-76} {node0-77} {node0-79} {node0-7} {node0-81} {node0-83} {node0-86} {node0-87} {node0-88} {node0-8} {node0-90} {node0-92} {node0-93} {node0-94} {node0-99} {node0-9}
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node1:5555
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node1:5556
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node1:5557
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node2:5555
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node2:5556
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node2:5557
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node3:5555
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node3:5556
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node3:5557
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node4:5555
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node4:5556
+2023/02/07 05:55:36 | node0 | Established connection with tcp://node4:5557
+2023/02/07 05:55:36 | node0 | Started interactive session
+2023/02/07 05:55:48 | node0 | Called GET
+2023/02/07 05:55:48 | node0 | Waiting for valid GET_REPLY
