@@ -10,8 +10,6 @@ import (
 var mu sync.Mutex
 
 func ResetLogFile() {
-	mu.Lock()
-	defer mu.Unlock()
 	// Check if the file exists
 	if _, err := os.Stat("log.txt"); err == nil {
 		// File exists, delete it
