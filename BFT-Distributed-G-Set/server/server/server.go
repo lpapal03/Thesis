@@ -4,17 +4,16 @@ import (
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/gset"
 	"BFT-Distributed-G-Set/tools"
-	"os"
-	"strings"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
 type Server struct {
-	Zctx           *zmq.Context
+	Id             string
 	Peers          map[string]*zmq.Socket
 	Receive_socket *zmq.Socket
 	Hostname       string
+	Port           string
 	Gset           map[string]string
 	My_init        map[string]bool
 	My_echo        map[string]bool
@@ -23,13 +22,7 @@ type Server struct {
 	Peers_vote     map[string]bool
 }
 
-func CreateServer(peers []string) *Server {
-
-	hostname, err := os.Hostname()
-	if err != nil {
-		panic(err)
-	}
-	hostname = strings.Split(hostname, ".")[0]
+func CreateServer(me config.Node, peers []config.Node) *Server {
 
 	zctx, _ := zmq.NewContext()
 	server_sockets := make(map[string]*zmq.Socket)
@@ -39,26 +32,34 @@ func CreateServer(peers []string) *Server {
 	my_vote := make(map[string]bool)
 	peers_echo := make(map[string]bool)
 	peers_vote := make(map[string]bool)
+	my_id := me.Host + ":" + me.Port
 
-	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
-	receive_socket.Bind("tcp://*:" + config.DEFAULT_PORT)
-	tools.Log(hostname, "Bound tcp://*:"+config.DEFAULT_PORT)
+	receive_socket, err := zctx.NewSocket(zmq.ROUTER)
+	if err != nil {
+		panic(err)
+	}
+	receive_socket.Bind("tcp://*:" + me.Port)
+	tools.Log(my_id, "Bound tcp://*:"+me.Port)
 
 	// Connect my dealer sockets to all other servers' router
 	for i := 0; i < len(peers); i++ {
-		s, _ := zctx.NewSocket(zmq.DEALER)
-		s.SetIdentity(hostname)
-		s.Connect("tcp://" + peers[i] + ":" + config.DEFAULT_PORT)
-		tools.Log(hostname, "Connected to "+peers[i]+":"+config.DEFAULT_PORT)
+		s, err := zctx.NewSocket(zmq.DEALER)
+		if err != nil {
+			panic(err)
+		}
+		s.SetIdentity(my_id)
+		s.Connect("tcp://" + peers[i].Host + ":" + peers[i].Port)
+		tools.Log(my_id, "Connected to "+peers[i].Host+":"+peers[i].Port)
 		// append socket to socket list
-		server_sockets[peers[i]] = s
+		server_sockets[peers[i].Host+":"+peers[i].Port] = s
 	}
 
 	return &Server{
-		Zctx:           zctx,
+		Id:             my_id,
 		Peers:          server_sockets,
 		Receive_socket: receive_socket,
-		Hostname:       hostname,
+		Hostname:       me.Host,
+		Port:           me.Port,
 		Gset:           my_gset,
 		My_init:        my_init,
 		My_echo:        my_echo,
