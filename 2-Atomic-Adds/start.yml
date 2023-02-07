@@ -7,6 +7,8 @@
       shell: chown -R loukis .
     - name: Fetch file hosts from node 0 (master node)
       command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set/hosts /users/loukis/Thesis/BFT-Distributed-G-Set
+    - name: Fetch file config from node 0 (master node)
+      command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set/config /users/loukis/Thesis/BFT-Distributed-G-Set
     - name: Remove output files
       file: 
         path: "/users/loukis/Thesis/BFT-Distributed-G-Set/server/stdoutfile"
