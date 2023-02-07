@@ -11,9 +11,19 @@ import (
 
 func main() {
 	tools.ResetLogFile()
-	hosts_filename := "/users/loukis/Thesis/BFT-Distributed-G-Set/hosts"
+	wd := "/users/loukis/Thesis/BFT-Distributed-G-Set"
 
-	servers := config.GetHosts(hosts_filename, "servers")
+	// hosts are just the machine names
+	hosts := config.GetHosts(wd+"/hosts", "servers")
+	default_port, num_threads := config.GetPortAndThreads(wd + "/config")
+
+	servers := make([]config.Node, 0)
+	for _, h := range hosts {
+		for p := default_port; p < default_port+num_threads; p++ {
+			p_num := strconv.Itoa(p)
+			servers = append(servers, config.Node{Host: h, Port: p_num})
+		}
+	}
 
 	config.N = len(servers)
 	config.F = (config.N - 1) / 3

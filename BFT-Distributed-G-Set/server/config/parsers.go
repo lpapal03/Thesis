@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -53,4 +54,27 @@ func GetHosts(filename, option string) []string {
 		return servers
 	}
 	return []string{}
+}
+
+func GetPortAndThreads(filename string) (int, int) {
+	b, err := os.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+	s := string(b)
+	lines := strings.Split(s, "\n")
+
+	default_port := strings.Split(lines[0], "=")[1]
+	threads := strings.Split(lines[1], "=")[1]
+
+	num_threads, err := strconv.Atoi(threads)
+	if err != nil {
+		panic(err)
+	}
+	num_default_port, err := strconv.Atoi(default_port)
+	if err != nil {
+		panic(err)
+	}
+
+	return num_default_port, num_threads
 }

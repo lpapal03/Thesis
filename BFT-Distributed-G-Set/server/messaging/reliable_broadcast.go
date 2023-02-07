@@ -69,8 +69,8 @@ func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 
 	// on receiving <vote, v> from n-f distinct parties:
 	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
-		tools.Log(receiver.Hostname, "Echo: "+strconv.Itoa(echo_count))
-		tools.Log(receiver.Hostname, "Vote: "+strconv.Itoa(vote_count))
+		tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
+		tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
 		cleaup(receiver, peers_key)
 		return true
 	}
