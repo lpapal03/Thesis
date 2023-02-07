@@ -1,41 +1,42 @@
-2023/02/07 04:29:51 | node0:5557 | Bound tcp://*:5557
-2023/02/07 04:29:51 | node0:5556 | Bound tcp://*:5556
-2023/02/07 04:29:51 | node0:5555 | Bound tcp://*:5555
-2023/02/07 04:29:51 | node0:5555 | Bound tcp://*:5555
-2023/02/07 04:29:51 | node0:5557 | Connected to node1:5555
-2023/02/07 04:29:51 | node0:5555 | Connected to node1:5555
-2023/02/07 04:29:51 | node0:5555 | Connected to node1:5556
-2023/02/07 04:29:51 | node0:5556 | Connected to node1:5556
-2023/02/07 04:29:51 | node0:5555 | Connected to node1:5557
-2023/02/07 04:29:51 | node0:5556 | Connected to node1:5557
-2023/02/07 04:29:51 | node0:5557 | Connected to node1:5557
-2023/02/07 04:29:51 | node0:5555 | Connected to node2:5555
-2023/02/07 04:29:51 | node0:5556 | Connected to node2:5555
-2023/02/07 04:29:51 | node0:5557 | Connected to node2:5555
-2023/02/07 04:29:51 | node0:5556 | Connected to node2:5556
-2023/02/07 04:29:51 | node0:5557 | Connected to node2:5556
-2023/02/07 04:29:51 | node0:5556 | Connected to node2:5557
-2023/02/07 04:29:51 | node0:5556 | Connected to node2:5557
-2023/02/07 04:29:51 | node0:5555 | Connected to node2:5557
-2023/02/07 04:29:51 | node0:5557 | Connected to node2:5557
-2023/02/07 04:29:51 | node0:5556 | Connected to node3:5555
-2023/02/07 04:29:51 | node0:5557 | Connected to node3:5555
-2023/02/07 04:29:51 | node0:5555 | Connected to node3:5555
-2023/02/07 04:29:51 | node0:5556 | Connected to node3:5556
-2023/02/07 04:29:51 | node0:5555 | Connected to node3:5556
-2023/02/07 04:29:51 | node0:5556 | Connected to node3:5557
-2023/02/07 04:29:51 | node0:5557 | Connected to node3:5556
-2023/02/07 04:29:51 | node0:5555 | Connected to node3:5557
-2023/02/07 04:29:51 | node0:5557 | Connected to node3:5557
-2023/02/07 04:29:51 | node0:5556 | Connected to node4:5555
-2023/02/07 04:29:51 | node0:5557 | Connected to node4:5555
-2023/02/07 04:29:51 | node0:5557 | Connected to node4:5556
-2023/02/07 04:29:51 | node0:5555 | Connected to node4:5555
-2023/02/07 04:29:51 | node0:5556 | Connected to node4:5557
-2023/02/07 04:29:51 | node0:5556 | Started with NORMAL behaviour
-2023/02/07 04:29:51 | node0:5555 | Connected to node4:5556
-2023/02/07 04:29:51 | node0:5555 | Connected to node4:5556
-2023/02/07 04:29:51 | node0:5557 | Connected to node4:5557
-2023/02/07 04:29:51 | node0:5557 | Started with NORMAL behaviour
-2023/02/07 04:29:51 | node0:5555 | Connected to node4:5557
-2023/02/07 04:29:51 | node0:5555 | Started with NORMAL behaviour
+2023/02/07 05:38:18 | node0:5557 | Bound tcp://*:5557
+2023/02/07 05:38:18 | node0:5556 | Bound tcp://*:5556
+2023/02/07 05:38:18 | node0:5555 | Bound tcp://*:5555
+2023/02/07 05:38:18 | node0:5557 | Connected to node1:5555
+2023/02/07 05:38:18 | node0:5555 | Connected to node1:5555
+2023/02/07 05:38:18 | node0:5556 | Connected to node1:5555
+2023/02/07 05:38:18 | node0:5555 | Connected to node1:5556
+2023/02/07 05:38:18 | node0:5557 | Connected to node1:5556
+2023/02/07 05:38:18 | node0:5555 | Connected to node1:5557
+2023/02/07 05:38:18 | node0:5556 | Connected to node1:5556
+2023/02/07 05:38:18 | node0:5555 | Connected to node1:5557
+2023/02/07 05:38:18 | node0:5557 | Connected to node1:5557
+2023/02/07 05:38:18 | node0:5557 | Connected to node2:5555
+2023/02/07 05:38:18 | node0:5556 | Connected to node1:5557
+2023/02/07 05:38:18 | node0:5555 | Connected to node2:5555
+2023/02/07 05:38:18 | node0:5557 | Connected to node2:5556
+2023/02/07 05:38:18 | node0:5556 | Connected to node2:5555
+2023/02/07 05:38:18 | node0:5555 | Connected to node2:5556
+2023/02/07 05:38:18 | node0:5557 | Connected to node2:5557
+2023/02/07 05:38:18 | node0:5556 | Connected to node2:5556
+2023/02/07 05:38:18 | node0:5555 | Connected to node2:5557
+2023/02/07 05:38:18 | node0:5557 | Connected to node3:5555
+2023/02/07 05:38:18 | node0:5556 | Connected to node2:5557
+2023/02/07 05:38:18 | node0:5557 | Connected to node3:5556
+2023/02/07 05:38:18 | node0:5555 | Connected to node3:5555
+2023/02/07 05:38:18 | node0:5557 | Connected to node3:5557
+2023/02/07 05:38:18 | node0:5555 | Connected to node3:5556
+2023/02/07 05:38:18 | node0:5556 | Connected to node3:5556
+2023/02/07 05:38:18 | node0:5557 | Connected to node4:5555
+2023/02/07 05:38:18 | node0:5555 | Connected to node3:5557
+2023/02/07 05:38:18 | node0:5556 | Connected to node3:5557
+2023/02/07 05:38:18 | node0:5557 | Connected to node4:5556
+2023/02/07 05:38:18 | node0:5556 | Connected to node4:5555
+2023/02/07 05:38:18 | node0:5555 | Connected to node4:5555
+2023/02/07 05:38:18 | node0:5557 | Connected to node4:5557
+2023/02/07 05:38:18 | node0:5557 | Started with NORMAL behaviour
+2023/02/07 05:38:18 | node0:5555 | Connected to node4:5556
+2023/02/07 05:38:18 | node0:5556 | Connected to node4:5556
+2023/02/07 05:38:18 | node0:5555 | Connected to node4:5557
+2023/02/07 05:38:18 | node0:5555 | Started with NORMAL behaviour
+2023/02/07 05:38:18 | node0:5556 | Connected to node4:5557
+2023/02/07 05:38:18 | node0:5556 | Started with NORMAL behaviour
