@@ -3,12 +3,24 @@ node0
 
 [clients-automated]
 
-[servers-normal]
+[sbdso-normal]
 node1
 node2
 node3
 node4
 
-[servers-mute]
+[sbdso-mute]
 
-[servers-malicious]
+[sbdso-malicious]
+
+[bdso-1-normal]
+
+[bdso-1-mute]
+
+[bdso-1-malicious]
+
+[bdso-2-normal]
+
+[bdso-2-mute]
+
+[bdso-2-malicious]
