@@ -5,7 +5,6 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
-	"fmt"
 	"math/rand"
 	"reflect"
 	"strings"
@@ -44,10 +43,16 @@ func handleGet(receiver *server.Server, message Message) {
 }
 
 func handleAdd(receiver *server.Server, message Message) {
+	var tag string
 	if !gset.Exists(receiver.Gset, message.Content[0]) {
 		ReliableBroadcast(receiver, message)
 	} else {
-		response := []string{message.Sender, receiver.Id, ADD_RESPONSE, message.Content[0]}
+		if strings.Contains(message.Content[0], "atomic;") {
+			tag = ADD_ATOMIC_RESPONSE
+		} else {
+			tag = ADD_RESPONSE
+		}
+		response := []string{message.Sender, receiver.Id, tag, message.Content[0]}
 		receiver.Receive_socket.SendMessage(response)
 	}
 }
@@ -113,32 +118,35 @@ func handleAtomicAdd(s *server.Server, r1, r2 string) {
 func Add(s *server.Server, record, destination string) {
 	tools.Log(s.Id, "Called ADD("+record+") with destination:"+destination)
 	tools.Log(s.Id, "Waiting for f+1 ADD replies")
-	val, ok := s.Bdso_networks[destination]
+	network, ok := s.Bdso_networks[destination]
 	// If the network exists
 	if !ok {
 		tools.Log(s.Id, destination+" network does not exist!")
 		return
 	}
-	sendToServers(val, []string{ADD, record}, 2*config.F+1)
+	sendToServers(network, []string{ADD, record}, 2*config.F+1)
 
-	// WAIT FOR F+1 RESPONSES
-	replies := make(map[string]bool)
-	tools.Log(s.Id, "Waiting for f+1 ADD replies")
-	for {
-		sockets, _ := s.Poller.Poll(-1)
-		for _, socket := range sockets {
-			s := socket.Socket
-			msg, _ := s.RecvMessage(0)
-			fmt.Println(msg)
-			if msg[1] == ADD_RESPONSE && msg[2] == record {
-				replies[msg[0]] = true
-			}
-		}
-		if len(replies) >= config.F+1 {
-			tools.Log(s.Id, "Record {"+record+"} appended")
-			return
-		}
-	}
+	// N := len(s.Bdso_networks[destination])
+	// F := (N - 1) / 3
+	// // WAIT FOR F+1 RESPONSES
+	// replies := make(map[string]bool)
+	// tools.Log(s.Id, "Waiting for f+1 ADD replies")
+	// for {
+	// 	sockets, _ := s.Poller.Poll(-1)
+	// 	for _, socket := range sockets {
+	// 		sock := socket.Socket
+	// 		msg, _ := sock.RecvMessage(0)
+	// 		fmt.Println(s.Id, msg)
+	// 		if msg[1] == ADD_RESPONSE && msg[2] == record {
+	// 			replies[msg[0]] = true
+	// 		}
+	// 		fmt.Println(s.Id, len(replies), "/", F+1)
+	// 	}
+	// 	if len(replies) >= F+1 {
+	// 		tools.Log(s.Id, "Record {"+record+"} appended")
+	// 		return
+	// 	}
+	// }
 }
 
 func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {

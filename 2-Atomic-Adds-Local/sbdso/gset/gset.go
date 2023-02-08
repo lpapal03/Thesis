@@ -109,9 +109,6 @@ func CheckAtomic(gset map[string]string) (string, string) {
 		delete(gset, key2)
 		Add(gset, v1)
 		Add(gset, v2)
-		for _, v := range gset {
-			fmt.Println("After", v)
-		}
 		return v1, v2
 	}
 	return "", ""

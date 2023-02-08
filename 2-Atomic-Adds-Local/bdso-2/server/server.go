@@ -34,6 +34,7 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context) *Ser
 	peers_vote := make(map[string]bool)
 	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
 	receive_socket.Bind("tcp://*:" + node.Port)
+	receive_socket.SetRcvhwm(1000)
 	tools.Log(id, "Bound tcp://*:"+node.Port)
 
 	// Connect my dealer sockets to all other servers' router

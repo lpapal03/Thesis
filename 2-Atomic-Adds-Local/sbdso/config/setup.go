@@ -59,7 +59,7 @@ func parseHostsFile(filename string, bdso string) ([]Node, error) {
 	return nodes, nil
 }
 
-func getAllBdso(filename string) map[string][]Node {
+func GetAllBdso(filename string) map[string][]Node {
 	all_bdso := make(map[string][]Node)
 	all_lines := make([]string, 0)
 	file, err := os.Open(filename)
@@ -97,7 +97,7 @@ func SetServerNodes() ([]Node, map[string][]Node) {
 
 	SERVERS, err = parseHostsFile(parent_dir+"/hosts", bdso_name)
 
-	BDSO := getAllBdso(parent_dir + "/hosts")
+	BDSO := GetAllBdso(parent_dir + "/hosts")
 	if err != nil {
 		panic(err)
 	}
