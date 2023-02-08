@@ -106,6 +106,7 @@ func AddAtomic(c *client.Client, record string) {
 	message := "atomic;" + c.Id + ";" + record
 	tools.Log(c.Id, "Called ADD_ATOMIC("+message+")")
 	sendToServers(c.Servers, []string{ADD, message}, 2*config.F+1)
+	message = strings.Replace(message, "atomic", "atomic-complete", 1)
 	// WAIT FOR F+1 RESPONSES
 	replies := make(map[string]bool)
 	tools.Log(c.Id, "Waiting for f+1 ADD_ATOMIC replies")
@@ -115,7 +116,7 @@ func AddAtomic(c *client.Client, record string) {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
 			if msg[1] == ADD_ATOMIC_RESPONSE {
-				if msg[2] == record {
+				if msg[2] == message {
 					replies[msg[0]] = true
 				}
 			}

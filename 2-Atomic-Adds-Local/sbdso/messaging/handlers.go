@@ -115,9 +115,12 @@ func Add(s *server.Server, record, destination string) {
 	val, ok := s.Bdso_networks[destination]
 	// If the network exists
 	if !ok {
+		tools.Log(s.Id, destination+" network does not exist!")
 		return
 	}
 	sendToServers(val, []string{ADD, record}, 2*config.F+1)
+
+	// TODO: Check amount of replies. Then we are done
 }
 
 func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {

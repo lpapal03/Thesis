@@ -40,6 +40,14 @@ func Exists(gset map[string]string, record string) bool {
 // Adds record to gset
 func Add(gset map[string]string, record string) {
 	// create a sha512 value based on the record
+	if strings.Contains(record, "atomic") {
+		test_record := strings.Replace(record, "atomic", "atomic-complete", 1)
+		test_key := string_to_sha512(test_record)
+		_, exists := gset[test_key]
+		if exists {
+			return
+		}
+	}
 	sha512_hash := string_to_sha512(record)
 	gset[sha512_hash] = record
 }
@@ -66,8 +74,16 @@ func GsetToString(gset map[string]string, verbose bool) string {
 // atomic message format:
 // atomic;sender;peer_id;destination_network;your_message;peer_message
 func CheckAtomic(gset map[string]string) (string, string) {
+	atomic_found := false
+	key1, key2 := "", ""
 	for k1, v1 := range gset {
+		if atomic_found {
+			break
+		}
 		for k2, v2 := range gset {
+			if atomic_found {
+				break
+			}
 			if !strings.Contains(v1, ";") || !strings.Contains(v2, ";") {
 				continue
 			}
@@ -77,15 +93,26 @@ func CheckAtomic(gset map[string]string) (string, string) {
 			parts1 := strings.Split(v1, ";")
 			parts2 := strings.Split(v2, ";")
 			if areAtomic(parts1, parts2) {
-				gset[k1] = strings.Replace(v1, "atomic", "atomic-complete", -1)
-				gset[k2] = strings.Replace(v2, "atomic", "atomic-complete", -1)
-				for _, v := range gset {
-					fmt.Println(v)
-				}
-				return v1, v2
+				atomic_found = true
+				key1, key2 = k1, k2
 			}
 
 		}
+	}
+	if atomic_found {
+		v1 := strings.Replace(gset[key1], "atomic", "atomic-complete", 1)
+		v2 := strings.Replace(gset[key2], "atomic", "atomic-complete", 1)
+		for _, v := range gset {
+			fmt.Println("Before", v)
+		}
+		delete(gset, key1)
+		delete(gset, key2)
+		Add(gset, v1)
+		Add(gset, v2)
+		for _, v := range gset {
+			fmt.Println("After", v)
+		}
+		return v1, v2
 	}
 	return "", ""
 }
