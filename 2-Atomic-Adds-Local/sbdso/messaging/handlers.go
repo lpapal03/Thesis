@@ -5,6 +5,7 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
+	"fmt"
 	"math/rand"
 	"reflect"
 	"strings"
@@ -120,7 +121,24 @@ func Add(s *server.Server, record, destination string) {
 	}
 	sendToServers(val, []string{ADD, record}, 2*config.F+1)
 
-	// TODO: Check amount of replies. Then we are done
+	// WAIT FOR F+1 RESPONSES
+	replies := make(map[string]bool)
+	tools.Log(s.Id, "Waiting for f+1 ADD replies")
+	for {
+		sockets, _ := s.Poller.Poll(-1)
+		for _, socket := range sockets {
+			s := socket.Socket
+			msg, _ := s.RecvMessage(0)
+			fmt.Println(msg)
+			if msg[1] == ADD_RESPONSE && msg[2] == record {
+				replies[msg[0]] = true
+			}
+		}
+		if len(replies) >= config.F+1 {
+			tools.Log(s.Id, "Record {"+record+"} appended")
+			return
+		}
+	}
 }
 
 func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {

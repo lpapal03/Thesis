@@ -12,6 +12,7 @@ type Server struct {
 	Zctx           *zmq.Context
 	Peers          map[string]*zmq.Socket
 	Receive_socket *zmq.Socket
+	Poller         *zmq.Poller
 	Id             string
 	Gset           map[string]string
 	Port           string
@@ -36,6 +37,7 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context, bdso
 	peers_vote := make(map[string]bool)
 	bdso_net := make(map[string]map[string]*zmq.Socket)
 	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
+	poller := zmq.NewPoller()
 	receive_socket.Bind("tcp://*:" + node.Port)
 	tools.Log(id, "Bound tcp://*:"+node.Port)
 
@@ -62,6 +64,7 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context, bdso
 			}
 			s.SetIdentity(id)
 			s.Connect("tcp://localhost:" + node_id.Port)
+			poller.Add(s, zmq.POLLIN)
 			bdso_net[network_name]["tcp://localhost:"+node_id.Port] = s
 			tools.Log(id, "Connected to "+"tcp://localhost:"+node_id.Port+" of network "+network_name)
 		}
@@ -70,6 +73,7 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context, bdso
 	return &Server{
 		Peers:          peer_sockets,
 		Receive_socket: receive_socket,
+		Poller:         poller,
 		Id:             id,
 		Port:           port,
 		Gset:           my_gset,
