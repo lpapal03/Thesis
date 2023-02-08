@@ -56,7 +56,7 @@ func isAtomicMessageValid(msg string) bool {
 		return false
 	}
 	parts := strings.Split(msg, ";")
-	if len(parts) != 4 {
+	if len(parts) != 3 {
 		return false
 	}
 	for _, p := range parts {
@@ -117,7 +117,7 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 			}
 		}
 		if command == "at" {
-			fmt.Println("Format of atomic records: peer_id;destination;your_message;peer_message")
+			fmt.Println("Format of atomic records: signature;destination;message")
 			fmt.Print("Record to append atomically > ")
 			scanner.Scan()
 			record = scanner.Text()

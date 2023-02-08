@@ -103,9 +103,10 @@ func Add(c *client.Client, record string) {
 }
 
 func AddAtomic(c *client.Client, record string) {
-	message := "atomic;" + c.Id + ";" + record
-	tools.Log(c.Id, "Called ADD_ATOMIC("+message+")")
-	sendToServers(c.Servers, []string{ADD, message}, 2*config.F+1)
+	tools.Log(c.Id, "Called ADD_ATOMIC("+record+")")
+	record = "atomic;" + c.Id + ";" + record
+	// orig_signature := strings.Split(record, ";")[2]
+	sendToServers(c.Servers, []string{ADD, record}, 2*config.F+1)
 	// WAIT FOR F+1 RESPONSES
 	replies := make(map[string]bool)
 	tools.Log(c.Id, "Waiting for f+1 ADD_ATOMIC replies")

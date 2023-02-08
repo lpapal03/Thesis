@@ -18,7 +18,7 @@ func HandleMessage(s *server.Server, msg []string) {
 		panic(err)
 	}
 	if message.Tag == GET {
-		tools.Log(s.Id, "Received "+message.Tag+" from "+message.Sender)
+		tools.Log(s.Id, "Received "+message.Tag+"from "+message.Sender)
 	} else {
 		tools.Log(s.Id, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
 	}
@@ -61,11 +61,10 @@ func handleRB(receiver *server.Server, message Message) {
 
 	delivered := HandleReliableBroadcast(receiver, message)
 	if delivered && !gset.Exists(receiver.Gset, message.Content[1]) {
-
-		// now check if atomic
 		gset.Add(receiver.Gset, message.Content[1])
-		if strings.Contains(message.Content[1], "atomic;") {
-			r1, r2 := gset.CheckAtomic(receiver.Gset)
+		if strings.Contains(message.Content[1], ";") {
+			msg_signatue := strings.Split(message.Content[1], ";")[2]
+			r1, r2 := gset.CheckAtomic(receiver.Gset, msg_signatue)
 			if len(r1) > 0 && len(r2) > 0 {
 				handleAtomicAdd(receiver, r1, r2)
 			}
@@ -92,23 +91,20 @@ func handleAtomicAdd(s *server.Server, r1, r2 string) {
 	dest1, dest2 := parts1[3], parts2[3]
 	msg1, msg2 := parts1[4], parts2[4]
 
-	// send adds
-	Add(s, msg1, dest1)
-	Add(s, msg2, dest2)
-
-	// respond 1
+	// handle 1
 	response = []string{client1, s.Id, ADD_ATOMIC_RESPONSE, r1}
+	Add(s, msg1, dest1)
 	s.Receive_socket.SendMessage(response)
 	tools.Log(s.Id, "Sent ADD_ATOMIC_RESPONSE to "+client1)
 
-	// respond 2
+	// handle 2
 	response = []string{client2, s.Id, ADD_ATOMIC_RESPONSE, r2}
+	Add(s, msg2, dest2)
 	s.Receive_socket.SendMessage(response)
 	tools.Log(s.Id, "Sent ADD_ATOMIC_RESPONSE to "+client2)
 
 }
 
-// only returns when we know the records were appended
 func Add(s *server.Server, record, destination string) {
 	tools.Log(s.Id, "Called ADD("+record+") with destination:"+destination)
 	tools.Log(s.Id, "Waiting for f+1 ADD replies")

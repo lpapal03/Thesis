@@ -64,8 +64,12 @@ func GsetToString(gset map[string]string, verbose bool) string {
 
 // checks for pairs of atomic records. Returns them if they exist.
 // atomic message format:
-// atomic;sender;peer_id;destination_network;your_message;peer_message
-func CheckAtomic(gset map[string]string) (string, string) {
+// atomic;sender;signature;destination_network;message
+// for it to be atomic:
+// 1. Signatures must match
+// 2. Senders should be different
+// 3. Destination networks should be different
+func CheckAtomic(gset map[string]string, signature string) (string, string) {
 	for k1, v1 := range gset {
 		for k2, v2 := range gset {
 			if !strings.Contains(v1, ";") || !strings.Contains(v2, ";") {
@@ -76,7 +80,7 @@ func CheckAtomic(gset map[string]string) (string, string) {
 			}
 			parts1 := strings.Split(v1, ";")
 			parts2 := strings.Split(v2, ";")
-			if areAtomic(parts1, parts2) {
+			if parts1[0] == "atomic" && parts2[0] == "atomic" && parts1[1] != parts2[1] && parts1[2] == parts2[2] && parts1[2] == signature && parts1[3] != parts2[3] {
 				gset[k1] = strings.Replace(v1, "atomic", "atomic-complete", -1)
 				gset[k2] = strings.Replace(v2, "atomic", "atomic-complete", -1)
 				for _, v := range gset {
@@ -88,24 +92,4 @@ func CheckAtomic(gset map[string]string) (string, string) {
 		}
 	}
 	return "", ""
-}
-
-func areAtomic(r1, r2 []string) bool {
-	// check tag
-	if r1[0] != "atomic" || r2[0] != "atomic" {
-		return false
-	}
-	// check senders
-	sender1, peer1 := r1[1], r1[2]
-	sender2, peer2 := r2[1], r2[2]
-	if sender1 != peer2 || sender2 != peer1 {
-		return false
-	}
-	// check senders
-	message1, peer_message1 := r1[4], r1[5]
-	message2, peer_message2 := r2[4], r2[5]
-	if message1 != peer_message2 || message2 != peer_message1 {
-		return false
-	}
-	return true
 }
