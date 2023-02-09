@@ -5,7 +5,6 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
-	"fmt"
 	"math/rand"
 	"strings"
 
@@ -138,7 +137,6 @@ func BdsoAdd(s *server.Server, record, destination string) {
 			if msg[1] == ADD_RESPONSE && msg[2] == record {
 				replies[msg[0]] = true
 			}
-			fmt.Println(s.Id, len(replies), "/", F+1)
 		}
 		if len(replies) >= F+1 {
 			tools.Log(s.Id, "Record {"+record+"} appended")
