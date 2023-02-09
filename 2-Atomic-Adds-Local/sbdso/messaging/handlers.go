@@ -5,6 +5,7 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
+	"fmt"
 	"math/rand"
 	"reflect"
 	"strings"
@@ -45,6 +46,7 @@ func handleGet(receiver *server.Server, message Message) {
 func handleAdd(receiver *server.Server, message Message) {
 	var tag string
 	if !gset.Exists(receiver.Gset, message.Content[0]) {
+		fmt.Println("DOES NOT EXIST")
 		ReliableBroadcast(receiver, message)
 	} else {
 		if strings.Contains(message.Content[0], "atomic;") {
@@ -99,8 +101,8 @@ func handleAtomicAdd(s *server.Server, r1, r2 string) {
 	msg1, msg2 := parts1[4], parts2[4]
 
 	// send adds
-	Add(s, msg1, dest1)
-	Add(s, msg2, dest2)
+	BdsoAdd(s, msg1, dest1)
+	BdsoAdd(s, msg2, dest2)
 
 	// respond 1
 	response = []string{client1, s.Id, ADD_ATOMIC_RESPONSE, r1}
@@ -115,7 +117,7 @@ func handleAtomicAdd(s *server.Server, r1, r2 string) {
 }
 
 // only returns when we know the records were appended
-func Add(s *server.Server, record, destination string) {
+func BdsoAdd(s *server.Server, record, destination string) {
 	tools.Log(s.Id, "Called ADD("+record+") with destination:"+destination)
 	tools.Log(s.Id, "Waiting for f+1 ADD replies")
 	network, ok := s.Bdso_networks[destination]

@@ -16,7 +16,11 @@ func main() {
 	}
 	server_nodes, bdso_networks := config.SetServerNodes()
 	// s := server.CreateServer(server_nodes[0], server_nodes, zctx, bdso_networks)
-	// messaging.Add(s, "hello", "bdso-2")
+	// for i := 0; i < 30; i++ {
+	// 	k := strconv.Itoa(i)
+	// 	messaging.BdsoAdd(s, "hello"+k, "bdso-1")
+	// 	messaging.BdsoAdd(s, "world"+k, "bdso-2")
+	// }
 
 	if len(os.Args) < 2 {
 		scenarios.Start(server_nodes, "NORMAL", zctx, bdso_networks)

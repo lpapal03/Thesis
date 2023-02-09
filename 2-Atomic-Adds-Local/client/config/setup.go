@@ -76,7 +76,7 @@ func parseHostsFile(fileName string, bdso string) ([]Node, error) {
 			break
 		}
 	}
-	for p := min_port; p < max_port; p++ {
+	for p := min_port; p <= max_port; p++ {
 		nodes = append(nodes, Node{Host: "localhost:", Port: strconv.Itoa(p)})
 	}
 	if len(nodes) != 0 {

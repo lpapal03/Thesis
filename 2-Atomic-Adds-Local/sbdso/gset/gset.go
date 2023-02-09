@@ -28,8 +28,23 @@ func Get(gset map[string]string) {
 	}
 }
 
+func atomicExists(gset map[string]string, record string) bool {
+	if strings.Contains(record, "atomic") {
+		test_record := strings.Replace(record, "atomic", "atomic-complete", 1)
+		test_key := string_to_sha512(test_record)
+		_, exists := gset[test_key]
+		if exists {
+			return true
+		}
+	}
+	return false
+}
+
 // Checks if a given record exists in the gset
 func Exists(gset map[string]string, record string) bool {
+	if atomicExists(gset, record) {
+		return true
+	}
 	hash := string_to_sha512(record)
 	if _, exists := gset[hash]; exists {
 		return true
@@ -40,13 +55,8 @@ func Exists(gset map[string]string, record string) bool {
 // Adds record to gset
 func Add(gset map[string]string, record string) {
 	// create a sha512 value based on the record
-	if strings.Contains(record, "atomic") {
-		test_record := strings.Replace(record, "atomic", "atomic-complete", 1)
-		test_key := string_to_sha512(test_record)
-		_, exists := gset[test_key]
-		if exists {
-			return
-		}
+	if atomicExists(gset, record) {
+		return
 	}
 	sha512_hash := string_to_sha512(record)
 	gset[sha512_hash] = record
