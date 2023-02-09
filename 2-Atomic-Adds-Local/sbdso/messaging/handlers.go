@@ -7,7 +7,6 @@ import (
 	"backend/tools"
 	"fmt"
 	"math/rand"
-	"reflect"
 	"strings"
 
 	"github.com/pebbe/zmq4"
@@ -46,7 +45,6 @@ func handleGet(receiver *server.Server, message Message) {
 func handleAdd(receiver *server.Server, message Message) {
 	var tag string
 	if !gset.Exists(receiver.Gset, message.Content[0]) {
-		fmt.Println("DOES NOT EXIST")
 		ReliableBroadcast(receiver, message)
 	} else {
 		if strings.Contains(message.Content[0], "atomic;") {
@@ -69,7 +67,6 @@ func handleRB(receiver *server.Server, message Message) {
 
 	delivered := HandleReliableBroadcast(receiver, message)
 	if delivered && !gset.Exists(receiver.Gset, message.Content[1]) {
-
 		// now check if atomic
 		gset.Add(receiver.Gset, message.Content[1])
 		if strings.Contains(message.Content[1], "atomic;") {
@@ -128,35 +125,37 @@ func BdsoAdd(s *server.Server, record, destination string) {
 	}
 	sendToServers(network, []string{ADD, record}, 2*config.F+1)
 
-	// N := len(s.Bdso_networks[destination])
-	// F := (N - 1) / 3
-	// // WAIT FOR F+1 RESPONSES
-	// replies := make(map[string]bool)
-	// tools.Log(s.Id, "Waiting for f+1 ADD replies")
-	// for {
-	// 	sockets, _ := s.Poller.Poll(-1)
-	// 	for _, socket := range sockets {
-	// 		sock := socket.Socket
-	// 		msg, _ := sock.RecvMessage(0)
-	// 		fmt.Println(s.Id, msg)
-	// 		if msg[1] == ADD_RESPONSE && msg[2] == record {
-	// 			replies[msg[0]] = true
-	// 		}
-	// 		fmt.Println(s.Id, len(replies), "/", F+1)
-	// 	}
-	// 	if len(replies) >= F+1 {
-	// 		tools.Log(s.Id, "Record {"+record+"} appended")
-	// 		return
-	// 	}
-	// }
+	N := len(s.Bdso_networks[destination])
+	F := (N - 1) / 3
+	// WAIT FOR F+1 RESPONSES
+	replies := make(map[string]bool)
+	tools.Log(s.Id, "Waiting for f+1 ADD replies")
+	for {
+		sockets, _ := s.Poller.Poll(-1)
+		for _, socket := range sockets {
+			sock := socket.Socket
+			msg, _ := sock.RecvMessage(0)
+			if msg[1] == ADD_RESPONSE && msg[2] == record {
+				replies[msg[0]] = true
+			}
+			fmt.Println(s.Id, len(replies), "/", F+1)
+		}
+		if len(replies) >= F+1 {
+			tools.Log(s.Id, "Record {"+record+"} appended")
+			return
+		}
+	}
 }
 
 func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {
-	keys := reflect.ValueOf(m).MapKeys()
-	rand.Shuffle(len(keys), func(i, j int) { keys[i], keys[j] = keys[j], keys[i] })
-	for i := 0; i < amount; i++ {
-		key := keys[i].String()
-		s := m[key]
+	sockets := make([]*zmq4.Socket, 0)
+	for _, v := range m {
+		sockets = append(sockets, v)
+	}
+	rand.Shuffle(len(sockets), func(i, j int) {
+		sockets[i], sockets[j] = sockets[j], sockets[i]
+	})
+	for _, s := range sockets {
 		s.SendMessage(message)
 	}
 }

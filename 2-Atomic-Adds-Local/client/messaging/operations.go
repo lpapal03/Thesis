@@ -1,7 +1,6 @@
 package messaging
 
 import (
-	"fmt"
 	"frontend/client"
 	"frontend/config"
 	"frontend/tools"
@@ -117,7 +116,6 @@ func AddAtomic(c *client.Client, record string) {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
 			if msg[1] == ADD_ATOMIC_RESPONSE {
-				fmt.Println(msg)
 				s1 := strings.SplitN(message, ";", 2)[1]
 				s2 := strings.SplitN(msg[2], ";", 2)[1]
 				if s1 == s2 {

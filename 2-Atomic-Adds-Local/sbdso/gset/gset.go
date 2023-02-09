@@ -112,9 +112,6 @@ func CheckAtomic(gset map[string]string) (string, string) {
 	if atomic_found {
 		v1 := strings.Replace(gset[key1], "atomic", "atomic-complete", 1)
 		v2 := strings.Replace(gset[key2], "atomic", "atomic-complete", 1)
-		for _, v := range gset {
-			fmt.Println("Before", v)
-		}
 		delete(gset, key1)
 		delete(gset, key2)
 		Add(gset, v1)
