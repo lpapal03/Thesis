@@ -8,6 +8,7 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/pebbe/zmq4"
 )
@@ -58,6 +59,7 @@ func findGetValidReply(replies map[string]string) string {
 func Get(c *client.Client) string {
 	tools.Log(c.Id, "Called GET")
 	c.Message_counter++
+	start := time.Now()
 	sendToServers(c.Servers, []string{GET}, 3*config.F+1)
 
 	replies := make(map[string]string)
@@ -73,7 +75,8 @@ func Get(c *client.Client) string {
 		}
 		r := findGetValidReply(replies)
 		if len(r) > 0 {
-			tools.Log(c.Id, "Reply: "+r)
+			elapsed := time.Since(start)
+			tools.Log(c.Id, "GET completed in: "+elapsed.String()+". Reply: "+r)
 			return r
 		}
 	}
@@ -82,6 +85,7 @@ func Get(c *client.Client) string {
 // Do i have to send to 2f+1 or all?
 func Add(c *client.Client, record string) {
 	tools.Log(c.Id, "Called ADD("+record+")")
+	start := time.Now()
 	sendToServers(c.Servers, []string{ADD, record}, 2*config.F+1)
 	// WAIT FOR F+1 RESPONSES
 	replies := make(map[string]bool)
@@ -96,7 +100,8 @@ func Add(c *client.Client, record string) {
 			}
 		}
 		if len(replies) >= config.F+1 {
-			tools.Log(c.Id, "Record {"+record+"} appended")
+			elapsed := time.Since(start)
+			tools.Log(c.Id, "ADD completed in: "+elapsed.String()+". Record {"+record+"} appended")
 			return
 		}
 	}

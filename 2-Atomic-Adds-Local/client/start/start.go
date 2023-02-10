@@ -121,7 +121,9 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 			fmt.Print("Record to append atomically > ")
 			scanner.Scan()
 			record = scanner.Text()
-			if isAtomicMessageValid(record) {
+			if network_name != "sbdso" {
+				fmt.Println("Network does not allow atomic operations")
+			} else if isAtomicMessageValid(record) {
 				messaging.AddAtomic(client, record)
 			} else {
 				fmt.Println("Invalid message")
