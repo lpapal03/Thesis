@@ -1,7 +1,6 @@
 package messaging
 
 import (
-	"backend/config"
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
@@ -18,14 +17,16 @@ func HandleMessage(s *server.Server, msg []string) {
 	}
 	if message.Tag == GET {
 		tools.Log(s.Id, "Received "+message.Tag+" from "+message.Sender)
-	} else {
-		tools.Log(s.Id, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
 	}
+	// } else {
+	// 	tools.Log(s.Id, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
+	// }
 
 	// handle
 	if message.Tag == GET {
 		handleGet(s, message)
 	} else if message.Tag == ADD {
+		message.Content[0] = message.Sender + "." + message.Content[0]
 		handleAdd(s, message)
 	} else if strings.Contains(message.Tag, BRACHA_BROADCAST) {
 		handleRB(s, message)
@@ -97,8 +98,7 @@ func handleAtomicAdd(s *server.Server, r1, r2 string) {
 	msg1, msg2 := parts1[4], parts2[4]
 
 	// send adds
-	BdsoAdd(s, msg1, dest1)
-	BdsoAdd(s, msg2, dest2)
+	BdsoAdd(s, msg1, msg2, dest1, dest2)
 
 	// respond 1
 	response = []string{client1, s.Id, ADD_ATOMIC_RESPONSE, r1}
@@ -113,36 +113,53 @@ func handleAtomicAdd(s *server.Server, r1, r2 string) {
 }
 
 // only returns when we know the records were appended
-func BdsoAdd(s *server.Server, record, destination string) {
-	tools.Log(s.Id, "Called ADD("+record+") with destination:"+destination)
-	tools.Log(s.Id, "Waiting for f+1 ADD replies")
-	network, ok := s.Bdso_networks[destination]
+func BdsoAdd(s *server.Server, r1, r2, dest1, dest2 string) {
+	tools.Log(s.Id, "Called ADD("+r1+") with destination:"+dest1)
+	tools.Log(s.Id, "Called ADD("+r2+") with destination:"+dest2)
+	network1, ok1 := s.Bdso_networks[dest1]
 	// If the network exists
-	if !ok {
-		tools.Log(s.Id, destination+" network does not exist!")
+	if !ok1 {
+		tools.Log(s.Id, dest1+" network does not exist!")
 		return
 	}
-	sendToServers(network, []string{ADD, record}, 2*config.F+1)
+	network2, ok2 := s.Bdso_networks[dest2]
+	// If the network exists
+	if !ok2 {
+		tools.Log(s.Id, dest2+" network does not exist!")
+		return
+	}
 
-	N := len(s.Bdso_networks[destination])
-	F := (N - 1) / 3
+	N1 := len(s.Bdso_networks[dest1])
+	F1 := (N1 - 1) / 3
+	N2 := len(s.Bdso_networks[dest2])
+	F2 := (N2 - 1) / 3
+
+	sendToServers(network1, []string{ADD, r1}, 2*F1+1)
+	sendToServers(network2, []string{ADD, r2}, 2*F2+1)
 	// WAIT FOR F+1 RESPONSES
-	replies := make(map[string]bool)
-	tools.Log(s.Id, "Waiting for f+1 ADD replies")
-	for {
+	replies1 := make(map[string]bool)
+	replies2 := make(map[string]bool)
+	tools.Log(s.Id, "Waiting for f+1 ADD_RESPONSE messages on {"+r1+"}")
+	tools.Log(s.Id, "Waiting for f+1 ADD_RESPONSE messages on {"+r2+"}")
+	for len(replies1) < F1+1 && len(replies2) < F2+1 {
 		sockets, _ := s.Poller.Poll(-1)
 		for _, socket := range sockets {
 			sock := socket.Socket
 			msg, _ := sock.RecvMessage(0)
-			if msg[1] == ADD_RESPONSE && msg[2] == record {
-				replies[msg[0]] = true
+			// tools.Log(s.Id, "["+strings.Join(msg, " ")+"]")
+			// tools.Log(s.Id, "Expected "+r1)
+			if msg[1] == ADD_RESPONSE && msg[2] == r1 {
+				replies1[msg[0]] = true
 			}
-		}
-		if len(replies) >= F+1 {
-			tools.Log(s.Id, "Record {"+record+"} appended")
-			return
+			if msg[1] == ADD_RESPONSE && msg[2] == r2 {
+				replies2[msg[0]] = true
+			}
+			// tools.Log(s.Id, strconv.Itoa(len(replies1))+"/"+strconv.Itoa(F1)+" "+r1)
+			// tools.Log(s.Id, strconv.Itoa(len(replies1))+"/"+strconv.Itoa(F2)+" "+r2)
 		}
 	}
+	tools.Log(s.Id, "Record {"+r1+"} appended at "+dest1)
+	tools.Log(s.Id, "Record {"+r2+"} appended at "+dest2)
 }
 
 func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {

@@ -42,6 +42,9 @@ func atomicExists(gset map[string]string, record string) bool {
 
 // Checks if a given record exists in the gset
 func Exists(gset map[string]string, record string) bool {
+	if strings.Contains(record, ".") {
+		record = strings.Split(record, ".")[1]
+	}
 	if atomicExists(gset, record) {
 		return true
 	}
@@ -54,6 +57,9 @@ func Exists(gset map[string]string, record string) bool {
 
 // Adds record to gset
 func Add(gset map[string]string, record string) {
+	if strings.Contains(record, ".") {
+		record = strings.Split(record, ".")[1]
+	}
 	// create a sha512 value based on the record
 	if atomicExists(gset, record) {
 		return

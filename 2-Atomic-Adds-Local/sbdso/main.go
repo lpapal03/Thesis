@@ -15,12 +15,13 @@ func main() {
 		panic(err)
 	}
 	server_nodes, bdso_networks := config.SetServerNodes()
-	// s := server.CreateServer(server_nodes[0], server_nodes, zctx, bdso_networks)
-	// for i := 0; i < 30; i++ {
-	// 	k := strconv.Itoa(i)
-	// 	messaging.BdsoAdd(s, "hello"+k, "bdso-1")
-	// 	messaging.BdsoAdd(s, "world"+k, "bdso-2")
-	// }
+	// s1 := server.CreateServer(server_nodes[1], server_nodes, zctx, bdso_networks)
+	// s2 := server.CreateServer(server_nodes[2], server_nodes, zctx, bdso_networks)
+	// s3 := server.CreateServer(server_nodes[3], server_nodes, zctx, bdso_networks)
+
+	// messaging.BdsoAdd(s1, "hello", "world", "bdso-1", "bdso-2")
+	// messaging.BdsoAdd(s2, "hello", "world", "bdso-1", "bdso-2")
+	// messaging.BdsoAdd(s3, "hello", "world", "bdso-1", "bdso-2")
 
 	if len(os.Args) < 2 {
 		scenarios.Start(server_nodes, "NORMAL", zctx, bdso_networks)
