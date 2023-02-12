@@ -94,7 +94,7 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 	}
 	fmt.Println("ID set to '" + id + "'\n")
 
-	client := client.CreateClient(id, servers)
+	client := client.CreateClient(id, servers, zctx)
 
 	fmt.Print("Type 'g' for GET, 'a' for ADD, 'at' for ATOMIC-ADD or 'e' for EXIT\n> ")
 	for scanner.Scan() {
@@ -145,7 +145,7 @@ func StartAutomated(zctx *zmq.Context, client_count, request_count int, network_
 		go func(id string) {
 			tools.Log(id, "Id set")
 			config.Initialize(network_name)
-			client := client.CreateClient(id, servers)
+			client := client.CreateClient(id, servers, zctx)
 
 			time.Sleep(time.Second * 1)
 			for r := 0; r < request_count; r++ {

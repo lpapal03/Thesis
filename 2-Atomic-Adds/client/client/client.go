@@ -15,9 +15,8 @@ type Client struct {
 	Servers         map[string]*zmq.Socket
 }
 
-func CreateClient(id string, servers []config.Node) *Client {
+func CreateClient(id string, servers []config.Node, zctx *zmq.Context) *Client {
 	// Declare context, poller, router sockets of servers, message counter
-	zctx, _ := zmq.NewContext()
 	poller := zmq.NewPoller()
 	server_sockets := make(map[string]*zmq.Socket)
 
