@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func StartNormal(servers []config.Node, default_port, num_threads int, bdso_networks map[string][]config.Node) {
+func StartNormal(servers []config.Node, default_port, num_threads int) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		panic(err)
@@ -20,7 +20,7 @@ func StartNormal(servers []config.Node, default_port, num_threads int, bdso_netw
 		go func(my_port int) {
 			p := strconv.Itoa(my_port)
 			me := config.Node{Host: hostname, Port: p}
-			s := server.CreateServer(me, servers, bdso_networks)
+			s := server.CreateServer(me, servers)
 			tools.Log(s.Id, "Started with NORMAL behaviour")
 			for {
 				msg, err := s.Receive_socket.RecvMessage(0)
@@ -33,7 +33,7 @@ func StartNormal(servers []config.Node, default_port, num_threads int, bdso_netw
 	}
 }
 
-func StartMute(servers []config.Node, default_port, num_threads int, bdso_networks map[string][]config.Node) {
+func StartMute(servers []config.Node, default_port, num_threads int) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		panic(err)
@@ -43,7 +43,7 @@ func StartMute(servers []config.Node, default_port, num_threads int, bdso_networ
 		go func(my_port int) {
 			p := strconv.Itoa(my_port)
 			me := config.Node{Host: hostname, Port: p}
-			s := server.CreateServer(me, servers, bdso_networks)
+			s := server.CreateServer(me, servers)
 			tools.Log(s.Id, "Started with MUTE behaviour")
 			for {
 				msg, err := s.Receive_socket.RecvMessage(0)
@@ -57,7 +57,7 @@ func StartMute(servers []config.Node, default_port, num_threads int, bdso_networ
 	}
 }
 
-func StartMalicious(servers []config.Node, default_port, num_threads int, bdso_networks map[string][]config.Node) {
+func StartMalicious(servers []config.Node, default_port, num_threads int) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		panic(err)
@@ -67,7 +67,7 @@ func StartMalicious(servers []config.Node, default_port, num_threads int, bdso_n
 		go func(my_port int) {
 			p := strconv.Itoa(my_port)
 			me := config.Node{Host: hostname, Port: p}
-			s := server.CreateServer(me, servers, bdso_networks)
+			s := server.CreateServer(me, servers)
 			tools.Log(s.Id, "Started with MALICIOUS behaviour")
 			for {
 				msg, err := s.Receive_socket.RecvMessage(0)

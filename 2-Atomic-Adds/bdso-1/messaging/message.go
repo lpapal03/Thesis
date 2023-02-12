@@ -23,9 +23,8 @@ func ParseMessageString(m []string) (Message, error) {
 	if tag == GET {
 		return Message{Sender: m[0], Tag: m[1]}, nil
 	}
-	if strings.Contains(tag, ADD) || strings.Contains(tag, BRACHA_BROADCAST) {
+	if tag == ADD || strings.Contains(tag, BRACHA_BROADCAST) {
 		return Message{Sender: m[0], Tag: m[1], Content: m[2:]}, nil
 	}
-
 	return Message{}, errors.New("Error parsing message")
 }
