@@ -27,9 +27,9 @@ func CreateClient(id string, servers []config.Node, zctx *zmq.Context) *Client {
 			panic(err)
 		}
 		s.SetIdentity(id)
-		s.Connect(servers[i].Host + ":" + servers[i].Port)
-		tools.Log(id, "Established connection with "+servers[i].Host+":"+servers[i].Port)
-		server_sockets[servers[i].Host+":"+servers[i].Port] = s
+		s.Connect("tcp://" + servers[i].Host + ":" + servers[i].Port)
+		tools.Log(id, "Established connection with tcp://"+servers[i].Host+":"+servers[i].Port)
+		server_sockets["tcp://"+servers[i].Host+":"+servers[i].Port] = s
 		poller.Add(s, zmq.POLLIN)
 	}
 

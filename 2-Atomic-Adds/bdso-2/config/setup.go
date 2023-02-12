@@ -2,7 +2,6 @@ package config
 
 import (
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -16,44 +15,6 @@ var (
 	N = 0
 	F = 0
 )
-
-func Initialize(network_name string) []Node {
-	working_dir, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-
-	parent_dir := filepath.Dir(working_dir)
-	port, threads := GetPortAndThreads(parent_dir + "/config")
-	servers := GetHosts(parent_dir+"/hosts", network_name)
-	server_nodes := make([]Node, 0)
-	for _, s := range servers {
-		for i := port; i < port+threads; i++ {
-			server_nodes = append(server_nodes, Node{Host: s, Port: strconv.Itoa(i)})
-		}
-	}
-
-	if err != nil {
-		panic(err)
-	}
-	N = len(server_nodes)
-	F = (N - 1) / 3
-
-	return server_nodes
-}
-
-func NetworkExists(net_name string) bool {
-	working_dir, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	parent_dir := filepath.Dir(working_dir)
-	_, err = os.Stat(parent_dir + "/" + net_name)
-	if os.IsNotExist(err) {
-		return false
-	}
-	return true
-}
 
 func GetHosts(filename, option string) []string {
 	b, err := os.ReadFile(filename)

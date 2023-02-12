@@ -64,7 +64,7 @@ func isAtomicMessageValid(msg string) bool {
 			return false
 		}
 	}
-	if !config.NetworkExists("hosts", strings.Split(msg, ";")[1]) {
+	if !config.NetworkExists(strings.Split(msg, ";")[1]) {
 		return false
 	}
 	return true

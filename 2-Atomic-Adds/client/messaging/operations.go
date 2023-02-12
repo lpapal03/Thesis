@@ -4,7 +4,6 @@ import (
 	"2-Atomic-Adds/client"
 	"2-Atomic-Adds/config"
 	"2-Atomic-Adds/tools"
-	"fmt"
 	"math/rand"
 	"reflect"
 	"sort"
@@ -20,8 +19,7 @@ func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {
 	for i := 0; i < amount; i++ {
 		key := keys[i].String()
 		s := m[key]
-		_, err := s.SendMessage(message)
-		fmt.Println(err)
+		s.SendMessage(message)
 	}
 }
 
