@@ -1,0 +1,87 @@
+---
+- name: Get hosts file from master
+  hosts: all
+  become: true
+  tasks:
+    - name: Transfer ownership to loukis
+      shell: chown -R loukis .
+    - name: Fetch file hosts from node 0 (master node)
+      command: scp loukis@node0:/users/loukis/Thesis/2-Atomic-Adds/hosts /users/loukis/Thesis/2-Atomic-Adds
+    - name: Fetch file config from node 0 (master node)
+      command: scp loukis@node0:/users/loukis/Thesis/2-Atomic-Adds/config /users/loukis/Thesis/2-Atomic-Adds
+    - name: Remove output files
+      file: 
+        path: "/users/loukis/Thesis/2-Atomic-Adds/server/stdoutfile"
+        state: absent
+    - name: Remove error files
+      file: 
+        path: "/users/loukis/Thesis/2-Atomic-Adds/server/stderrfile"
+        state: absent
+# SBDSO
+- name: Start sbdso servers
+  hosts: sbdso-normal
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/sbdso; nohup /usr/local/go/bin/go run . normal > stdoutfile 2> stderrfile & sleep 1
+      become_user: loukis
+- name: Start mute servers
+  hosts: sbdso-mute
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/sbdso; nohup /usr/local/go/bin/go run . mute > stdoutfile 2> stderrfile & sleep 1
+      become_user: loukis
+- name: Start malicious servers
+  hosts: sbdso-malicious
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/sbdso; nohup /usr/local/go/bin/go run . malicious > stdoutfile 2> stderrfile & & sleep 1
+      become_user: loukis
+
+# BDSO-1
+- name: Start bdso-1 servers
+  hosts: bdso-1-normal
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/bdso-1; nohup /usr/local/go/bin/go run . normal > stdoutfile 2> stderrfile & sleep 1
+      become_user: loukis
+- name: Start mute servers
+  hosts: bdso-1-mute
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/bdso-1; nohup /usr/local/go/bin/go run . mute > stdoutfile 2> stderrfile & sleep 1
+      become_user: loukis
+- name: Start malicious servers
+  hosts: bdso-1-malicious
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/bdso-1; nohup /usr/local/go/bin/go run . malicious > stdoutfile 2> stderrfile & & sleep 1
+      become_user: loukis
+
+# BDSO-2
+- name: Start bdso-2 servers
+  hosts: bdso-2-normal
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/bdso-2; nohup /usr/local/go/bin/go run . normal > stdoutfile 2> stderrfile & sleep 1
+      become_user: loukis
+- name: Start mute servers
+  hosts: bdso-2-mute
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/bdso-2; nohup /usr/local/go/bin/go run . mute > stdoutfile 2> stderrfile & sleep 1
+      become_user: loukis
+- name: Start malicious servers
+  hosts: bdso-2-malicious
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/bdso-2; nohup /usr/local/go/bin/go run . malicious > stdoutfile 2> stderrfile & & sleep 1
+      become_user: loukis
+
+# Automated clients
+- name: Start automated clients. Interactive clients should be started manually
+  hosts: clients-automated
+  tasks:
+    - name: Start client
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/client; nohup /usr/local/go/bin/go run . automated </dev/null >/dev/null 2>&1 & sleep 1
+      become_user: loukis
+    
