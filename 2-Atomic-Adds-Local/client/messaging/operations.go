@@ -95,6 +95,9 @@ func Add(c *client.Client, record string) {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
+			if strings.Contains(msg[2], ".") {
+				msg[2] = strings.Split(msg[2], ".")[1]
+			}
 			if msg[1] == ADD_RESPONSE && msg[2] == record {
 				replies[msg[0]] = true
 			}
