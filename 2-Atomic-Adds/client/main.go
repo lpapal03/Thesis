@@ -1,54 +1,32 @@
 package main
 
 import (
-	"BFT-Distributed-G-Set/client"
-	"BFT-Distributed-G-Set/config"
-	"BFT-Distributed-G-Set/modules"
-	"BFT-Distributed-G-Set/tools"
+	"2-Atomic-Adds/tools"
+	"fmt"
 	"os"
 	"strconv"
+
+	zmq "github.com/pebbe/zmq4"
 )
 
 func main() {
 	tools.ResetLogFile()
-	wd := "/users/loukis/Thesis/BFT-Distributed-G-Set"
+	zctx, _ := zmq.NewContext()
 
-	// hosts are just the machine names
-	hosts := config.GetHosts(wd+"/hosts", "servers")
-	default_port, num_threads := config.GetPortAndThreads(wd + "/config")
-
-	servers := make([]config.Node, 0)
-	for _, h := range hosts {
-		for p := default_port; p < default_port+num_threads; p++ {
-			p_num := strconv.Itoa(p)
-			servers = append(servers, config.Node{Host: h, Port: p_num})
+	if len(os.Args) == 1 {
+		fmt.Println("Not enough arguments")
+		return
+	}
+	if len(os.Args) == 2 {
+		modules.StartInteractive(zctx, os.Args[1])
+	}
+	if len(os.Args) == 5 {
+		if os.Args[2] == "a" || os.Args[2] == "automated" {
+			client_count, _ := strconv.Atoi(os.Args[3])
+			request_count, _ := strconv.Atoi(os.Args[4])
+			modules.StartAutomated(zctx, client_count, request_count, os.Args[1])
 		}
 	}
-
-	config.N = len(servers)
-	config.F = (config.N - 1) / 3
-
-	c := client.CreateClient(servers)
-
-	if len(os.Args) < 2 {
-		modules.StartInteractive(c)
-	} else {
-		behaviour := os.Args[1]
-		switch behaviour {
-		case "interactive":
-			modules.StartInteractive(c)
-		case "automated":
-			if len(os.Args) > 2 {
-				request_count, err := strconv.Atoi(os.Args[2])
-				if err != nil {
-					panic("Invalid arguments")
-				}
-				modules.StartAutomated(c, request_count)
-			} else {
-				modules.StartAutomated(c, 20)
-			}
-		default:
-			panic("Invalid arguments")
-		}
-	}
+	fmt.Println("Invalid arguments")
+	return
 }

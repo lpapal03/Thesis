@@ -1,86 +1,188 @@
 package modules
 
 import (
-	"BFT-Distributed-G-Set/client"
-	"BFT-Distributed-G-Set/messaging"
-	"BFT-Distributed-G-Set/tools"
+	"2-Atomic-Adds/client"
+	"2-Atomic-Adds/config"
+	"2-Atomic-Adds/messaging"
+	"2-Atomic-Adds/tools"
 	"bufio"
 	"fmt"
 	"math/rand"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
+
+	zmq "github.com/pebbe/zmq4"
 )
 
-func isRecordValid(r string) bool {
-	return !(r == "" || strings.TrimSpace(r) == "")
+func isMessageValid(msg string) bool {
+	if msg == "" {
+		return false
+	}
+	if strings.Contains(msg, " ") {
+		return false
+	}
+	if strings.Contains(msg, ".") {
+		return false
+	}
+	if strings.Contains(msg, "{") {
+		return false
+	}
+	if strings.Contains(msg, "}") {
+		return false
+	}
+	if strings.Contains(msg, ";") {
+		return false
+	}
+	return true
 }
 
-func StartInteractive(c *client.Client) {
-	tools.Log(c.Hostname, "Started interactive session")
+func isAtomicMessageValid(msg string) bool {
+	if msg == "" {
+		return false
+	}
+	if strings.Contains(msg, " ") {
+		return false
+	}
+	if strings.Contains(msg, ".") {
+		return false
+	}
+	if strings.Contains(msg, "{") {
+		return false
+	}
+	if strings.Contains(msg, "}") {
+		return false
+	}
+	parts := strings.Split(msg, ";")
+	if len(parts) != 4 {
+		return false
+	}
+	for _, p := range parts {
+		if len(p) < 1 {
+			return false
+		}
+	}
+	if !config.NetworkExists("hosts", strings.Split(msg, ";")[1]) {
+		return false
+	}
+	return true
+}
+
+func waitRandomly(min, max int) {
+	rand.Seed(time.Now().UnixNano())
+	r := rand.Intn(max - min)
+	time.Sleep(time.Duration(min+r) * time.Millisecond)
+}
+
+func Initialize(network_name string) {
+
+	working_dir, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	parent_dir := filepath.Dir(working_dir)
+
+	SERVERS, err = parseHostsFile(parent_dir+"/hosts", network_name)
+	if err != nil {
+		panic(err)
+	}
+	N = len(SERVERS)
+
+	F = (N - 1) / 3
+	// 3f+1
+	HIGH_THRESHOLD = 3*F + 1
+	// 2f+1
+	MEDIUM_THRESHOLD = 2*F + 1
+	// f+1
+	LOW_THRESHOLD = F + 1
+
+}
+
+func StartInteractive(zctx *zmq.Context, network_name string) {
+	config.Initialize(network_name)
+
 	scanner := bufio.NewScanner(os.Stdin)
+	var id string
 	var command string
 	var record string
 
-	fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
+	fmt.Print("Your ID\n> ")
+	scanner.Scan()
+	id = scanner.Text()
+	for !isMessageValid(id) {
+		fmt.Print("Invalid ID, try again\n> ")
+		scanner.Scan()
+		id = scanner.Text()
+	}
+	fmt.Println("ID set to '" + id + "'\n")
+
+	servers := config.SERVERS
+	client := client.CreateClient(id, servers, zctx)
+
+	fmt.Print("Type 'g' for GET, 'a' for ADD, 'at' for ATOMIC-ADD or 'e' for EXIT\n> ")
 	for scanner.Scan() {
 		command = strings.ToLower(scanner.Text())
 		if command == "e" {
-			return
+			os.Exit(0)
 		}
 		if command == "g" {
-			messaging.Get(c)
+			messaging.Get(client)
 		}
 		if command == "a" {
 			fmt.Print("Record to append > ")
 			scanner.Scan()
 			record = scanner.Text()
-			if isRecordValid(record) {
-				messaging.Add(c, record)
+			if isMessageValid(record) {
+				messaging.Add(client, record)
 			} else {
-				fmt.Print("Record cannot be empty or contain only spaces\n")
+				fmt.Println("Invalid message")
+			}
+		}
+		if command == "at" {
+			fmt.Println("Format of atomic records: peer_id;destination;your_message;peer_message")
+			fmt.Print("Record to append atomically > ")
+			scanner.Scan()
+			record = scanner.Text()
+			if network_name != "sbdso" {
+				fmt.Println("Network does not allow atomic operations")
+			} else if isAtomicMessageValid(record) {
+				messaging.AddAtomic(client, record)
+			} else {
+				fmt.Println("Invalid message")
 			}
 		}
 		if len(command) == 0 {
 			fmt.Print("> ")
 		} else {
-			fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
+			fmt.Print("Type 'g' for GET, 'a' for ADD, 'at' for ATOMIC-ADD or 'e' for EXIT\n> ")
 		}
 	}
 }
 
-func randomString() string {
-	rand.Seed(time.Now().UnixNano())
-	n := rand.Intn(6)
-	b := make([]byte, n)
-	for i := range b {
-		b[i] = 'a' + byte(rand.Intn(26))
-	}
-	return string(b)
-}
+func StartAutomated(zctx *zmq.Context, client_count, request_count int, network_name string) {
+	var wg sync.WaitGroup
+	wg.Add(client_count)
+	for i := 0; i < client_count; i++ {
+		id := "c" + strconv.Itoa(i)
+		go func(id string) {
+			tools.Log(id, "Id set")
+			config.Initialize(network_name)
+			servers := config.SERVERS
+			client := client.CreateClient(id, servers, zctx)
 
-func StartAutomated(c *client.Client, req_count int) {
-
-	for i := 0; i < req_count; i++ {
-		rand.Seed(time.Now().UnixNano())
-		n := rand.Intn(2)
-
-		if n == 0 {
-			messaging.Get(c)
-		}
-
-		if n == 1 {
-			// s := randomString()
-			s := c.Hostname + "-" + strconv.Itoa(i)
-			if isRecordValid(s) {
-				messaging.Add(c, s)
+			time.Sleep(time.Second * 1)
+			for r := 0; r < request_count; r++ {
+				messaging.Add(client, id+"-"+strconv.Itoa(r))
+				waitRandomly(1000, 2000)
+				messaging.Get(client)
+				waitRandomly(1000, 2000)
 			}
-		}
-
-		rand.Seed(time.Now().UnixNano())
-		t := rand.Intn(3)
-		time.Sleep(time.Duration(t) * time.Second)
-
+			tools.Log(id, "Done")
+			wg.Done()
+		}(id)
 	}
+	wg.Wait()
 }
