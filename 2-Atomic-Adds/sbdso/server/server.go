@@ -1,9 +1,9 @@
 package server
 
 import (
-	"BFT-Distributed-G-Set/config"
-	"BFT-Distributed-G-Set/gset"
-	"BFT-Distributed-G-Set/tools"
+	"2-Atomic-Adds/config"
+	"2-Atomic-Adds/gset"
+	"2-Atomic-Adds/tools"
 
 	zmq "github.com/pebbe/zmq4"
 )

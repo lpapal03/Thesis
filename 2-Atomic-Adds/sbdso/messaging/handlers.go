@@ -1,9 +1,9 @@
 package messaging
 
 import (
-	"BFT-Distributed-G-Set/gset"
-	"BFT-Distributed-G-Set/server"
-	"BFT-Distributed-G-Set/tools"
+	"2-Atomic-Adds/gset"
+	"2-Atomic-Adds/server"
+	"2-Atomic-Adds/tools"
 	"fmt"
 	"strings"
 )

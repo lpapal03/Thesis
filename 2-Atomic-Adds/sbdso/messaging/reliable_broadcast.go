@@ -1,9 +1,9 @@
 package messaging
 
 import (
-	"BFT-Distributed-G-Set/config"
-	"BFT-Distributed-G-Set/server"
-	"BFT-Distributed-G-Set/tools"
+	"2-Atomic-Adds/config"
+	"2-Atomic-Adds/server"
+	"2-Atomic-Adds/tools"
 	"strconv"
 	"strings"
 )

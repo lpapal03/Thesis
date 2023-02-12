@@ -1,15 +1,16 @@
 package main
 
 import (
-	"BFT-Distributed-G-Set/config"
-	"BFT-Distributed-G-Set/modules"
-	"BFT-Distributed-G-Set/tools"
+	"2-Atomic-Adds/config"
+	"2-Atomic-Adds/modules"
+	"2-Atomic-Adds/tools"
+	"os"
 	"strconv"
 )
 
 func main() {
 	tools.ResetLogFile()
-	wd := "/users/loukis/Thesis/BFT-Distributed-G-Set"
+	wd := "/users/loukis/Thesis/2-Atomic-Adds"
 
 	// hosts are just the machine names
 	hosts := config.GetHosts(wd+"/hosts", "servers")
@@ -26,23 +27,23 @@ func main() {
 	config.N = len(servers)
 	config.F = (config.N - 1) / 3
 
-	modules.StartNormal(servers, default_port, num_threads)
+	// modules.StartNormal(servers, default_port, num_threads)
 
-	// if len(os.Args) < 2 {
-	// 	modules.StartNormal(servers, default_port, num_threads)
-	// } else {
-	// 	behaviour := os.Args[1]
-	// 	switch behaviour {
-	// 	case "normal":
-	// 		modules.StartNormal(default_port, num_threads)
-	// 	case "mute":
-	// 		modules.StartMute(default_port, num_threads)
-	// 	case "malicious":
-	// 		modules.StartMute(default_port, num_threads)
-	// 	default:
-	// 		panic("Invalid argument")
-	// 	}
-	// }
+	if len(os.Args) < 2 {
+		modules.StartNormal(servers, default_port, num_threads)
+	} else {
+		behaviour := os.Args[1]
+		switch behaviour {
+		case "normal":
+			modules.StartNormal(servers, default_port, num_threads)
+		case "mute":
+			modules.StartMute(servers, default_port, num_threads)
+		case "malicious":
+			modules.StartMute(servers, default_port, num_threads)
+		default:
+			panic("Invalid argument")
+		}
+	}
 
 	select {}
 
