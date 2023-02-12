@@ -4,6 +4,7 @@ import (
 	"BFT-Distributed-G-Set/config"
 	"BFT-Distributed-G-Set/modules"
 	"BFT-Distributed-G-Set/tools"
+	"os"
 	"strconv"
 )
 
@@ -26,23 +27,23 @@ func main() {
 	config.N = len(servers)
 	config.F = (config.N - 1) / 3
 
-	modules.StartNormal(servers, default_port, num_threads)
+	// modules.StartNormal(servers, default_port, num_threads)
 
-	// if len(os.Args) < 2 {
-	// 	modules.StartNormal(servers, default_port, num_threads)
-	// } else {
-	// 	behaviour := os.Args[1]
-	// 	switch behaviour {
-	// 	case "normal":
-	// 		modules.StartNormal(default_port, num_threads)
-	// 	case "mute":
-	// 		modules.StartMute(default_port, num_threads)
-	// 	case "malicious":
-	// 		modules.StartMute(default_port, num_threads)
-	// 	default:
-	// 		panic("Invalid argument")
-	// 	}
-	// }
+	if len(os.Args) < 2 {
+		modules.StartNormal(servers, default_port, num_threads)
+	} else {
+		behaviour := os.Args[1]
+		switch behaviour {
+		case "normal":
+			modules.StartNormal(default_port, num_threads)
+		case "mute":
+			modules.StartMute(default_port, num_threads)
+		case "malicious":
+			modules.StartMute(default_port, num_threads)
+		default:
+			panic("Invalid argument")
+		}
+	}
 
 	select {}
 

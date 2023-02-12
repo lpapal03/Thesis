@@ -25,7 +25,7 @@ type Server struct {
 }
 
 // Now server receives a map of ports with their respective bdso
-func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context, bdso_network map[string][]config.Node) *Server {
+func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context, bdso_networks map[string][]config.Node) *Server {
 	id := node.Host + node.Port
 	port := node.Port
 	peer_sockets := make(map[string]*zmq.Socket)
@@ -36,7 +36,10 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context, bdso
 	peers_echo := make(map[string]bool)
 	peers_vote := make(map[string]bool)
 	bdso_net := make(map[string]map[string]*zmq.Socket)
-	receive_socket, _ := zctx.NewSocket(zmq.ROUTER)
+	receive_socket, err := zctx.NewSocket(zmq.ROUTER)
+	if err != nil {
+		panic(err)
+	}
 	poller := zmq.NewPoller()
 	receive_socket.Bind("tcp://*:" + node.Port)
 	tools.Log(id, "Bound tcp://*:"+node.Port)
@@ -54,10 +57,10 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context, bdso
 		// tools.Log(id, "Connected to "+"tcp://localhost:"+peers[i].Port)
 	}
 
-	for network_name := range bdso_network {
+	for network_name := range bdso_networks {
 		tools.Log(id, "Starting connection with network: "+network_name)
 		bdso_net[network_name] = make(map[string]*zmq.Socket)
-		for _, node_id := range bdso_network[network_name] {
+		for _, node_id := range bdso_networks[network_name] {
 			s, err := zctx.NewSocket(zmq.DEALER)
 			if err != nil {
 				panic(err)
