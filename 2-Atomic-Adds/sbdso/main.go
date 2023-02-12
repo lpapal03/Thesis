@@ -13,7 +13,9 @@ func main() {
 	wd := "/users/loukis/Thesis/2-Atomic-Adds"
 
 	// hosts are just the machine names
-	hosts := config.GetHosts(wd+"/hosts", "servers")
+	sbdso := config.GetHosts(wd+"/hosts", "servers")
+	bdso_1 := config.GetHosts(wd+"/hosts", "bdso-1")
+	bdso_2 := config.GetHosts(wd+"/hosts", "bdso-2")
 	default_port, num_threads := config.GetPortAndThreads(wd + "/config")
 
 	servers := make([]config.Node, 0)
@@ -26,8 +28,6 @@ func main() {
 
 	config.N = len(servers)
 	config.F = (config.N - 1) / 3
-
-	// modules.StartNormal(servers, default_port, num_threads)
 
 	if len(os.Args) < 2 {
 		modules.StartNormal(servers, default_port, num_threads)
