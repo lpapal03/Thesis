@@ -1,13 +1,14 @@
 package messaging
 
 import (
-	"BFT-Distributed-G-Set/client"
-	"BFT-Distributed-G-Set/config"
-	"BFT-Distributed-G-Set/tools"
+	"2-Atomic-Adds/client"
+	"2-Atomic-Adds/config"
+	"2-Atomic-Adds/tools"
 	"math/rand"
 	"reflect"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/pebbe/zmq4"
 )
@@ -56,12 +57,13 @@ func findGetValidReply(replies map[string]string) string {
 }
 
 func Get(c *client.Client) string {
-	tools.Log(c.Hostname, "Called GET")
+	tools.Log(c.Id, "Called GET")
 	c.Message_counter++
+	start := time.Now()
 	sendToServers(c.Servers, []string{GET}, 3*config.F+1)
 
 	replies := make(map[string]string)
-	tools.Log(c.Hostname, "Waiting for valid GET_REPLY")
+	tools.Log(c.Id, "Waiting for valid GET_REPLY")
 	for {
 		sockets, _ := c.Poller.Poll(-1)
 		for _, socket := range sockets {
@@ -73,31 +75,64 @@ func Get(c *client.Client) string {
 		}
 		r := findGetValidReply(replies)
 		if len(r) > 0 {
-			tools.Log(c.Hostname, "Reply: "+r)
+			elapsed := time.Since(start)
+			tools.Log(c.Id, "GET completed in: "+elapsed.String()+". Reply: "+r)
 			return r
 		}
 	}
 }
 
-// TODO: Handle responses
 // Do i have to send to 2f+1 or all?
 func Add(c *client.Client, record string) {
-	tools.Log(c.Hostname, "Called ADD("+record+")")
+	tools.Log(c.Id, "Called ADD("+record+")")
+	start := time.Now()
 	sendToServers(c.Servers, []string{ADD, record}, 2*config.F+1)
 	// WAIT FOR F+1 RESPONSES
 	replies := make(map[string]bool)
-	tools.Log(c.Hostname, "Waiting for f+1 ADD replies")
+	tools.Log(c.Id, "Waiting for f+1 ADD replies")
 	for {
 		sockets, _ := c.Poller.Poll(-1)
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
+			if strings.Contains(msg[2], ".") {
+				msg[2] = strings.Split(msg[2], ".")[1]
+			}
 			if msg[1] == ADD_RESPONSE && msg[2] == record {
 				replies[msg[0]] = true
 			}
 		}
 		if len(replies) >= config.F+1 {
-			tools.Log(c.Hostname, "Record {"+record+"} appended")
+			elapsed := time.Since(start)
+			tools.Log(c.Id, "ADD completed in: "+elapsed.String()+". Record {"+record+"} appended")
+			return
+		}
+	}
+}
+
+func AddAtomic(c *client.Client, record string) {
+	message := "atomic;" + c.Id + ";" + record
+	tools.Log(c.Id, "Called ADD_ATOMIC("+message+")")
+	sendToServers(c.Servers, []string{ADD, message}, 2*config.F+1)
+	message = strings.Replace(message, "atomic", "atomic-complete", 1)
+	// WAIT FOR F+1 RESPONSES
+	replies := make(map[string]bool)
+	tools.Log(c.Id, "Waiting for f+1 ADD_ATOMIC replies")
+	for {
+		sockets, _ := c.Poller.Poll(-1)
+		for _, socket := range sockets {
+			s := socket.Socket
+			msg, _ := s.RecvMessage(0)
+			if msg[1] == ADD_ATOMIC_RESPONSE {
+				s1 := strings.SplitN(message, ";", 2)[1]
+				s2 := strings.SplitN(msg[2], ";", 2)[1]
+				if s1 == s2 {
+					replies[msg[0]] = true
+				}
+			}
+		}
+		if len(replies) >= config.F+1 {
+			tools.Log(c.Id, "Record {"+record+"} appended to destination")
 			return
 		}
 	}

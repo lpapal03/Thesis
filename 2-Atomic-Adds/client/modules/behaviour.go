@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
@@ -77,32 +76,8 @@ func waitRandomly(min, max int) {
 	time.Sleep(time.Duration(min+r) * time.Millisecond)
 }
 
-func Initialize(network_name string) {
-
-	working_dir, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	parent_dir := filepath.Dir(working_dir)
-
-	SERVERS, err = parseHostsFile(parent_dir+"/hosts", network_name)
-	if err != nil {
-		panic(err)
-	}
-	N = len(SERVERS)
-
-	F = (N - 1) / 3
-	// 3f+1
-	HIGH_THRESHOLD = 3*F + 1
-	// 2f+1
-	MEDIUM_THRESHOLD = 2*F + 1
-	// f+1
-	LOW_THRESHOLD = F + 1
-
-}
-
 func StartInteractive(zctx *zmq.Context, network_name string) {
-	config.Initialize(network_name)
+	servers := config.Initialize(network_name)
 
 	scanner := bufio.NewScanner(os.Stdin)
 	var id string
@@ -119,8 +94,7 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 	}
 	fmt.Println("ID set to '" + id + "'\n")
 
-	servers := config.SERVERS
-	client := client.CreateClient(id, servers, zctx)
+	client := client.CreateClient(id, servers)
 
 	fmt.Print("Type 'g' for GET, 'a' for ADD, 'at' for ATOMIC-ADD or 'e' for EXIT\n> ")
 	for scanner.Scan() {
@@ -163,6 +137,7 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 }
 
 func StartAutomated(zctx *zmq.Context, client_count, request_count int, network_name string) {
+	servers := config.Initialize(network_name)
 	var wg sync.WaitGroup
 	wg.Add(client_count)
 	for i := 0; i < client_count; i++ {
@@ -170,8 +145,7 @@ func StartAutomated(zctx *zmq.Context, client_count, request_count int, network_
 		go func(id string) {
 			tools.Log(id, "Id set")
 			config.Initialize(network_name)
-			servers := config.SERVERS
-			client := client.CreateClient(id, servers, zctx)
+			client := client.CreateClient(id, servers)
 
 			time.Sleep(time.Second * 1)
 			for r := 0; r < request_count; r++ {

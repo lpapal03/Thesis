@@ -18,6 +18,31 @@ var (
 	F = 0
 )
 
+func Initialize(network_name string) []Node {
+	working_dir, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+
+	parent_dir := filepath.Dir(working_dir)
+	port, threads := GetPortAndThreads(parent_dir + "/config")
+	servers := GetHosts(parent_dir+"/hosts", network_name)
+	server_nodes := make([]Node, 0)
+	for _, s := range servers {
+		for i := port; i < port+threads; i++ {
+			server_nodes = append(server_nodes, Node{Host: s, Port: strconv.Itoa(i)})
+		}
+	}
+
+	if err != nil {
+		panic(err)
+	}
+	N = len(server_nodes)
+	F = (N - 1) / 3
+
+	return server_nodes
+}
+
 func NetworkExists(filename, net_name string) bool {
 	working_dir, err := os.Getwd()
 	if err != nil {
