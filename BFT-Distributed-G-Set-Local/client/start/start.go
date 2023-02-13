@@ -90,9 +90,9 @@ func StartAutomated(client_count, request_count int) {
 			time.Sleep(time.Second * 1)
 			for r := 0; r < request_count; r++ {
 				messaging.Add(client, id+"-"+strconv.Itoa(r))
-				waitRandomly(1000, 2000)
+				waitRandomly(500, 1000)
 				messaging.Get(client)
-				waitRandomly(1000, 2000)
+				waitRandomly(500, 1000)
 			}
 			tools.Log(id, "Done")
 			wg.Done()
