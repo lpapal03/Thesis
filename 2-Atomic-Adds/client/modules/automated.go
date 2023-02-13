@@ -5,7 +5,9 @@ import (
 	"2-Atomic-Adds/config"
 	"2-Atomic-Adds/messaging"
 	"2-Atomic-Adds/tools"
+	"os"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -17,8 +19,12 @@ func StartAutomated(zctx *zmq.Context, client_count, request_count int, network_
 	var wg sync.WaitGroup
 	wg.Add(client_count)
 	for i := 0; i < client_count; i++ {
-
-		id := "c" + strconv.Itoa(i)
+		host, err := os.Hostname()
+		if err != nil {
+			panic(err)
+		}
+		host = strings.Split(host, ".")[0]
+		id := host + "_client_" + strconv.Itoa(i)
 		go func(id string) {
 			tools.Log(id, "Id set")
 			config.Initialize(network_name)
