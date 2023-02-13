@@ -29,40 +29,4 @@ func main() {
 	}
 	fmt.Println("Invalid arguments")
 	return
-
-	// ****************************************START TESTING
-
-	// zctx, _ := zmq.NewContext()
-	// config.Initialize("sbdso")
-	// servers := config.SERVERS
-
-	// c1 := client.CreateClient("loukas", servers, zctx)
-	// c2 := client.CreateClient("marios", servers, zctx)
-	// // c3 := client.CreateClient("kostas", servers, zctx)
-
-	// r1 := "marios;bdso-1;hello;world"
-	// r2 := "loukas;bdso-2;world;hello"
-
-	// r3 := "marios;bdso-1;1;2"
-	// r4 := "loukas;bdso-2;2;1"
-
-	// r5 := "marios;bdso-1;test1;test2"
-	// r6 := "loukas;bdso-2;test2;test1"
-
-	// go func() {
-	// 	messaging.AddAtomic(c1, r3)
-	// 	messaging.AddAtomic(c1, r1)
-	// 	messaging.AddAtomic(c1, r5)
-	// 	messaging.Get(c1)
-	// }()
-	// go func() {
-	// 	messaging.AddAtomic(c2, r2)
-	// 	messaging.AddAtomic(c2, r6)
-	// 	messaging.AddAtomic(c2, r4)
-	// 	messaging.Get(c2)
-	// }()
-
-	// select {}
-
-	// ****************************************END TESTING
 }
