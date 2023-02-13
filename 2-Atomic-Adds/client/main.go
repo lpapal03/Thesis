@@ -23,8 +23,14 @@ func main() {
 	}
 	if len(os.Args) == 5 {
 		if os.Args[2] == "a" || os.Args[2] == "automated" {
-			client_count, _ := strconv.Atoi(os.Args[3])
-			request_count, _ := strconv.Atoi(os.Args[4])
+			client_count, err := strconv.Atoi(os.Args[3])
+			if err!=nil{
+				panic(err)
+			}
+			request_count, err := strconv.Atoi(os.Args[4])
+						if err!=nil{
+				panic(err)
+			}
 			modules.StartAutomated(zctx, client_count, request_count, os.Args[1])
 		}
 	}
