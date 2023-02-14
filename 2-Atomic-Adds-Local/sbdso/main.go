@@ -3,12 +3,14 @@ package main
 import (
 	"backend/config"
 	"backend/scenarios"
+	"backend/tools"
 	"os"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
 func main() {
+	tools.ResetLogFile()
 
 	zctx, err := zmq.NewContext()
 	if err != nil {

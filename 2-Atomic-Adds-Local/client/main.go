@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"frontend/start"
+	"frontend/tools"
 	"os"
 	"strconv"
 
@@ -10,6 +11,7 @@ import (
 )
 
 func main() {
+	tools.ResetLogFile()
 
 	zctx, _ := zmq.NewContext()
 
