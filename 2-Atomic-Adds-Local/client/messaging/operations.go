@@ -6,7 +6,7 @@ import (
 	"frontend/tools"
 	"math/rand"
 	"reflect"
-	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -23,37 +23,54 @@ func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {
 	}
 }
 
-// returns true iff we have
-// more than 2f+1 replies
-// and f+1 matching
-// returns a valid reply
-func findGetValidReply(replies map[string]string) string {
-	if len(replies) < 2*config.F+1 {
-		return ""
-	}
-	reply_strings := []string{}
-	for k := range replies {
-		temp := strings.Split(replies[k], ",")
-		sort.Strings(temp)
-		reply_strings = append(reply_strings, strings.Join(temp, " "))
-	}
-
-	histo := make(map[string]int)
-	for _, str := range reply_strings {
-		histo[str]++
-	}
-	valhi := 0
-	strhi := ""
-	for k, v := range histo {
-		if v > valhi {
-			valhi = v
-			strhi = k
+func countMatchingReplies(replies map[string]string) string {
+	// Count occurrences of each record in all replies
+	recordCounts := make(map[string]int)
+	for _, reply := range replies {
+		records := strings.Split(reply, ",")
+		for _, record := range records {
+			recordCounts[record]++
 		}
 	}
-	if valhi >= config.F+1 {
-		return strhi
+
+	// Find records with at least F+1 occurrences
+	var commonRecords []string
+	for record, count := range recordCounts {
+		if count >= config.F+1 {
+			commonRecords = append(commonRecords, record)
+		}
 	}
-	return ""
+
+	// Check if common records occur in enough replies
+	var matchingReplies []string
+	for reply, records := range replies {
+		replyRecords := strings.Split(records, ",")
+		for _, record := range commonRecords {
+			if contains(replyRecords, record) {
+				matchingReplies = append(matchingReplies, reply)
+				break
+			}
+		}
+	}
+	if len(matchingReplies) < 2*config.F+1 {
+		return ""
+	}
+
+	// Return smallest common set
+	return formatSlice(commonRecords)
+}
+
+func contains(slice []string, s string) bool {
+	for _, element := range slice {
+		if element == s {
+			return true
+		}
+	}
+	return false
+}
+
+func formatSlice(slice []string) string {
+	return strings.Join(slice, " ")
 }
 
 func Get(c *client.Client) string {
@@ -69,12 +86,12 @@ func Get(c *client.Client) string {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
-			tools.Log(c.Id, strings.Join(msg, "-"))
+			// tools.Log(c.Id, strings.Join(msg, "-"))
 			if msg[1] == GET_RESPONSE {
 				replies[msg[0]] = msg[2]
 			}
 		}
-		r := findGetValidReply(replies)
+		r := countMatchingReplies(replies)
 		if len(r) > 0 {
 			elapsed := time.Since(start)
 			tools.Log(c.Id, "GET completed in: "+elapsed.String()+". Reply: "+r)
@@ -85,9 +102,11 @@ func Get(c *client.Client) string {
 
 // Do i have to send to 2f+1 or all?
 func Add(c *client.Client, record string) {
+	c.Message_counter++
 	tools.Log(c.Id, "Called ADD("+record+")")
+	message := strconv.Itoa(c.Message_counter) + "." + record
 	start := time.Now()
-	sendToServers(c.Servers, []string{ADD, record}, 2*config.F+1)
+	sendToServers(c.Servers, []string{ADD, message}, 2*config.F+1)
 	// WAIT FOR F+1 RESPONSES
 	replies := make(map[string]bool)
 	tools.Log(c.Id, "Waiting for f+1 ADD replies")
@@ -97,7 +116,7 @@ func Add(c *client.Client, record string) {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
 			if strings.Contains(msg[2], ".") {
-				msg[2] = strings.Split(msg[2], ".")[1]
+				msg[2] = strings.Split(msg[2], ".")[2]
 			}
 			if msg[1] == ADD_RESPONSE && msg[2] == record {
 				replies[msg[0]] = true

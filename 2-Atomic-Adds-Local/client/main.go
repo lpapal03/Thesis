@@ -21,6 +21,7 @@ func main() {
 	}
 	if len(os.Args) == 2 {
 		start.StartInteractive(zctx, os.Args[1])
+		return
 	}
 	if len(os.Args) == 5 {
 		if os.Args[2] == "a" || os.Args[2] == "automated" {
@@ -28,6 +29,7 @@ func main() {
 			request_count, _ := strconv.Atoi(os.Args[4])
 			start.StartAutomated(zctx, client_count, request_count, os.Args[1])
 		}
+		return
 	}
 	fmt.Println("Invalid arguments")
 	return

@@ -4,6 +4,7 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
+	"fmt"
 	"math/rand"
 	"strings"
 
@@ -13,14 +14,14 @@ import (
 func HandleMessage(s *server.Server, msg []string) {
 	message, err := ParseMessageString(msg)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 	if message.Tag == GET {
 		tools.Log(s.Id, "Received "+message.Tag+" from "+message.Sender)
+	} else {
+		tools.Log(s.Id, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
 	}
-	// } else {
-	// 	tools.Log(s.Id, "Received "+message.Tag+" {"+strings.Join(message.Content, " ")+"} from "+message.Sender)
-	// }
 
 	// handle
 	if message.Tag == GET {
