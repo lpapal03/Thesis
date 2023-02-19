@@ -5,6 +5,7 @@ import (
 	"2-Atomic-Adds/server"
 	"2-Atomic-Adds/tools"
 	"math/rand"
+	"strconv"
 	"strings"
 
 	"github.com/pebbe/zmq4"
@@ -134,8 +135,10 @@ func BdsoAdd(s *server.Server, r1, r2, dest1, dest2 string) {
 	N2 := len(s.Bdso_networks[dest2])
 	F2 := (N2 - 1) / 3
 
-	sendToServers(network1, []string{ADD, r1}, 2*F1+1)
-	sendToServers(network2, []string{ADD, r2}, 2*F2+1)
+	s.Message_counter++
+	sendToServers(network1, []string{ADD, strconv.Itoa(s.Message_counter), r1}, 2*F1+1)
+	s.Message_counter++
+	sendToServers(network2, []string{ADD, strconv.Itoa(s.Message_counter), r2}, 2*F2+1)
 	// WAIT FOR F+1 RESPONSES
 	replies1 := make(map[string]bool)
 	replies2 := make(map[string]bool)

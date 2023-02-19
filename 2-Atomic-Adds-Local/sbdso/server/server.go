@@ -9,19 +9,20 @@ import (
 )
 
 type Server struct {
-	Zctx           *zmq.Context
-	Peers          map[string]*zmq.Socket
-	Receive_socket *zmq.Socket
-	Poller         *zmq.Poller
-	Id             string
-	Gset           map[string]string
-	Port           string
-	My_init        map[string]bool
-	My_echo        map[string]bool
-	My_vote        map[string]bool
-	Peers_echo     map[string]bool
-	Peers_vote     map[string]bool
-	Bdso_networks  map[string]map[string]*zmq.Socket
+	Message_counter int
+	Zctx            *zmq.Context
+	Peers           map[string]*zmq.Socket
+	Receive_socket  *zmq.Socket
+	Poller          *zmq.Poller
+	Id              string
+	Gset            map[string]string
+	Port            string
+	My_init         map[string]bool
+	My_echo         map[string]bool
+	My_vote         map[string]bool
+	Peers_echo      map[string]bool
+	Peers_vote      map[string]bool
+	Bdso_networks   map[string]map[string]*zmq.Socket
 }
 
 // Now server receives a map of ports with their respective bdso
@@ -74,17 +75,18 @@ func CreateServer(node config.Node, peers []config.Node, zctx *zmq.Context, bdso
 	}
 
 	return &Server{
-		Peers:          peer_sockets,
-		Receive_socket: receive_socket,
-		Poller:         poller,
-		Id:             id,
-		Port:           port,
-		Gset:           my_gset,
-		My_init:        my_init,
-		My_echo:        my_echo,
-		My_vote:        my_vote,
-		Peers_echo:     peers_echo,
-		Peers_vote:     peers_vote,
-		Bdso_networks:  bdso_net,
+		Peers:           peer_sockets,
+		Receive_socket:  receive_socket,
+		Poller:          poller,
+		Id:              id,
+		Port:            port,
+		Gset:            my_gset,
+		My_init:         my_init,
+		My_echo:         my_echo,
+		My_vote:         my_vote,
+		Peers_echo:      peers_echo,
+		Peers_vote:      peers_vote,
+		Bdso_networks:   bdso_net,
+		Message_counter: 0,
 	}
 }
