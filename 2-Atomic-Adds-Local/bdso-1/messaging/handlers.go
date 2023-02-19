@@ -4,13 +4,15 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
+	"fmt"
 	"strings"
 )
 
 func HandleMessage(s *server.Server, msg []string) {
 	message, err := ParseMessageString(msg)
 	if err != nil {
-		panic(err)
+		fmt.Println("Error msg: ", msg)
+		return
 	}
 	if message.Tag == GET {
 		tools.Log(s.Id, "Received "+message.Tag+"from "+message.Sender)
@@ -49,7 +51,6 @@ func handleAdd(receiver *server.Server, message Message) {
 		}
 		response := []string{message.Sender, receiver.Id, ADD_RESPONSE, message.Content[0]}
 		receiver.Receive_socket.SendMessage(response)
-		tools.Log(receiver.Id, "Send response to "+message.Sender+" "+strings.Join(response, "-"))
 	}
 }
 
@@ -57,11 +58,7 @@ func handleRB(receiver *server.Server, message Message) {
 	response := []string{message.Content[0], receiver.Id, ADD_RESPONSE, message.Content[1]}
 
 	if gset.Exists(receiver.Gset, message.Content[1]) {
-		if strings.Contains(response[3], ".") {
-			response[3] = strings.Split(response[3], ".")[1]
-		}
 		receiver.Receive_socket.SendMessage(response)
-		tools.Log(receiver.Id, "Send response to "+message.Content[0]+" "+strings.Join(response, "-"))
 		return
 	}
 
@@ -69,11 +66,7 @@ func handleRB(receiver *server.Server, message Message) {
 
 	if delivered {
 		gset.Add(receiver.Gset, message.Content[1])
-		if strings.Contains(response[3], ".") {
-			response[3] = strings.Split(response[3], ".")[1]
-		}
 		receiver.Receive_socket.SendMessage(response)
-		tools.Log(receiver.Id, "Send response to "+message.Content[0]+" "+strings.Join(response, "-"))
 		tools.Log(receiver.Id, "Appended record {"+message.Content[1]+"}")
 		return
 	}

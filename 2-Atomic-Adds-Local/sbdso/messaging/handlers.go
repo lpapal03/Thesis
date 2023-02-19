@@ -14,7 +14,7 @@ import (
 func HandleMessage(s *server.Server, msg []string) {
 	message, err := ParseMessageString(msg)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error msg: ", msg)
 		return
 	}
 	if message.Tag == GET {

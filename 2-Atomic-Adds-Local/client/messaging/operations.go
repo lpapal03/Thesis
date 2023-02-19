@@ -24,60 +24,36 @@ func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {
 }
 
 func countMatchingReplies(replies map[string]string) string {
-	// Count occurrences of each record in all replies
-	recordCounts := make(map[string]int)
-	for _, reply := range replies {
-		records := strings.Split(reply, ",")
-		for _, record := range records {
-			recordCounts[record]++
-		}
-	}
-
-	// Find records with at least F+1 occurrences
-	var commonRecords []string
-	for record, count := range recordCounts {
-		if count >= config.F+1 {
-			commonRecords = append(commonRecords, record)
-		}
-	}
-
-	// Check if common records occur in enough replies
-	var matchingReplies []string
-	for reply, records := range replies {
-		replyRecords := strings.Split(records, ",")
-		for _, record := range commonRecords {
-			if contains(replyRecords, record) {
-				matchingReplies = append(matchingReplies, reply)
-				break
-			}
-		}
-	}
-	if len(matchingReplies) < 2*config.F+1 {
+	if len(replies) < 2*config.F+1 {
 		return ""
 	}
-
-	// Return smallest common set
-	return formatSlice(commonRecords)
-}
-
-func contains(slice []string, s string) bool {
-	for _, element := range slice {
-		if element == s {
-			return true
+	// Create a map to count the occurrences of each record
+	counts := make(map[string]int)
+	for _, reply := range replies {
+		// Parse the reply into individual records
+		records := strings.Split(reply, ",")
+		for _, record := range records {
+			// Increment the count for this record
+			counts[record]++
 		}
 	}
-	return false
-}
 
-func formatSlice(slice []string) string {
-	return strings.Join(slice, " ")
+	// Find the records that appear in at least F+1 of the sets
+	var commonSet []string
+	for record, count := range counts {
+		if count >= config.F+1 {
+			commonSet = append(commonSet, record)
+		}
+	}
+
+	return strings.Join(commonSet, " ")
 }
 
 func Get(c *client.Client) string {
 	tools.Log(c.Id, "Called GET")
 	c.Message_counter++
 	start := time.Now()
-	sendToServers(c.Servers, []string{GET}, 3*config.F+1)
+	sendToServers(c.Servers, []string{GET, strconv.Itoa(c.Message_counter)}, 3*config.F+1)
 
 	replies := make(map[string]string)
 	tools.Log(c.Id, "Waiting for valid GET_REPLY")
@@ -115,6 +91,7 @@ func Add(c *client.Client, record string) {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
+			// fmt.Println(msg)
 			if strings.Contains(msg[2], ".") {
 				msg[2] = strings.Split(msg[2], ".")[2]
 			}
@@ -131,7 +108,7 @@ func Add(c *client.Client, record string) {
 }
 
 func AddAtomic(c *client.Client, record string) {
-	message := "atomic;" + c.Id + ";" + record
+	message := strconv.Itoa(c.Message_counter) + ".atomic;" + c.Id + ";" + record
 	tools.Log(c.Id, "Called ADD_ATOMIC("+message+")")
 	sendToServers(c.Servers, []string{ADD, message}, 2*config.F+1)
 	message = strings.Replace(message, "atomic", "atomic-complete", 1)

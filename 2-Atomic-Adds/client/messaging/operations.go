@@ -6,7 +6,7 @@ import (
 	"2-Atomic-Adds/tools"
 	"math/rand"
 	"reflect"
-	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -23,44 +23,37 @@ func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {
 	}
 }
 
-// returns true iff we have
-// more than 2f+1 replies
-// and f+1 matching
-// returns a valid reply
-func findGetValidReply(replies map[string]string) string {
+func countMatchingReplies(replies map[string]string) string {
 	if len(replies) < 2*config.F+1 {
 		return ""
 	}
-	reply_strings := []string{}
-	for k := range replies {
-		temp := strings.Split(replies[k], ",")
-		sort.Strings(temp)
-		reply_strings = append(reply_strings, strings.Join(temp, " "))
-	}
-
-	histo := make(map[string]int)
-	for _, str := range reply_strings {
-		histo[str]++
-	}
-	valhi := 0
-	strhi := ""
-	for k, v := range histo {
-		if v > valhi {
-			valhi = v
-			strhi = k
+	// Create a map to count the occurrences of each record
+	counts := make(map[string]int)
+	for _, reply := range replies {
+		// Parse the reply into individual records
+		records := strings.Split(reply, ",")
+		for _, record := range records {
+			// Increment the count for this record
+			counts[record]++
 		}
 	}
-	if valhi >= config.F+1 {
-		return strhi
+
+	// Find the records that appear in at least F+1 of the sets
+	var commonSet []string
+	for record, count := range counts {
+		if count >= config.F+1 {
+			commonSet = append(commonSet, record)
+		}
 	}
-	return ""
+
+	return strings.Join(commonSet, " ")
 }
 
 func Get(c *client.Client) string {
 	tools.Log(c.Id, "Called GET")
 	c.Message_counter++
 	start := time.Now()
-	sendToServers(c.Servers, []string{GET}, 3*config.F+1)
+	sendToServers(c.Servers, []string{GET, strconv.Itoa(c.Message_counter)}, 3*config.F+1)
 
 	replies := make(map[string]string)
 	tools.Log(c.Id, "Waiting for valid GET_REPLY")
@@ -69,11 +62,12 @@ func Get(c *client.Client) string {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
+			// tools.Log(c.Id, strings.Join(msg, "-"))
 			if msg[1] == GET_RESPONSE {
 				replies[msg[0]] = msg[2]
 			}
 		}
-		r := findGetValidReply(replies)
+		r := countMatchingReplies(replies)
 		if len(r) > 0 {
 			elapsed := time.Since(start)
 			tools.Log(c.Id, "GET completed in: "+elapsed.String()+". Reply: "+r)
@@ -84,9 +78,11 @@ func Get(c *client.Client) string {
 
 // Do i have to send to 2f+1 or all?
 func Add(c *client.Client, record string) {
+	c.Message_counter++
 	tools.Log(c.Id, "Called ADD("+record+")")
+	message := strconv.Itoa(c.Message_counter) + "." + record
 	start := time.Now()
-	sendToServers(c.Servers, []string{ADD, record}, 2*config.F+1)
+	sendToServers(c.Servers, []string{ADD, message}, 2*config.F+1)
 	// WAIT FOR F+1 RESPONSES
 	replies := make(map[string]bool)
 	tools.Log(c.Id, "Waiting for f+1 ADD replies")
@@ -95,8 +91,9 @@ func Add(c *client.Client, record string) {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
+			// fmt.Println(msg)
 			if strings.Contains(msg[2], ".") {
-				msg[2] = strings.Split(msg[2], ".")[1]
+				msg[2] = strings.Split(msg[2], ".")[2]
 			}
 			if msg[1] == ADD_RESPONSE && msg[2] == record {
 				replies[msg[0]] = true
@@ -111,7 +108,7 @@ func Add(c *client.Client, record string) {
 }
 
 func AddAtomic(c *client.Client, record string) {
-	message := "atomic;" + c.Id + ";" + record
+	message := strconv.Itoa(c.Message_counter) + ".atomic;" + c.Id + ";" + record
 	tools.Log(c.Id, "Called ADD_ATOMIC("+message+")")
 	sendToServers(c.Servers, []string{ADD, message}, 2*config.F+1)
 	message = strings.Replace(message, "atomic", "atomic-complete", 1)
