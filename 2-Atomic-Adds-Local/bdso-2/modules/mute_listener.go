@@ -1,4 +1,4 @@
-package scenarios
+package modules
 
 import (
 	"backend/config"

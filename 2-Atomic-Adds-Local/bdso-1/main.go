@@ -2,7 +2,7 @@ package main
 
 import (
 	"backend/config"
-	"backend/scenarios"
+	"backend/modules"
 	"backend/tools"
 	"os"
 
@@ -19,9 +19,9 @@ func main() {
 	servers := config.SetServerNodes()
 
 	if len(os.Args) < 2 {
-		scenarios.Start(servers, "NORMAL", zctx)
+		modules.Start(servers, "NORMAL", zctx)
 	} else if os.Args[1] == "mutes" || os.Args[1] == "m" {
-		scenarios.Start(servers, "MUTES", zctx)
+		modules.Start(servers, "MUTES", zctx)
 	}
 
 	select {}
