@@ -5,17 +5,16 @@ node0
 
 [sbdso-normal]
 node1
-node2
 
 [bdso-1-normal]
-node3
+node2
 
 [bdso-1-mute]
 
 [bdso-1-malicious]
 
 [bdso-2-normal]
-node4
+node3
 
 [bdso-2-mute]
 
