@@ -31,7 +31,7 @@ func Get(gset map[string]string) {
 // Checks if a given record exists in the gset
 func Exists(gset map[string]string, record string) bool {
 	if strings.Contains(record, ".") {
-		record = strings.Split(record, ".")[1]
+		record = strings.Split(record, ".")[2]
 	}
 	hash := string_to_sha512(record)
 	if _, exists := gset[hash]; exists {
@@ -43,7 +43,7 @@ func Exists(gset map[string]string, record string) bool {
 // Appends record to gset
 func Add(gset map[string]string, record string) {
 	if strings.Contains(record, ".") {
-		record = strings.Split(record, ".")[1]
+		record = strings.Split(record, ".")[2]
 	}
 	// create a sha512 value based on the record
 	sha512_hash := string_to_sha512(record)
