@@ -2,9 +2,7 @@ package modules
 
 import (
 	"2-Atomic-Adds/config"
-	"math/rand"
 	"strings"
-	"time"
 )
 
 func isMessageValid(msg string) bool {
@@ -58,10 +56,4 @@ func isAtomicMessageValid(msg string) bool {
 		return false
 	}
 	return true
-}
-
-func waitRandomly(min, max int) {
-	rand.Seed(time.Now().UnixNano())
-	r := rand.Intn(max - min)
-	time.Sleep(time.Duration(min+r) * time.Millisecond)
 }

@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"time"
 
 	zmq "github.com/pebbe/zmq4"
 )
@@ -29,13 +28,9 @@ func StartAutomated(zctx *zmq.Context, client_count, request_count int, network_
 			tools.Log(id, "Id set")
 			config.Initialize(network_name)
 			client := client.CreateClient(id, servers, zctx)
-
-			time.Sleep(time.Second * 1)
 			for r := 0; r < request_count; r++ {
 				messaging.Add(client, id+"-"+strconv.Itoa(r))
-				waitRandomly(500, 1000)
 				messaging.Get(client)
-				waitRandomly(500, 1000)
 			}
 			tools.Log(id, "Done")
 			wg.Done()

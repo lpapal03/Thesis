@@ -108,6 +108,7 @@ func Add(c *client.Client, record string) {
 }
 
 func AddAtomic(c *client.Client, record string) {
+	c.Message_counter++
 	message := strconv.Itoa(c.Message_counter) + ".atomic;" + c.Id + ";" + record
 	tools.Log(c.Id, "Called ADD_ATOMIC("+message+")")
 	sendToServers(c.Servers, []string{ADD, message}, 2*config.F+1)

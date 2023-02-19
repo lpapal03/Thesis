@@ -4,7 +4,6 @@ import (
 	"2-Atomic-Adds/gset"
 	"2-Atomic-Adds/server"
 	"2-Atomic-Adds/tools"
-	"fmt"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -15,7 +14,7 @@ import (
 func HandleMessage(s *server.Server, msg []string) {
 	message, err := ParseMessageString(msg)
 	if err != nil {
-		fmt.Println("Error msg: ", msg)
+		tools.Log(s.Id, "Error msg: "+strings.Join(msg, " "))
 		return
 	}
 	if message.Tag == GET {
