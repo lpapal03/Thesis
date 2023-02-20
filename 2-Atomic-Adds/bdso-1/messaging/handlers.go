@@ -4,6 +4,7 @@ import (
 	"2-Atomic-Adds/gset"
 	"2-Atomic-Adds/server"
 	"2-Atomic-Adds/tools"
+	"fmt"
 	"strings"
 )
 
@@ -45,6 +46,7 @@ func handleAdd(receiver *server.Server, message Message) {
 	} else {
 		response := []string{message.Sender, receiver.Id, ADD_RESPONSE, message.Content[0]}
 		receiver.Receive_socket.SendMessage(response)
+		fmt.Println("sent", response)
 	}
 }
 
@@ -53,20 +55,22 @@ func handleRB(receiver *server.Server, message Message) {
 
 	if gset.Exists(receiver.Gset, message.Content[1]) {
 		receiver.Receive_socket.SendMessage(response)
+		fmt.Println("sent", response)
 		return
 	}
 
 	delivered := HandleReliableBroadcast(receiver, message)
 	if delivered && !gset.Exists(receiver.Gset, message.Content[1]) {
-		// now check if atomic
 		gset.Add(receiver.Gset, message.Content[1])
 		receiver.Receive_socket.SendMessage(response)
+		fmt.Println("sent", response)
 		tools.Log(receiver.Id, "Appended record {"+message.Content[1]+"}")
 		return
 	}
 
 	if delivered && gset.Exists(receiver.Gset, message.Content[1]) {
 		receiver.Receive_socket.SendMessage(response)
+		fmt.Println("sent", response)
 		tools.Log(receiver.Id, "Record {"+message.Content[1]+"} already exists")
 		return
 	}

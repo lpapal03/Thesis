@@ -4,6 +4,7 @@ import (
 	"2-Atomic-Adds/gset"
 	"2-Atomic-Adds/server"
 	"2-Atomic-Adds/tools"
+	"fmt"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -151,6 +152,7 @@ func BdsoAdd(s *server.Server, r1, r2, dest1, dest2 string) {
 		for _, socket := range sockets {
 			sock := socket.Socket
 			msg, _ := sock.RecvMessage(0)
+			fmt.Println(msg)
 			// tools.Log(s.Id, "["+strings.Join(msg, " ")+"]")
 			// tools.Log(s.Id, "Expected "+r1)
 			if msg[1] == ADD_RESPONSE && msg[2] == r1 {
