@@ -4,7 +4,6 @@ import (
 	"backend/gset"
 	"backend/server"
 	"backend/tools"
-	"fmt"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -15,7 +14,7 @@ import (
 func HandleMessage(s *server.Server, msg []string) {
 	message, err := ParseMessageString(msg)
 	if err != nil {
-		fmt.Println("Error msg: ", msg)
+		tools.Log(s.Id, "Error msg: "+strings.Join(msg, " "))
 		return
 	}
 	if message.Tag == GET {
@@ -152,8 +151,8 @@ func BdsoAdd(s *server.Server, r1, r2, dest1, dest2 string) {
 		for _, socket := range sockets {
 			sock := socket.Socket
 			msg, _ := sock.RecvMessage(0)
-			// tools.Log(s.Id, "["+strings.Join(msg, " ")+"]")
-			// tools.Log(s.Id, "Expected "+r1)
+			tools.Log(s.Id, "["+strings.Join(msg, " ")+"]")
+			tools.Log(s.Id, "Expected "+r1)
 			if msg[1] == ADD_RESPONSE && msg[2] == r1 {
 				replies1[msg[0]] = true
 			}
