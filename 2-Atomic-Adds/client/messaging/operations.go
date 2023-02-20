@@ -121,6 +121,7 @@ func AddAtomic(c *client.Client, record string) {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
+			// fmt.Println(msg)
 			if msg[1] == ADD_ATOMIC_RESPONSE {
 				s1 := strings.SplitN(message, ";", 2)[1]
 				s2 := strings.SplitN(msg[2], ";", 2)[1]
