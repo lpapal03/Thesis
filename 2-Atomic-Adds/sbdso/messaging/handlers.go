@@ -153,10 +153,10 @@ func BdsoAdd(s *server.Server, r1, r2, dest1, dest2 string) {
 			msg, _ := sock.RecvMessage(0)
 			tools.Log(s.Id, "["+strings.Join(msg, " ")+"]")
 			tools.Log(s.Id, "Expected "+r1)
-			if msg[1] == ADD_RESPONSE && msg[2] == r1 {
+			if msg[1] == ADD_RESPONSE && msg[2] == s.Id+"."+m1 {
 				replies1[msg[0]] = true
 			}
-			if msg[1] == ADD_RESPONSE && msg[2] == r2 {
+			if msg[1] == ADD_RESPONSE && msg[2] == s.Id+"."+m2 {
 				replies2[msg[0]] = true
 			}
 			// tools.Log(s.Id, strconv.Itoa(len(replies1))+"/"+strconv.Itoa(F1)+" "+r1)
