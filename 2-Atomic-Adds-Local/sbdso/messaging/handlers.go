@@ -35,6 +35,19 @@ func HandleMessage(s *server.Server, msg []string) {
 
 }
 
+func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {
+	sockets := make([]*zmq4.Socket, 0)
+	for _, v := range m {
+		sockets = append(sockets, v)
+	}
+	rand.Shuffle(len(sockets), func(i, j int) {
+		sockets[i], sockets[j] = sockets[j], sockets[i]
+	})
+	for _, s := range sockets {
+		s.SendMessage(message)
+	}
+}
+
 // Handle get request. I need sender_id to know where
 // my response will go to
 func handleGet(receiver *server.Server, message Message) {
@@ -141,6 +154,7 @@ func BdsoAdd(s *server.Server, r1, r2, dest1, dest2 string) {
 	s.Message_counter++
 	m2 := strconv.Itoa(s.Message_counter) + "." + r2
 	sendToServers(network2, []string{ADD, m2}, 2*F2+1)
+
 	// WAIT FOR F+1 RESPONSES
 	replies1 := make(map[string]bool)
 	replies2 := make(map[string]bool)
@@ -152,7 +166,6 @@ func BdsoAdd(s *server.Server, r1, r2, dest1, dest2 string) {
 			sock := socket.Socket
 			msg, _ := sock.RecvMessage(0)
 			tools.Log(s.Id, "["+strings.Join(msg, " ")+"]")
-			tools.Log(s.Id, "Expected "+r1)
 			if msg[1] == ADD_RESPONSE && msg[2] == s.Id+"."+m1 {
 				replies1[msg[0]] = true
 			}
@@ -165,17 +178,4 @@ func BdsoAdd(s *server.Server, r1, r2, dest1, dest2 string) {
 	}
 	tools.Log(s.Id, "Record {"+r1+"} appended at "+dest1)
 	tools.Log(s.Id, "Record {"+r2+"} appended at "+dest2)
-}
-
-func sendToServers(m map[string]*zmq4.Socket, message []string, amount int) {
-	sockets := make([]*zmq4.Socket, 0)
-	for _, v := range m {
-		sockets = append(sockets, v)
-	}
-	rand.Shuffle(len(sockets), func(i, j int) {
-		sockets[i], sockets[j] = sockets[j], sockets[i]
-	})
-	for _, s := range sockets {
-		s.SendMessage(message)
-	}
 }

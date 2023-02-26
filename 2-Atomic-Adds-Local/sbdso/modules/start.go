@@ -1,4 +1,4 @@
-package scenarios
+package modules
 
 import (
 	"backend/config"
@@ -15,23 +15,18 @@ func Start(servers []config.Node, scenario string, zctx *zmq.Context, bdso_netwo
 			s := server.CreateServer(servers[i], servers, zctx, bdso_networks)
 			go Normal_listener_task(s)
 		}
+		return
 	}
-	// f mutes
 	if scenario == "MUTES" {
-		// f mute
-		for i := 0; i < config.F; i++ {
-			go Mute_listener_task(servers[i], servers, zctx)
-			fmt.Println("Mute: ", servers[i])
-		}
-		// n-f normal
-		for i := config.F; i < config.N; i++ {
-			s := server.CreateServer(servers[i], servers, zctx, bdso_networks)
-			go Normal_listener_task(s)
-			fmt.Println("Normal: ", servers[i])
-		}
+		fmt.Println("Scenario not implemented")
+		return
 	}
-	// f/2 act correctly, the rest act maliciously
 	if scenario == "HALF&HALF" {
-
+		fmt.Println("Scenario not implemented")
+		return
+	}
+	if scenario == "MALICIOUS" {
+		fmt.Println("Scenario not implemented")
+		return
 	}
 }

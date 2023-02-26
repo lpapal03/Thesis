@@ -20,8 +20,8 @@ func main() {
 	c1 := client.CreateClient("loukas", servers, zctx)
 	c2 := client.CreateClient("marios", servers, zctx)
 
-	go messaging.AddAtomic(c1, "marios;bdso-1;hello;world")
-	go messaging.AddAtomic(c2, "loukas;bdso-2;world;hello")
+	go messaging.AddAtomic(c1, "marios;bdso-1;1;2")
+	go messaging.AddAtomic(c2, "loukas;bdso-2;2;1")
 
 	select {}
 
