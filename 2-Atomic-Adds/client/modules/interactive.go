@@ -4,6 +4,7 @@ import (
 	"2-Atomic-Adds/client"
 	"2-Atomic-Adds/config"
 	"2-Atomic-Adds/messaging"
+	"2-Atomic-Adds/tools"
 	"bufio"
 	"fmt"
 	"os"
@@ -39,7 +40,8 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 			os.Exit(0)
 		}
 		if command == "g" {
-			messaging.Get(client)
+			r := messaging.Get(client)
+			tools.Log(client.Id, r)
 		}
 		if command == "a" {
 			fmt.Print("Record to append > ")
