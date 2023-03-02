@@ -1,6 +1,0 @@
-2023/03/02 21:11:01 | localhost:5700 | Bound tcp://*:5700
-2023/03/02 21:11:01 | localhost:5701 | Bound tcp://*:5701
-2023/03/02 21:11:01 | localhost:5702 | Bound tcp://*:5702
-2023/03/02 21:11:01 | localhost:5703 | Bound tcp://*:5703
-2023/03/02 21:11:01 | localhost:5704 | Bound tcp://*:5704
-2023/03/02 21:11:01 | localhost:5705 | Bound tcp://*:5705

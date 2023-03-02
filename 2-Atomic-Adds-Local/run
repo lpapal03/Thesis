@@ -4,20 +4,16 @@ killall -9 backend
 echo "Killed all servers"
 
 cd ./bdso-1
-rm bdso-1-log.txt
-go run . >> bdso-1-log.txt 2>&1 &
+go run . > /dev/null 2>&1 &
 cd ..
 echo "Started BDSO-1"
 
 cd ./bdso-2
-rm bdso-2-log.txt
-go run . >> bdso-2-log.txt 2>&1 &
+go run . > /dev/null 2>&1 &
 cd ..
 echo "Started BDSO-2"
 
 cd ./sbdso
-rm sbdso-log.txt
-go run . >> sbdso-log.txt 2>&1 &
+go run . > /dev/null 2>&1 &
 cd ..
 echo "Started SBDSO"
-
