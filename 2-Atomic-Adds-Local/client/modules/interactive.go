@@ -6,6 +6,7 @@ import (
 	"frontend/client"
 	"frontend/config"
 	"frontend/messaging"
+	"frontend/tools"
 	"os"
 	"strings"
 
@@ -40,7 +41,8 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 			os.Exit(0)
 		}
 		if command == "g" {
-			messaging.Get(client)
+			r := messaging.Get(client)
+			tools.Log(client.Id, r)
 		}
 		if command == "a" {
 			fmt.Print("Record to append > ")

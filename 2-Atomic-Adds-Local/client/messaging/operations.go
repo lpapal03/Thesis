@@ -70,7 +70,7 @@ func Get(c *client.Client) string {
 		r := countMatchingReplies(replies)
 		if len(r) > 0 {
 			elapsed := time.Since(start)
-			tools.Log(c.Id, "GET completed in: "+elapsed.String()+". Reply: "+r)
+			tools.Log(c.Id, "GET completed in: "+elapsed.String())
 			return r
 		}
 	}

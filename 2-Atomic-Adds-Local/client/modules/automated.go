@@ -22,8 +22,9 @@ func StartAutomated(zctx *zmq.Context, client_count, request_count int, network_
 			servers := config.SERVERS
 			client := client.CreateClient(id, servers, zctx)
 			for r := 0; r < request_count; r++ {
-				messaging.Add(client, id+"-"+strconv.Itoa(r))
+				messaging.Add(client, id+"-test-"+strconv.Itoa(r))
 				messaging.Get(client)
+				// tools.Log(client.Id, r)
 			}
 			tools.Log(id, "Done")
 			wg.Done()

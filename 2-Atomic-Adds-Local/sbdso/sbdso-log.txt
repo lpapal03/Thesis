@@ -1,91 +1,90 @@
-2023/03/02 20:02:09 | localhost:5500 | Bound tcp://*:5500
-2023/03/02 20:02:09 | localhost:5500 | Starting connection with network: bdso-1
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5600 of network bdso-1
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5601 of network bdso-1
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5602 of network bdso-1
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5603 of network bdso-1
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5604 of network bdso-1
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5605 of network bdso-1
-2023/03/02 20:02:09 | localhost:5500 | Starting connection with network: bdso-2
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5700 of network bdso-2
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5701 of network bdso-2
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5702 of network bdso-2
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5703 of network bdso-2
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5704 of network bdso-2
-2023/03/02 20:02:09 | localhost:5500 | Connected to tcp://localhost:5705 of network bdso-2
-2023/03/02 20:02:09 | localhost:5501 | Bound tcp://*:5501
-2023/03/02 20:02:09 | localhost:5501 | Starting connection with network: bdso-1
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5600 of network bdso-1
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5601 of network bdso-1
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5602 of network bdso-1
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5603 of network bdso-1
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5604 of network bdso-1
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5605 of network bdso-1
-2023/03/02 20:02:09 | localhost:5501 | Starting connection with network: bdso-2
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5700 of network bdso-2
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5701 of network bdso-2
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5702 of network bdso-2
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5703 of network bdso-2
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5704 of network bdso-2
-2023/03/02 20:02:09 | localhost:5501 | Connected to tcp://localhost:5705 of network bdso-2
-2023/03/02 20:02:09 | localhost:5502 | Bound tcp://*:5502
-2023/03/02 20:02:09 | localhost:5502 | Starting connection with network: bdso-1
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5600 of network bdso-1
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5601 of network bdso-1
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5602 of network bdso-1
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5603 of network bdso-1
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5604 of network bdso-1
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5605 of network bdso-1
-2023/03/02 20:02:09 | localhost:5502 | Starting connection with network: bdso-2
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5700 of network bdso-2
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5701 of network bdso-2
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5702 of network bdso-2
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5703 of network bdso-2
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5704 of network bdso-2
-2023/03/02 20:02:09 | localhost:5502 | Connected to tcp://localhost:5705 of network bdso-2
-2023/03/02 20:02:09 | localhost:5503 | Bound tcp://*:5503
-2023/03/02 20:02:09 | localhost:5503 | Starting connection with network: bdso-1
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5600 of network bdso-1
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5601 of network bdso-1
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5602 of network bdso-1
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5603 of network bdso-1
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5604 of network bdso-1
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5605 of network bdso-1
-2023/03/02 20:02:09 | localhost:5503 | Starting connection with network: bdso-2
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5700 of network bdso-2
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5701 of network bdso-2
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5702 of network bdso-2
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5703 of network bdso-2
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5704 of network bdso-2
-2023/03/02 20:02:09 | localhost:5503 | Connected to tcp://localhost:5705 of network bdso-2
-2023/03/02 20:02:09 | localhost:5504 | Bound tcp://*:5504
-2023/03/02 20:02:09 | localhost:5504 | Starting connection with network: bdso-1
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5600 of network bdso-1
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5601 of network bdso-1
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5602 of network bdso-1
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5603 of network bdso-1
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5604 of network bdso-1
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5605 of network bdso-1
-2023/03/02 20:02:09 | localhost:5504 | Starting connection with network: bdso-2
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5700 of network bdso-2
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5701 of network bdso-2
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5702 of network bdso-2
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5703 of network bdso-2
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5704 of network bdso-2
-2023/03/02 20:02:09 | localhost:5504 | Connected to tcp://localhost:5705 of network bdso-2
-2023/03/02 20:02:09 | localhost:5505 | Bound tcp://*:5505
-2023/03/02 20:02:09 | localhost:5505 | Starting connection with network: bdso-1
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5600 of network bdso-1
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5601 of network bdso-1
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5602 of network bdso-1
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5603 of network bdso-1
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5604 of network bdso-1
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5605 of network bdso-1
-2023/03/02 20:02:09 | localhost:5505 | Starting connection with network: bdso-2
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5700 of network bdso-2
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5701 of network bdso-2
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5702 of network bdso-2
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5703 of network bdso-2
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5704 of network bdso-2
-2023/03/02 20:02:09 | localhost:5505 | Connected to tcp://localhost:5705 of network bdso-2
-signal: killed
+2023/03/02 21:11:01 | localhost:5500 | Bound tcp://*:5500
+2023/03/02 21:11:01 | localhost:5500 | Starting connection with network: bdso-1
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5600 of network bdso-1
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5601 of network bdso-1
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5602 of network bdso-1
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5603 of network bdso-1
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5604 of network bdso-1
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5605 of network bdso-1
+2023/03/02 21:11:01 | localhost:5500 | Starting connection with network: bdso-2
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5700 of network bdso-2
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5701 of network bdso-2
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5702 of network bdso-2
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5703 of network bdso-2
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5704 of network bdso-2
+2023/03/02 21:11:01 | localhost:5500 | Connected to tcp://localhost:5705 of network bdso-2
+2023/03/02 21:11:01 | localhost:5501 | Bound tcp://*:5501
+2023/03/02 21:11:01 | localhost:5501 | Starting connection with network: bdso-1
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5600 of network bdso-1
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5601 of network bdso-1
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5602 of network bdso-1
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5603 of network bdso-1
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5604 of network bdso-1
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5605 of network bdso-1
+2023/03/02 21:11:01 | localhost:5501 | Starting connection with network: bdso-2
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5700 of network bdso-2
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5701 of network bdso-2
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5702 of network bdso-2
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5703 of network bdso-2
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5704 of network bdso-2
+2023/03/02 21:11:01 | localhost:5501 | Connected to tcp://localhost:5705 of network bdso-2
+2023/03/02 21:11:01 | localhost:5502 | Bound tcp://*:5502
+2023/03/02 21:11:01 | localhost:5502 | Starting connection with network: bdso-1
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5600 of network bdso-1
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5601 of network bdso-1
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5602 of network bdso-1
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5603 of network bdso-1
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5604 of network bdso-1
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5605 of network bdso-1
+2023/03/02 21:11:01 | localhost:5502 | Starting connection with network: bdso-2
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5700 of network bdso-2
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5701 of network bdso-2
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5702 of network bdso-2
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5703 of network bdso-2
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5704 of network bdso-2
+2023/03/02 21:11:01 | localhost:5502 | Connected to tcp://localhost:5705 of network bdso-2
+2023/03/02 21:11:01 | localhost:5503 | Bound tcp://*:5503
+2023/03/02 21:11:01 | localhost:5503 | Starting connection with network: bdso-1
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5600 of network bdso-1
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5601 of network bdso-1
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5602 of network bdso-1
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5603 of network bdso-1
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5604 of network bdso-1
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5605 of network bdso-1
+2023/03/02 21:11:01 | localhost:5503 | Starting connection with network: bdso-2
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5700 of network bdso-2
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5701 of network bdso-2
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5702 of network bdso-2
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5703 of network bdso-2
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5704 of network bdso-2
+2023/03/02 21:11:01 | localhost:5503 | Connected to tcp://localhost:5705 of network bdso-2
+2023/03/02 21:11:01 | localhost:5504 | Bound tcp://*:5504
+2023/03/02 21:11:01 | localhost:5504 | Starting connection with network: bdso-2
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5700 of network bdso-2
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5701 of network bdso-2
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5702 of network bdso-2
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5703 of network bdso-2
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5704 of network bdso-2
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5705 of network bdso-2
+2023/03/02 21:11:01 | localhost:5504 | Starting connection with network: bdso-1
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5600 of network bdso-1
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5601 of network bdso-1
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5602 of network bdso-1
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5603 of network bdso-1
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5604 of network bdso-1
+2023/03/02 21:11:01 | localhost:5504 | Connected to tcp://localhost:5605 of network bdso-1
+2023/03/02 21:11:01 | localhost:5505 | Bound tcp://*:5505
+2023/03/02 21:11:01 | localhost:5505 | Starting connection with network: bdso-1
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5600 of network bdso-1
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5601 of network bdso-1
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5602 of network bdso-1
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5603 of network bdso-1
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5604 of network bdso-1
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5605 of network bdso-1
+2023/03/02 21:11:01 | localhost:5505 | Starting connection with network: bdso-2
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5700 of network bdso-2
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5701 of network bdso-2
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5702 of network bdso-2
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5703 of network bdso-2
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5704 of network bdso-2
+2023/03/02 21:11:01 | localhost:5505 | Connected to tcp://localhost:5705 of network bdso-2

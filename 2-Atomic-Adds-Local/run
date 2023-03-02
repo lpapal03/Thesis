@@ -1,5 +1,8 @@
 #!/bin/bash
 
+killall -9 backend
+echo "Killed all servers"
+
 cd ./bdso-1
 rm bdso-1-log.txt
 go run . >> bdso-1-log.txt 2>&1 &
