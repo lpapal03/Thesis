@@ -82,6 +82,6 @@
   hosts: clients-automated
   tasks:
     - name: Start client
-      raw: cd /users/loukis/Thesis/2-Atomic-Adds/client; nohup /usr/local/go/bin/go run . automated </dev/null >/dev/null 2>&1 & sleep 1
+      raw: cd /users/loukis/Thesis/2-Atomic-Adds/client; nohup /usr/local/go/bin/go run . sbdso -auto </dev/null >/dev/null 2>&1 & sleep 1
       become_user: loukis
     

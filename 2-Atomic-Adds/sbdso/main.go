@@ -16,7 +16,7 @@ func main() {
 	sbdso := config.GetHosts(wd+"/hosts", "sbdso")
 	bdso_1 := config.GetHosts(wd+"/hosts", "bdso-1")
 	bdso_2 := config.GetHosts(wd+"/hosts", "bdso-2")
-	default_port, num_threads := config.GetPortAndThreads(wd + "/config")
+	default_port, num_threads := config.ParseConfigFile(wd + "/config")
 
 	sbdso_nodes := make([]config.Node, 0)
 	all_bdso := make(map[string][]config.Node)

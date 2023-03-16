@@ -1,0 +1,9 @@
+#!/bin/bash
+
+killall -9 backend
+echo "Killed all servers"
+
+cd ./server
+go run . > /dev/null 2>&1 &
+cd ..
+echo "Started all servers"

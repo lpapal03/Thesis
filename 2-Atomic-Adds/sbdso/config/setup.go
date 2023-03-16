@@ -120,7 +120,7 @@ func GetHosts(filename, option string) []string {
 	return []string{}
 }
 
-func GetPortAndThreads(filename string) (int, int) {
+func ParseConfigFile(filename string) (int, int) {
 	b, err := os.ReadFile(filename)
 	if err != nil {
 		panic(err)

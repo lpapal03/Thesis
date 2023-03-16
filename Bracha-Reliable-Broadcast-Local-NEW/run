@@ -1,0 +1,19 @@
+#!/bin/bash
+
+killall -9 backend
+echo "Killed all servers"
+
+cd ./bdso-1
+go run . > /dev/null 2>&1 &
+cd ..
+echo "Started BDSO-1"
+
+cd ./bdso-2
+go run . > /dev/null 2>&1 &
+cd ..
+echo "Started BDSO-2"
+
+cd ./sbdso
+go run . > /dev/null 2>&1 &
+cd ..
+echo "Started SBDSO"
