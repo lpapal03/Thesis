@@ -6,10 +6,10 @@ import (
 	"strings"
 )
 
-func HandleMessage(s server.Server, msg []string) {
+func HandleMessage(s *server.Server, msg []string) {
 	message, err := ParseMessageString(msg)
 	if err != nil {
-		panic(err)
+		return
 	}
 	tools.Log(s.Id, "Received "+message.Tag+" "+strings.Join(message.Content, ".")+" from "+message.Sender)
 
@@ -20,11 +20,11 @@ func HandleMessage(s server.Server, msg []string) {
 	}
 }
 
-func handleRBInit(receiver server.Server, message Message) {
+func handleRBInit(receiver *server.Server, message Message) {
 	ReliableBroadcast(receiver, message)
 }
 
-func handleRB(receiver server.Server, message Message) {
+func handleRB(receiver *server.Server, message Message) {
 
 	HandleReliableBroadcast(receiver, message)
 

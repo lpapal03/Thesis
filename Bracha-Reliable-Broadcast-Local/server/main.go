@@ -8,14 +8,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"runtime/debug"
 	"time"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
 func main() {
-	debug.SetGCPercent(-1)
 	scanner := bufio.NewScanner(os.Stdin)
 	servers := config.SetServers()
 
@@ -47,7 +45,6 @@ func main() {
 
 	s.SendMessage([]string{messaging.BRACHA_BROADCAST, value})
 
-	for {
-	}
+	select {}
 
 }
