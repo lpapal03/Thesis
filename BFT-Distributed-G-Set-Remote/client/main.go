@@ -26,8 +26,8 @@ func main() {
 	flag.Parse()
 
 	if auto {
-		modules.StartAutomated(zctx, clients, reqs, bdso)
+		modules.StartAutomated(zctx, clients, reqs, "servers")
 		return
 	}
-	modules.StartInteractive(zctx, bdso)
+	modules.StartInteractive(zctx, "servers")
 }

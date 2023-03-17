@@ -49,10 +49,7 @@ func NetworkExists(net_name string) bool {
 	}
 	parent_dir := filepath.Dir(working_dir)
 	_, err = os.Stat(parent_dir + "/" + net_name)
-	if os.IsNotExist(err) {
-		return false
-	}
-	return true
+	return !os.IsNotExist(err)
 }
 
 func GetHosts(filename, option string) []string {
@@ -63,22 +60,8 @@ func GetHosts(filename, option string) []string {
 	s := string(b)
 	lines := strings.Split(s, "\n")
 
-	var (
-		master           []string
-		clientsAutomated []string
-		sbdsoNormal      []string
-		sbdsoMute        []string
-		sbdsoMalicious   []string
-		bdso1Normal      []string
-		bdso1Mute        []string
-		bdso1Malicious   []string
-		bdso2Normal      []string
-		bdso2Mute        []string
-		bdso2Malicious   []string
-		sbdsoServers     []string
-		bdso1Servers     []string
-		bdso2Servers     []string
-	)
+	var master, clients, serversNormal, serversMute, serversMalicious []string
+	var servers []string
 
 	currentCategory := ""
 	for _, line := range lines {
@@ -94,35 +77,17 @@ func GetHosts(filename, option string) []string {
 		switch currentCategory {
 		case "[master]":
 			master = append(master, line)
-		case "[clients-automated]":
-			clientsAutomated = append(clientsAutomated, line)
-		case "[sbdso-normal]":
-			sbdsoNormal = append(sbdsoNormal, line)
-			sbdsoServers = append(sbdsoServers, line)
-		case "[sbdso-mute]":
-			sbdsoMute = append(sbdsoMute, line)
-			sbdsoServers = append(sbdsoServers, line)
-		case "[sbdso-malicious]":
-			sbdsoMalicious = append(sbdsoMalicious, line)
-			sbdsoServers = append(sbdsoServers, line)
-		case "[bdso-1-normal]":
-			bdso1Normal = append(bdso1Normal, line)
-			bdso1Servers = append(bdso1Servers, line)
-		case "[bdso-1-mute]":
-			bdso1Mute = append(bdso1Mute, line)
-			bdso1Servers = append(bdso1Servers, line)
-		case "[bdso-1-malicious]":
-			bdso1Malicious = append(bdso1Malicious, line)
-			bdso1Servers = append(bdso1Servers, line)
-		case "[bdso-2-normal]":
-			bdso2Normal = append(bdso2Normal, line)
-			bdso2Servers = append(bdso2Servers, line)
-		case "[bdso-2-mute]":
-			bdso2Mute = append(bdso2Mute, line)
-			bdso2Servers = append(bdso2Servers, line)
-		case "[bdso-2-malicious]":
-			bdso2Malicious = append(bdso2Malicious, line)
-			bdso2Servers = append(bdso2Servers, line)
+		case "[clients]":
+			clients = append(clients, line)
+		case "[servers-normal]":
+			serversNormal = append(serversNormal, line)
+			servers = append(servers, line)
+		case "[servers-mute]":
+			serversMute = append(serversMute, line)
+			servers = append(servers, line)
+		case "[servers-malicious]":
+			serversMalicious = append(serversMalicious, line)
+			servers = append(servers, line)
 		}
 	}
 
@@ -130,31 +95,9 @@ func GetHosts(filename, option string) []string {
 	case "master":
 		return master
 	case "clients":
-		return clientsAutomated
-	case "sbdso":
-		return sbdsoServers
-	case "bdso-1":
-		return bdso1Servers
-	case "bdso-2":
-		return bdso2Servers
-	case "sbdso-normal":
-		return sbdsoNormal
-	case "sbdso-mute":
-		return sbdsoMute
-	case "sbdso-malicious":
-		return sbdsoMalicious
-	case "bdso1-normal":
-		return bdso1Normal
-	case "bdso1-mute":
-		return bdso1Mute
-	case "bdso1-malicious":
-		return bdso1Malicious
-	case "bdso2-normal":
-		return bdso2Normal
-	case "bdso2-mute":
-		return bdso2Mute
-	case "bdso2-malicious":
-		return bdso2Malicious
+		return clients
+	case "servers":
+		return servers
 	}
 	return []string{}
 }
