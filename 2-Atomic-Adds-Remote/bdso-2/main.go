@@ -11,7 +11,7 @@ import (
 
 func main() {
 	tools.ResetLogFile()
-	wd := "/users/loukis/Thesis/2-Atomic-Adds"
+	wd := "/users/loukis/Thesis/2-Atomic-Adds-Remote"
 
 	// hosts are just the machine names
 	working_dir, err := os.Getwd()
