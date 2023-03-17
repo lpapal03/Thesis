@@ -1,0 +1,14 @@
+[master]
+node0
+
+[clients-automated]
+
+[servers-normal]
+node1
+node2
+node3
+node4
+
+[servers-mute]
+
+[servers-malicious]
