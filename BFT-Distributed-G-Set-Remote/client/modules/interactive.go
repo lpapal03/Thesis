@@ -33,7 +33,7 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 
 	client := client.CreateClient(id, servers, zctx)
 
-	fmt.Print("Type 'g' for GET, 'a' for ADD, 'at' for ATOMIC-ADD or 'e' for EXIT\n> ")
+	fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
 	for scanner.Scan() {
 		command = strings.ToLower(scanner.Text())
 		if command == "e" {
@@ -53,23 +53,10 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 				fmt.Println("Invalid message")
 			}
 		}
-		if command == "at" {
-			fmt.Println("Format of atomic records: peer_id;destination;your_message;peer_message")
-			fmt.Print("Record to append atomically > ")
-			scanner.Scan()
-			record = scanner.Text()
-			if network_name != "sbdso" {
-				fmt.Println("Network does not allow atomic operations")
-			} else if isAtomicMessageValid(record) {
-				messaging.AddAtomic(client, record)
-			} else {
-				fmt.Println("Invalid message")
-			}
-		}
 		if len(command) == 0 {
 			fmt.Print("> ")
 		} else {
-			fmt.Print("Type 'g' for GET, 'a' for ADD, 'at' for ATOMIC-ADD or 'e' for EXIT\n> ")
+			fmt.Print("Type 'g' for GET, 'a' for ADD or 'e' for EXIT\n> ")
 		}
 	}
 }

@@ -5,7 +5,6 @@ import (
 	"2-Atomic-Adds/modules"
 	"2-Atomic-Adds/tools"
 	"os"
-	"path/filepath"
 	"strconv"
 )
 
@@ -13,13 +12,7 @@ func main() {
 	tools.ResetLogFile()
 	wd := "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote"
 
-	// hosts are just the machine names
-	working_dir, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	bdso_name := filepath.Base(working_dir)
-	servers := config.GetHosts(wd+"/hosts", bdso_name)
+	servers := config.GetHosts(wd+"/hosts", "servers")
 	default_port, num_threads := config.GetPortAndThreads(wd + "/config")
 
 	sevrer_nodes := make([]config.Node, 0)

@@ -106,31 +106,3 @@ func Add(c *client.Client, record string) {
 		}
 	}
 }
-
-func AddAtomic(c *client.Client, record string) {
-	message := strconv.Itoa(c.Message_counter) + ".atomic;" + c.Id + ";" + record
-	tools.Log(c.Id, "Called ADD_ATOMIC("+message+")")
-	sendToServers(c.Servers, []string{ADD, message}, 2*config.F+1)
-	message = strings.Replace(message, "atomic", "atomic-complete", 1)
-	// WAIT FOR F+1 RESPONSES
-	replies := make(map[string]bool)
-	tools.Log(c.Id, "Waiting for f+1 ADD_ATOMIC replies")
-	for {
-		sockets, _ := c.Poller.Poll(-1)
-		for _, socket := range sockets {
-			s := socket.Socket
-			msg, _ := s.RecvMessage(0)
-			if msg[1] == ADD_ATOMIC_RESPONSE {
-				s1 := strings.SplitN(message, ";", 2)[1]
-				s2 := strings.SplitN(msg[2], ";", 2)[1]
-				if s1 == s2 {
-					replies[msg[0]] = true
-				}
-			}
-		}
-		if len(replies) >= config.F+1 {
-			tools.Log(c.Id, "Record {"+record+"} appended to destination")
-			return
-		}
-	}
-}
