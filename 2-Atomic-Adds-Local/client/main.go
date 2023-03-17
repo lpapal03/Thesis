@@ -25,6 +25,10 @@ func main() {
 
 	flag.Parse()
 
+	if bdso != "sbdso" && bdso != "bdso-1" && bdso != "bdso-2" {
+		panic("Invalid network")
+	}
+
 	if auto {
 		modules.StartAutomated(zctx, clients, reqs, bdso)
 		return
