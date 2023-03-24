@@ -4,8 +4,8 @@ import (
 	"backend/config"
 	"backend/modules"
 	"backend/tools"
-	"fmt"
-	"os"
+	"flag"
+	"strings"
 
 	zmq "github.com/pebbe/zmq4"
 )
@@ -19,17 +19,13 @@ func main() {
 	}
 	server_nodes := config.SetServerNodes()
 
-	if len(os.Args) < 2 {
-		modules.Start(server_nodes, "NORMAL", zctx)
-		select {}
-	}
-	if len(os.Args) == 2 && os.Args[1] == "mutes" || os.Args[1] == "m" {
-		modules.Start(server_nodes, "MUTES", zctx)
-		select {}
-	}
-	if len(os.Args) > 2 {
-		fmt.Println("Wrong arguments")
-		return
-	}
+	var scenario string
 
+	flag.StringVar(&scenario, "s", "NORMAL", "Secnario")
+
+	flag.Parse()
+
+	scenario = strings.ToUpper(scenario)
+
+	modules.Start(server_nodes, scenario, zctx)
 }

@@ -69,7 +69,7 @@ func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
 		// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
 		// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
-		cleaup(receiver, peers_key)
+		cleanup(receiver, peers_key)
 		return true
 	}
 
@@ -100,7 +100,7 @@ func sendToAll(receiver *server.Server, message []string) {
 }
 
 // delete all echo and vote of a message after being done with it
-func cleaup(s *server.Server, key string) {
+func cleanup(s *server.Server, key string) {
 	for k := range s.Peers_echo {
 		if strings.Contains(k, key) {
 			delete(s.Peers_echo, k)
