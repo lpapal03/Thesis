@@ -28,6 +28,9 @@ func isMessageValid(msg string) bool {
 }
 
 func truncateResponse(r string, maxCount int) string {
+	if maxCount < 0 {
+		return r
+	}
 	records := strings.Split(strings.TrimSpace(r), " ")
 	count := len(records)
 	if count <= maxCount {

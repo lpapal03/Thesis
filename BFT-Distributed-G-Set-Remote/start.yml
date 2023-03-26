@@ -61,5 +61,5 @@
   hosts: clients-automated
   tasks:
     - name: Start client
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client; nohup /usr/local/go/bin/go run . -auto -reqs 1000 > stdoutfile 2> stderrfile & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client; nohup /usr/local/go/bin/go run . -auto -reqs 200 > stdoutfile 2> stderrfile & sleep 1
       become_user: loukis
