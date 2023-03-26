@@ -51,6 +51,12 @@
     - name: Start server
       raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server; nohup /usr/local/go/bin/go run . malicious > stdoutfile 2> stderrfile & & sleep 1
       become_user: loukis
+- name: Start half_and_half servers
+  hosts: servers-half_and_half
+  tasks:
+    - name: Start server
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server; nohup /usr/local/go/bin/go run . half_and_half > stdoutfile 2> stderrfile & & sleep 1
+      become_user: loukis
 - name: Start automated clients. Interactive clients should be started manually
   hosts: clients-automated
   tasks:

@@ -25,7 +25,8 @@ func StartNormal(servers []config.Node, default_port, num_threads int) {
 			for {
 				msg, err := s.Receive_socket.RecvMessage(0)
 				if err != nil {
-					panic(err)
+					tools.Log(s.Id, err.Error())
+					return
 				}
 				messaging.HandleMessage(s, msg)
 			}
@@ -48,9 +49,9 @@ func StartMute(servers []config.Node, default_port, num_threads int) {
 			for {
 				msg, err := s.Receive_socket.RecvMessage(0)
 				if err != nil {
-					panic(err)
+					tools.Log(s.Id, err.Error())
+					return
 				}
-				// messaging.HandleMessage(s, msg)
 				tools.Log(s.Id, "Received {"+strings.Join(msg, " ")+"}, no action")
 			}
 		}(i)
@@ -72,9 +73,9 @@ func StartMalicious(servers []config.Node, default_port, num_threads int) {
 			for {
 				msg, err := s.Receive_socket.RecvMessage(0)
 				if err != nil {
-					panic(err)
+					tools.Log(s.Id, err.Error())
+					return
 				}
-				// messaging.HandleMessage(s, msg)
 				messaging.HandleMessageByzantine(s, msg, "MALICIOUS")
 			}
 		}(i)
@@ -96,7 +97,8 @@ func StartHalfAndHalf(servers []config.Node, default_port, num_threads int) {
 			for {
 				msg, err := s.Receive_socket.RecvMessage(0)
 				if err != nil {
-					panic(err)
+					tools.Log(s.Id, err.Error())
+					return
 				}
 				messaging.HandleMessageByzantine(s, msg, "HALF_AND_HALF")
 			}

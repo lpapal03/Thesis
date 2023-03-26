@@ -37,7 +37,9 @@ func main() {
 		case "mute":
 			modules.StartMute(server_nodes, default_port, num_threads)
 		case "malicious":
-			modules.StartMute(server_nodes, default_port, num_threads)
+			modules.StartMalicious(server_nodes, default_port, num_threads)
+		case "half_and_half":
+			modules.StartHalfAndHalf(server_nodes, default_port, num_threads)
 		default:
 			panic("Invalid argument")
 		}
