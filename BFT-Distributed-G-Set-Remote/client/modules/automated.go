@@ -24,13 +24,13 @@ func StartAutomated(zctx *zmq.Context, client_count, request_count int, network_
 			panic(err)
 		}
 		host = strings.Split(host, ".")[0]
-		id := host + "_client_" + strconv.Itoa(i)
+		id := host + "_client" + strconv.Itoa(i)
 		go func(id string) {
 			tools.Log(id, "Id set")
 			config.Initialize(network_name)
 			client := client.CreateClient(id, servers, zctx)
 			for r := 0; r < request_count; r++ {
-				add_time := messaging.Add(client, id+"-test-"+strconv.Itoa(r))
+				add_time := messaging.Add(client, id+"_test_"+strconv.Itoa(r))
 				_, get_time := messaging.Get(client)
 				fmt.Println(add_time, get_time)
 				// append to times file

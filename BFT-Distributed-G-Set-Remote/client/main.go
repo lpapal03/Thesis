@@ -5,7 +5,6 @@ import (
 	"2-Atomic-Adds/modules"
 	"2-Atomic-Adds/tools"
 	"flag"
-	"fmt"
 
 	zmq "github.com/pebbe/zmq4"
 )
@@ -14,8 +13,7 @@ func main() {
 	tools.ResetLogFile()
 
 	wd := "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote"
-	_, num_threads := config.GetPortAndThreads(wd + "/config")
-	fmt.Println(num_threads)
+	_, client_threads := config.GetPortAndThreads(wd + "/config")
 
 	zctx, _ := zmq.NewContext()
 
@@ -27,12 +25,12 @@ func main() {
 	flag.StringVar(&bdso, "net", "", "Bdso network")
 	flag.BoolVar(&auto, "auto", false, "Automated")
 	flag.IntVar(&clients, "clients", 1, "Amount of automated clients")
-	flag.IntVar(&reqs, "reqs", 5, "Amount of requests")
+	flag.IntVar(&reqs, "reqs", 200, "Amount of requests")
 
 	flag.Parse()
 
 	if auto {
-		modules.StartAutomated(zctx, clients, reqs, "servers")
+		modules.StartAutomated(zctx, client_threads, reqs, "servers")
 		return
 	}
 	modules.StartInteractive(zctx, "servers")

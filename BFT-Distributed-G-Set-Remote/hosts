@@ -2,9 +2,9 @@
 node0
 
 [clients-automated]
+node1
 
 [servers-normal]
-node1
 node2
 node3
 node4
