@@ -9,6 +9,7 @@
         dest: /users/loukis/Thesis/BFT-Distributed-G-Set-Remote
         clone: no
         update: yes
+        force: yes
       become_user: loukis
 - name: Get hosts file from master
   hosts: all
