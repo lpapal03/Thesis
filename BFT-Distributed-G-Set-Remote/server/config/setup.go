@@ -24,7 +24,7 @@ func GetHosts(filename, option string) []string {
 	s := string(b)
 	lines := strings.Split(s, "\n")
 
-	var master, clients, serversNormal, serversMute, serversMalicious []string
+	var master, clients, serversNormal, serversMute, serversMalicious, serversHalfAndHalf []string
 	var servers []string
 
 	currentCategory := ""
@@ -51,6 +51,9 @@ func GetHosts(filename, option string) []string {
 			servers = append(servers, line)
 		case "[servers-malicious]":
 			serversMalicious = append(serversMalicious, line)
+			servers = append(servers, line)
+		case "[servers-half_and_half]":
+			serversHalfAndHalf = append(serversHalfAndHalf, line)
 			servers = append(servers, line)
 		}
 	}
