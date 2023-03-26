@@ -23,7 +23,7 @@ func main() {
 
 	flag.StringVar(&bdso, "net", "", "Bdso network")
 	flag.BoolVar(&auto, "auto", false, "Automated")
-	flag.IntVar(&reqs, "reqs", 200, "Amount of requests")
+	flag.IntVar(&reqs, "reqs", 5, "Amount of requests")
 
 	flag.Parse()
 
