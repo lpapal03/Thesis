@@ -7,7 +7,8 @@
       git:
         repo: https://github.com/loukaspapalazarou/Thesis.git
         dest: /users/loukis/Thesis/BFT-Distributed-G-Set-Remote
-        version: master
+        clone: no
+        update: yes
       become_user: loukis
 - name: Get hosts file from master
   hosts: all
