@@ -3,13 +3,13 @@
   hosts: all
   become: true
   tasks:
-    - name: Update repo
-      git:
-        repo: https://github.com/loukaspapalazarou/Thesis.git
-        dest: /users/loukis/Thesis
-        clone: yes
-        update: yes
-        force: yes
+    # - name: Update repo
+    #   git:
+    #     repo: https://github.com/loukaspapalazarou/Thesis.git
+    #     dest: /users/loukis/Thesis
+    #     clone: yes
+    #     update: yes
+    #     force: yes
 - name: Get hosts file from master
   hosts: all
   become: true
