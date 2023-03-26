@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-var LOGGING = true
+var LOGGING bool
 
 var mu sync.Mutex
 
