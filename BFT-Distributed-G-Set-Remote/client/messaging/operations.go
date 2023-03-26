@@ -62,7 +62,7 @@ func Get(c *client.Client) (string, time.Duration) {
 		for _, socket := range sockets {
 			s := socket.Socket
 			msg, _ := s.RecvMessage(0)
-			// tools.Log(c.Id, strings.Join(msg, "-"))
+			tools.Log(c.Id, strings.Join(msg, "-"))
 			if msg[1] == GET_RESPONSE {
 				replies[msg[0]] = msg[2]
 			}
