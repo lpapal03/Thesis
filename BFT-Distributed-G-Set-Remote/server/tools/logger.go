@@ -7,8 +7,6 @@ import (
 	"sync"
 )
 
-var LOGGING bool
-
 var mu sync.Mutex
 
 func ResetLogFile() {
@@ -24,16 +22,10 @@ func ResetLogFile() {
 }
 
 func LogDebug(hostname, event string) {
-	if !LOGGING {
-		return
-	}
 	log.Println("| " + hostname + " | " + event)
 }
 
 func Log(hostname, event string) error {
-	if !LOGGING {
-		return nil
-	}
 	LogDebug(hostname, event)
 	// Open a log file
 	mu.Lock()
