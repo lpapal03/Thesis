@@ -3,12 +3,12 @@
   hosts: all
   become: true
   tasks:
-    - name: Clone repository
+    - name: Pull repository
       git:
         repo: https://github.com/loukaspapalazarou/Thesis.git
         dest: /users/loukis/Thesis/BFT-Distributed-G-Set-Remote
-        version: main
-        force: yes
+        version: master
+      become_user: loukis
 - name: Get hosts file from master
   hosts: all
   become: true
