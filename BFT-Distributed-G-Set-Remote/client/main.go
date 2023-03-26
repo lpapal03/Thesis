@@ -1,15 +1,21 @@
 package main
 
 import (
+	"2-Atomic-Adds/config"
 	"2-Atomic-Adds/modules"
 	"2-Atomic-Adds/tools"
 	"flag"
+	"fmt"
 
 	zmq "github.com/pebbe/zmq4"
 )
 
 func main() {
 	tools.ResetLogFile()
+
+	wd := "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote"
+	_, num_threads := config.GetPortAndThreads(wd + "/config")
+	fmt.Println(num_threads)
 
 	zctx, _ := zmq.NewContext()
 

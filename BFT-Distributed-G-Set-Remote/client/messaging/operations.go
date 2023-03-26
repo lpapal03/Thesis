@@ -49,7 +49,7 @@ func countMatchingReplies(replies map[string]string) string {
 	return strings.Join(commonSet, " ")
 }
 
-func Get(c *client.Client) string {
+func Get(c *client.Client) (string, time.Duration) {
 	tools.Log(c.Id, "Called GET")
 	c.Message_counter++
 	start := time.Now()
@@ -71,13 +71,13 @@ func Get(c *client.Client) string {
 		if len(r) > 0 {
 			elapsed := time.Since(start)
 			tools.Log(c.Id, "GET completed in: "+elapsed.String())
-			return r
+			return r, elapsed
 		}
 	}
 }
 
 // Do i have to send to 2f+1 or all?
-func Add(c *client.Client, record string) {
+func Add(c *client.Client, record string) time.Duration {
 	c.Message_counter++
 	tools.Log(c.Id, "Called ADD("+record+")")
 	message := strconv.Itoa(c.Message_counter) + "." + record
@@ -102,7 +102,7 @@ func Add(c *client.Client, record string) {
 		if len(replies) >= config.F+1 {
 			elapsed := time.Since(start)
 			tools.Log(c.Id, "ADD completed in: "+elapsed.String()+". Record {"+record+"} appended")
-			return
+			return elapsed
 		}
 	}
 }

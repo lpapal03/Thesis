@@ -15,29 +15,29 @@ func main() {
 	servers := config.GetHosts(wd+"/hosts", "servers")
 	default_port, num_threads := config.GetPortAndThreads(wd + "/config")
 
-	sevrer_nodes := make([]config.Node, 0)
+	server_nodes := make([]config.Node, 0)
 
 	for _, h := range servers {
 		for p := default_port; p < default_port+num_threads; p++ {
 			p_num := strconv.Itoa(p)
-			sevrer_nodes = append(sevrer_nodes, config.Node{Host: h, Port: p_num})
+			server_nodes = append(server_nodes, config.Node{Host: h, Port: p_num})
 		}
 	}
 
-	config.N = len(sevrer_nodes)
+	config.N = len(server_nodes)
 	config.F = (config.N - 1) / 3
 
 	if len(os.Args) < 2 {
-		modules.StartNormal(sevrer_nodes, default_port, num_threads)
+		modules.StartNormal(server_nodes, default_port, num_threads)
 	} else {
 		behaviour := os.Args[1]
 		switch behaviour {
 		case "normal":
-			modules.StartNormal(sevrer_nodes, default_port, num_threads)
+			modules.StartNormal(server_nodes, default_port, num_threads)
 		case "mute":
-			modules.StartMute(sevrer_nodes, default_port, num_threads)
+			modules.StartMute(server_nodes, default_port, num_threads)
 		case "malicious":
-			modules.StartMute(sevrer_nodes, default_port, num_threads)
+			modules.StartMute(server_nodes, default_port, num_threads)
 		default:
 			panic("Invalid argument")
 		}

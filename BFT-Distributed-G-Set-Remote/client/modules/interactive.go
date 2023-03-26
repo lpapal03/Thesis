@@ -40,7 +40,7 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 			os.Exit(0)
 		}
 		if command == "g" {
-			r := messaging.Get(client)
+			r, _ := messaging.Get(client)
 			tools.Log(client.Id, r)
 		}
 		if command == "a" {
