@@ -41,6 +41,7 @@ func StartInteractive(zctx *zmq.Context, network_name string) {
 		}
 		if command == "g" {
 			r, _ := messaging.Get(client)
+			r = truncateResponse(r, 5)
 			tools.Log(client.Id, r)
 		}
 		if command == "a" {
