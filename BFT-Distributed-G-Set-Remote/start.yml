@@ -1,4 +1,14 @@
 ---
+- name: Start scenario
+  hosts: all
+  become: true
+  tasks:
+    - name: Clone repository
+      git:
+        repo: https://github.com/loukaspapalazarou/Thesis.git
+        dest: /users/loukis/Thesis/BFT-Distributed-G-Set-Remote
+        version: main
+        force: yes
 - name: Get hosts file from master
   hosts: all
   become: true
@@ -46,4 +56,3 @@
     - name: Start client
       raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client; nohup /usr/local/go/bin/go run . -auto </dev/null >/dev/null 2>&1 & sleep 1
       become_user: loukis
-    
