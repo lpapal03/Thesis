@@ -26,7 +26,9 @@ func saveState() error {
 	}
 	defer file.Close()
 
-	_, err = fmt.Fprintf(file, "REQUESTS=%d\nAVG_GET_TIME=%fns\nAVG_ADD_TIME=%fns\n", REQUESTS, float64(TOTAL_GET_TIME)/float64(REQUESTS), float64(TOTAL_ADD_TIME)/float64(REQUESTS))
+	avg_get := float64(TOTAL_GET_TIME) / float64(REQUESTS) / float64(time.Millisecond)
+	avg_add := float64(TOTAL_ADD_TIME) / float64(REQUESTS) / float64(time.Millisecond)
+	_, err = fmt.Fprintf(file, "REQUESTS=%d\nAVG_GET_TIME=%fms\nAVG_ADD_TIME=%fms\n", REQUESTS, avg_get, avg_add)
 
 	if err != nil {
 		return err
