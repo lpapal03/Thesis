@@ -5,12 +5,10 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 )
 
-var mu sync.Mutex
-
 func ResetLogFile() {
-	fmt.Println("Hello from reset")
 	// Check if the file exists
 	if _, err := os.Stat("log.txt"); err == nil {
 		// File exists, delete it
@@ -26,25 +24,26 @@ func LogDebug(hostname, event string) {
 	log.Println("| " + hostname + " | " + event)
 }
 
+var fileMutex sync.Mutex // declare a mutex for file access
+
 func Log(hostname, event string) error {
+	fileMutex.Lock()         // acquire the lock
+	defer fileMutex.Unlock() // release the lock when done
+
 	LogDebug(hostname, event)
-	// Open a log file
-	mu.Lock()
-	file, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+
+	f, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	// Set the log output to the file
-	log.SetOutput(file)
+	now := time.Now().Format("2006/01/02 15:04:05") // format the current time as YYYY/MM/DD HH:MM:SS
+	data := fmt.Sprintf("%s | %s | %s", now, hostname, event)
 
-	// Write some log messages
-	log.Println("| " + hostname + " | " + event)
-
-	log.SetOutput(os.Stdout)
-
-	file.Close()
-	mu.Unlock()
-
+	if _, err = f.WriteString(data); err != nil {
+		return err
+	}
+	f.Close()
+	fileMutex.Unlock()
 	return nil
 }
