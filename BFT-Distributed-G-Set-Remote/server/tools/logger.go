@@ -27,8 +27,7 @@ func LogDebug(hostname, event string) {
 var fileMutex sync.Mutex // declare a mutex for file access
 
 func Log(hostname, event string) error {
-	fileMutex.Lock()         // acquire the lock
-	defer fileMutex.Unlock() // release the lock when done
+	fileMutex.Lock() // acquire the lock
 
 	LogDebug(hostname, event)
 
