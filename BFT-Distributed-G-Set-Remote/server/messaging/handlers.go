@@ -45,7 +45,6 @@ func handleAdd(receiver *server.Server, message Message) {
 	} else {
 		response := []string{message.Sender, receiver.Id, ADD_RESPONSE, message.Content[0]}
 		receiver.Receive_socket.SendMessage(response)
-		tools.Log(receiver.Id, "sent"+strings.Join(response, " "))
 	}
 }
 

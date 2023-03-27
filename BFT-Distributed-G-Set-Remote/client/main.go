@@ -5,7 +5,6 @@ import (
 	"2-Atomic-Adds/modules"
 	"2-Atomic-Adds/tools"
 	"flag"
-	"fmt"
 
 	zmq "github.com/pebbe/zmq4"
 )
@@ -30,7 +29,6 @@ func main() {
 
 	if auto {
 		modules.StartAutomated(zctx, client_threads, reqs, "servers")
-		fmt.Println(reqs)
 		return
 	}
 	modules.StartInteractive(zctx, "servers")
