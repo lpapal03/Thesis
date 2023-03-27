@@ -5,8 +5,9 @@ import (
 	"log"
 	"os"
 	"sync"
-	"time"
 )
+
+var mu sync.Mutex
 
 func ResetLogFile() {
 	// Check if the file exists
@@ -24,25 +25,23 @@ func LogDebug(hostname, event string) {
 	log.Println("| " + hostname + " | " + event)
 }
 
-var fileMutex sync.Mutex // declare a mutex for file access
-
 func Log(hostname, event string) error {
-	fileMutex.Lock() // acquire the lock
-
 	LogDebug(hostname, event)
-
-	f, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	// Open a log file
+	mu.Lock()
+	defer mu.Unlock()
+	file, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		return err
+		panic(err)
 	}
+	defer file.Close()
 
-	now := time.Now().Format("2006/01/02 15:04:05") // format the current time as YYYY/MM/DD HH:MM:SS
-	data := fmt.Sprintf("%s | %s | %s", now, hostname, event)
+	// Set the log output to the file
+	log.SetOutput(file)
 
-	if _, err = f.WriteString(data); err != nil {
-		return err
-	}
-	f.Close()
-	fileMutex.Unlock()
+	// Write some log messages
+	log.Println("| " + hostname + " | " + event)
+
+	log.SetOutput(os.Stdout)
 	return nil
 }
