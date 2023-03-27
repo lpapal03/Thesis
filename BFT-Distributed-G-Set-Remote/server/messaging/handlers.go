@@ -4,10 +4,12 @@ import (
 	"2-Atomic-Adds/gset"
 	"2-Atomic-Adds/server"
 	"2-Atomic-Adds/tools"
+	"fmt"
 	"strings"
 )
 
 func HandleMessage(s *server.Server, msg []string) {
+	fmt.Println(tools.BRB_MESSAGES, tools.NORMAL_MESSAGES)
 	message, err := ParseMessageString(msg)
 	if err != nil {
 		tools.Log(s.Id, "Error msg: "+strings.Join(msg, " "))
@@ -21,11 +23,14 @@ func HandleMessage(s *server.Server, msg []string) {
 
 	// handle
 	if message.Tag == GET {
+		tools.IncrementNormalCount()
 		handleGet(s, message)
 	} else if message.Tag == ADD {
+		tools.IncrementNormalCount()
 		message.Content[0] = message.Sender + "." + message.Content[0]
 		handleAdd(s, message)
 	} else if strings.Contains(message.Tag, BRACHA_BROADCAST) {
+		tools.IncrementBRBCount()
 		handleRB(s, message)
 	}
 
