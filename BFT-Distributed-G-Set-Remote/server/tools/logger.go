@@ -10,6 +10,7 @@ import (
 var mu sync.Mutex
 
 func ResetLogFile() {
+	fmt.Println("Hello from reset")
 	// Check if the file exists
 	if _, err := os.Stat("log.txt"); err == nil {
 		// File exists, delete it
@@ -29,12 +30,10 @@ func Log(hostname, event string) error {
 	LogDebug(hostname, event)
 	// Open a log file
 	mu.Lock()
-	defer mu.Unlock()
 	file, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		panic(err)
 	}
-	defer file.Close()
 
 	// Set the log output to the file
 	log.SetOutput(file)
@@ -43,5 +42,9 @@ func Log(hostname, event string) error {
 	log.Println("| " + hostname + " | " + event)
 
 	log.SetOutput(os.Stdout)
+
+	file.Close()
+	mu.Unlock()
+
 	return nil
 }
