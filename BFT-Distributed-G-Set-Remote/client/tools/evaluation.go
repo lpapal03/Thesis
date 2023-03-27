@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"sync"
+	"time"
 )
 
 // total add time
@@ -12,8 +13,8 @@ import (
 // avg of each
 var (
 	TOTAL_GET_TIME = 0
-	TOTAL_ADD_TIME=0
-	REQUESTS=0
+	TOTAL_ADD_TIME = 0
+	REQUESTS       = 0
 )
 
 var counter_mutex sync.Mutex
@@ -25,7 +26,8 @@ func saveState() error {
 	}
 	defer file.Close()
 
-	_, err = fmt.Fprintf(file, "TOTAL_GET_TIME=%d\nTOTAL_ADD_TIME=%d\nREQUESTS=%d\n", BRB_MESSAGES, NORMAL_MESSAGES, BRB_MESSAGES+NORMAL_MESSAGES)
+	_, err = fmt.Fprintf(file, "REQUESTS=%d\nAVG_GET_TIME=%fns\nAVG_ADD_TIME=%fns\n", REQUESTS, float64(TOTAL_GET_TIME)/float64(REQUESTS), float64(TOTAL_ADD_TIME)/float64(REQUESTS))
+
 	if err != nil {
 		return err
 	}
@@ -33,16 +35,18 @@ func saveState() error {
 	return nil
 }
 
-func IncrementAddTime() {
+func IncrementAddTime(t time.Duration) {
 	counter_mutex.Lock()
-	BRB_MESSAGES++
+	TOTAL_ADD_TIME += int(t.Nanoseconds())
+	REQUESTS++
 	saveState()
 	counter_mutex.Unlock()
 }
 
-func IncrementGetTime() {
+func IncrementGetTime(t time.Duration) {
 	counter_mutex.Lock()
-	NORMAL_MESSAGES++
+	TOTAL_GET_TIME += int(t.Nanoseconds())
+	REQUESTS++
 	saveState()
 	counter_mutex.Unlock()
 }

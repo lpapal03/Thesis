@@ -28,8 +28,8 @@ func main() {
 	flag.Parse()
 
 	if auto {
-		modules.StartAutomated(zctx, client_threads, reqs, "servers")
+		modules.StartAutomated(zctx, client_threads, reqs)
 		return
 	}
-	modules.StartInteractive(zctx, "servers")
+	modules.StartInteractive(zctx)
 }

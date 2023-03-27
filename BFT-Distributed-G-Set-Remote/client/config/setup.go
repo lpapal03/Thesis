@@ -17,7 +17,7 @@ var (
 	F = 0
 )
 
-func Initialize(network_name string) []Node {
+func Initialize() []Node {
 	working_dir, err := os.Getwd()
 	if err != nil {
 		panic(err)
@@ -25,7 +25,7 @@ func Initialize(network_name string) []Node {
 
 	parent_dir := filepath.Dir(working_dir)
 	port, threads := GetPortAndThreads(parent_dir + "/config")
-	servers := GetHosts(parent_dir+"/hosts", network_name)
+	servers := GetHosts(parent_dir+"/hosts", "servers")
 	server_nodes := make([]Node, 0)
 	for _, s := range servers {
 		for i := port; i < port+threads; i++ {

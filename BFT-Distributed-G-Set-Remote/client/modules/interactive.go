@@ -13,8 +13,8 @@ import (
 	zmq "github.com/pebbe/zmq4"
 )
 
-func StartInteractive(zctx *zmq.Context, network_name string) {
-	servers := config.Initialize(network_name)
+func StartInteractive(zctx *zmq.Context) {
+	servers := config.Initialize()
 
 	scanner := bufio.NewScanner(os.Stdin)
 	var id string
