@@ -37,29 +37,34 @@
   hosts: servers-normal
   tasks:
     - name: Start server
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server; nohup /usr/local/go/bin/go run . normal > stdoutfile 2> stderrfile & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server; nohup /usr/local/go/bin/go run . normal > stdoutfile 2> stderrfile
+      command: scp /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/experiment_results.txt loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/experiment_results.txt
       become_user: loukis
 - name: Start mute servers
   hosts: servers-mute
   tasks:
     - name: Start server
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server; nohup /usr/local/go/bin/go run . mute > stdoutfile 2> stderrfile & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server; nohup /usr/local/go/bin/go run . mute > stdoutfile 2> stderrfile
+      command: scp /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/experiment_results.txt loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/$HOSTNAME.txt
       become_user: loukis
 - name: Start malicious servers
   hosts: servers-malicious
   tasks:
     - name: Start server
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server; nohup /usr/local/go/bin/go run . malicious > stdoutfile 2> stderrfile & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server; nohup /usr/local/go/bin/go run . malicious > stdoutfile 2> stderrfile
+      command: scp /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/experiment_results.txt loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/$HOSTNAME.txt
       become_user: loukis
 - name: Start half_and_half servers
   hosts: servers-half_and_half
   tasks:
     - name: Start server
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server; nohup /usr/local/go/bin/go run . half_and_half > stdoutfile 2> stderrfile & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server; nohup /usr/local/go/bin/go run . half_and_half > stdoutfile 2> stderrfile
+      command: scp /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/experiment_results.txt loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/$HOSTNAME.txt
       become_user: loukis
 - name: Start automated clients. Interactive clients should be started manually
   hosts: clients-automated
   tasks:
     - name: Start client
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client; nohup /usr/local/go/bin/go run . -auto -reqs 200 > stdoutfile 2> stderrfile & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client; nohup /usr/local/go/bin/go run . -auto -reqs 200 > stdoutfile 2> stderrfile
+      command: scp /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/experiment_results.txt loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/$HOSTNAME.txt
       become_user: loukis
