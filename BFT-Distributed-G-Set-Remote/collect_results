@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rm results
+mkdir results # add experiemtn identifier
+
+for num in {0..30}; do
+    # Run the scp command to copy the file from the remote node
+    scp loukis@node$num:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/experiment_results.txt /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/node$num.txt
+    scp loukis@node$num:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/experiment_results.txt /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/node$num.txt
+done
