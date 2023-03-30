@@ -28,6 +28,14 @@
       file: 
         path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/stderrfile"
         state: absent
+    - name: Remove experiment files
+      file: 
+        path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/experiment_results.txt"
+        state: absent
+    - name: Remove experiment files
+      file: 
+        path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/experiment_results.txt"
+        state: absent
     - name: Kill project processes on all machines
       command: killall -9 BFT-Distributed-G-Set-Remote
       become: true
@@ -61,5 +69,5 @@
   hosts: clients-automated
   tasks:
     - name: Start client
-      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client; nohup /usr/local/go/bin/go run . -auto -reqs 200 > stdoutfile 2> stderrfile & sleep 1
+      raw: cd /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client; nohup /usr/local/go/bin/go run . -auto -reqs 5 > stdoutfile 2> stderrfile & sleep 1
       become_user: loukis

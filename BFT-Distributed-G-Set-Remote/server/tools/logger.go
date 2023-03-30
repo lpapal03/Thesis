@@ -18,7 +18,6 @@ func ResetLogFile() {
 			fmt.Println(err)
 		}
 	}
-
 }
 
 func LogDebug(hostname, event string) {
