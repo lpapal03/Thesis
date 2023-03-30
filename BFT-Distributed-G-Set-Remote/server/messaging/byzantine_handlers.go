@@ -83,7 +83,8 @@ func generateByzantineValue(s *server.Server, sender string, half_and_half bool)
 		return "0"
 	}
 	for _, peer := range s.Peers {
-		fmt.Println(peer, sender)
+		id, _ := peer.GetIdentity()
+		fmt.Println(id, sender, id == sender)
 	}
 	rand.Seed(time.Now().UnixNano())
 	if rand.Intn(2) == 0 {
