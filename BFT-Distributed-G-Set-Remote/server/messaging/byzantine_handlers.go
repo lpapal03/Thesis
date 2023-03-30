@@ -3,10 +3,8 @@ package messaging
 import (
 	"2-Atomic-Adds/server"
 	"2-Atomic-Adds/tools"
-	"fmt"
-	"math/rand"
+	"strconv"
 	"strings"
-	"time"
 )
 
 func HandleMessageByzantine(s *server.Server, msg []string, scenario string) {
@@ -48,19 +46,19 @@ func HandleMessageByzantine(s *server.Server, msg []string, scenario string) {
 // Handle get request. I need sender_id to know where
 // my response will go to
 func handleGetByzantine(receiver *server.Server, message Message, half_and_half bool) {
-	byzantine_value := generateByzantineValue(receiver, message.Sender, half_and_half)
+	byzantine_value := generateByzantineValue(message.Sender, half_and_half)
 	response := []string{message.Sender, receiver.Id, GET_RESPONSE, byzantine_value}
 	receiver.Receive_socket.SendMessage(response)
 }
 
 func handleAddByzantine(receiver *server.Server, message Message, half_and_half bool) {
-	byzantine_value := generateByzantineValue(receiver, message.Sender, half_and_half)
+	byzantine_value := generateByzantineValue(message.Sender, half_and_half)
 	response := []string{message.Sender, receiver.Id, ADD_RESPONSE, byzantine_value}
 	receiver.Receive_socket.SendMessage(response)
 }
 
 func handleRBByzantine(receiver *server.Server, message Message, half_and_half bool) {
-	byzantine_value := generateByzantineValue(receiver, message.Sender, half_and_half)
+	byzantine_value := generateByzantineValue(message.Sender, half_and_half)
 	var tag string
 	switch message.Tag {
 	case BRACHA_BROADCAST_INIT:
@@ -78,18 +76,14 @@ func handleRBByzantine(receiver *server.Server, message Message, half_and_half b
 	sendToAll(receiver, v)
 }
 
-func generateByzantineValue(s *server.Server, sender string, half_and_half bool) string {
+func generateByzantineValue(sender string, half_and_half bool) string {
 	if !half_and_half {
-		return "0"
+		return "BYZANTINE_0"
 	}
-	for _, peer := range s.Peers {
-		id, _ := peer.GetIdentity()
-		fmt.Println(id, sender, id == sender)
-	}
-	rand.Seed(time.Now().UnixNano())
-	if rand.Intn(2) == 0 {
-		return "0"
+	sender_port, _ := strconv.Atoi(strings.Split(sender, ":")[1])
+	if sender_port%2 == 0 {
+		return "BYZANTINE_0"
 	} else {
-		return "1"
+		return "BYZANTINE_1"
 	}
 }
