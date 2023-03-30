@@ -3,6 +3,7 @@ package messaging
 import (
 	"2-Atomic-Adds/server"
 	"2-Atomic-Adds/tools"
+	"fmt"
 	"math/rand"
 	"strings"
 	"time"
@@ -47,19 +48,19 @@ func HandleMessageByzantine(s *server.Server, msg []string, scenario string) {
 // Handle get request. I need sender_id to know where
 // my response will go to
 func handleGetByzantine(receiver *server.Server, message Message, half_and_half bool) {
-	byzantine_value := generateByzantineValue(half_and_half)
+	byzantine_value := generateByzantineValue(receiver, message.Sender, half_and_half)
 	response := []string{message.Sender, receiver.Id, GET_RESPONSE, byzantine_value}
 	receiver.Receive_socket.SendMessage(response)
 }
 
 func handleAddByzantine(receiver *server.Server, message Message, half_and_half bool) {
-	byzantine_value := generateByzantineValue(half_and_half)
+	byzantine_value := generateByzantineValue(receiver, message.Sender, half_and_half)
 	response := []string{message.Sender, receiver.Id, ADD_RESPONSE, byzantine_value}
 	receiver.Receive_socket.SendMessage(response)
 }
 
 func handleRBByzantine(receiver *server.Server, message Message, half_and_half bool) {
-	byzantine_value := generateByzantineValue(half_and_half)
+	byzantine_value := generateByzantineValue(receiver, message.Sender, half_and_half)
 	var tag string
 	switch message.Tag {
 	case BRACHA_BROADCAST_INIT:
@@ -77,7 +78,8 @@ func handleRBByzantine(receiver *server.Server, message Message, half_and_half b
 	sendToAll(receiver, v)
 }
 
-func generateByzantineValue(half_and_half bool) string {
+func generateByzantineValue(s *server.Server, sender string, half_and_half bool) string {
+	fmt.Println(s.Peers, sender)
 	if !half_and_half {
 		return "0"
 	}
