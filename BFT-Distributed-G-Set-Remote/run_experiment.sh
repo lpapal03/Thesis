@@ -7,13 +7,11 @@ fi
 
 param=$1
 
-last_node=$(awk '/^\[clients-automated\]/{flag=1;next}/^\[/{flag=0}flag{print $1}' /etc/hosts | grep -o "[0-9]*" | sort -rn | head -1)
-
 for thread_num in {1..5}; do
     sed -i "s/NUM_THREADS=[0-9]*/NUM_THREADS=$thread_num/" config # Update the number of threads in the config file
     echo Starting with $thread_num threads
-    ansible-playbook -i ./hosts ansible/end.yml
-    ansible-playbook -i ./hosts ansible/start.yml
+    ansible-playbook -i ./hosts end.yml
+    ansible-playbook -i ./hosts start.yml
     while true; do
         echo Waiting for clients to finish...
         # Get the list of nodes under the [clients-automated] tag from a remote machine
@@ -29,9 +27,10 @@ for thread_num in {1..5}; do
             rm -rf results/experiment-$param/threads-$thread_num
             mkdir results/experiment-$param
             mkdir results/experiment-$param/threads-$thread_num
-            for num in {0..50}; do
-                scp loukis@node$num:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/experiment_results.txt /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/experiment-$param/threads-$thread_num/node$num.txt
-                scp loukis@node$num:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/experiment_results.txt /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/experiment-$param/threads-$thread_num/node$num.txt
+            nodes=$(grep -v "^#" hosts | grep -v "^$" | grep -v "^node0$" | grep -v "^\[" | cut -d" " -f2)
+            for node in $nodes; do
+                scp loukis@$node:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/experiment_results.txt /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/experiment-$param/threads-$thread_num/$node.txt
+                scp loukis@$node:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/experiment_results.txt /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/experiment-$param/threads-$thread_num/$node.txt
             done
             break
         fi
