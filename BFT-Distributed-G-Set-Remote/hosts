@@ -7,10 +7,10 @@ node1
 [servers-normal]
 node2
 node3
-node4
 
 [servers-mute]
 
 [servers-malicious]
 
 [servers-half_and_half]
+node4

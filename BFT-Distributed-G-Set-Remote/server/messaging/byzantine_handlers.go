@@ -79,9 +79,11 @@ func handleRBByzantine(receiver *server.Server, message Message, half_and_half b
 }
 
 func generateByzantineValue(s *server.Server, sender string, half_and_half bool) string {
-	fmt.Println(s.Peers, sender)
 	if !half_and_half {
 		return "0"
+	}
+	for _, peer := range s.Peers {
+		fmt.Println(peer, sender)
 	}
 	rand.Seed(time.Now().UnixNano())
 	if rand.Intn(2) == 0 {
