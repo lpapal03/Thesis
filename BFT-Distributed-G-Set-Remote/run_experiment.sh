@@ -24,13 +24,13 @@ for thread_num in {1..5}; do
 
         # If every node is done, run the second script
         if [[ $done_count -eq 0 ]]; then
-            rm -rf results/experiment-$param/threads-$thread_num
-            mkdir results/experiment-$param
-            mkdir results/experiment-$param/threads-$thread_num
+            rm -rf results/scenario-$param/threads-$thread_num
+            mkdir results/scenario-$param
+            mkdir results/scenario-$param/threads-$thread_num
             nodes=$(grep -v "^#" hosts | grep -v "^$" | grep -v "^node0$" | grep -v "^\[" | cut -d" " -f2)
             for node in $nodes; do
-                scp loukis@$node:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/experiment_results.txt /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/experiment-$param/threads-$thread_num/$node.txt
-                scp loukis@$node:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/experiment_results.txt /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/experiment-$param/threads-$thread_num/$node.txt
+                scp loukis@$node:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/scenario_results.txt /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/scenario-$param/threads-$thread_num/$node.txt
+                scp loukis@$node:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/scenario_results.txt /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/scenario-$param/threads-$thread_num/$node.txt
             done
             break
         fi
