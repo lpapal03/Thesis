@@ -1,8 +1,8 @@
 package client
 
 import (
-	"2-Atomic-Adds/config"
-	"2-Atomic-Adds/tools"
+	"BFT-Distributed-G-Set-Remote/config"
+	"BFT-Distributed-G-Set-Remote/tools"
 
 	zmq "github.com/pebbe/zmq4"
 )

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"2-Atomic-Adds/config"
-	"2-Atomic-Adds/modules"
-	"2-Atomic-Adds/tools"
+	"BFT-Distributed-G-Set-Remote/config"
+	"BFT-Distributed-G-Set-Remote/modules"
+	"BFT-Distributed-G-Set-Remote/tools"
 	"flag"
 
 	zmq "github.com/pebbe/zmq4"

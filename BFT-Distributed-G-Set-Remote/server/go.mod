@@ -1,4 +1,4 @@
-module 2-Atomic-Adds
+module BFT-Distributed-G-Set-Remote
 
 go 1.18
 

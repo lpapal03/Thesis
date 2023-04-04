@@ -35,6 +35,6 @@ for thread_num in {1..5}; do
             break
         fi
 
-        sleep 5 # wait for 5 seconds before running the first script again
+        sleep 10 # wait for 5 seconds before running the first script again
     done
 done

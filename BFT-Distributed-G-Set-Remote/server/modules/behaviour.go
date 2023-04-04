@@ -1,10 +1,10 @@
 package modules
 
 import (
-	"2-Atomic-Adds/config"
-	"2-Atomic-Adds/messaging"
-	"2-Atomic-Adds/server"
-	"2-Atomic-Adds/tools"
+	"BFT-Distributed-G-Set-Remote/config"
+	"BFT-Distributed-G-Set-Remote/messaging"
+	"BFT-Distributed-G-Set-Remote/server"
+	"BFT-Distributed-G-Set-Remote/tools"
 	"os"
 	"strconv"
 	"strings"
