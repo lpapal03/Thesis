@@ -20,6 +20,8 @@
       command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/hosts /users/loukis/Thesis/BFT-Distributed-G-Set-Remote
     - name: Fetch file config from node 0 (master node)
       command: scp loukis@node0:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/config /users/loukis/Thesis/BFT-Distributed-G-Set-Remote
+    - name: Create results folder
+      command: mkdir results
     - name: Remove output files
       file: 
         path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/stdoutfile"
