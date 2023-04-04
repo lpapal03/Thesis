@@ -4,6 +4,7 @@ import (
 	"2-Atomic-Adds/config"
 	"2-Atomic-Adds/gset"
 	"2-Atomic-Adds/tools"
+	"time"
 
 	zmq "github.com/pebbe/zmq4"
 )
@@ -22,6 +23,9 @@ type Server struct {
 	Peers_echo     map[string]bool
 	Peers_vote     map[string]bool
 	Bdso_networks  map[string]map[string]*zmq.Socket
+
+	BRB_start_time map[string]time.Time
+	BRB_duration   map[string]time.Duration
 }
 
 func CreateServer(me config.Node, peers []config.Node) *Server {
@@ -33,6 +37,10 @@ func CreateServer(me config.Node, peers []config.Node) *Server {
 	my_vote := make(map[string]bool)
 	peers_echo := make(map[string]bool)
 	peers_vote := make(map[string]bool)
+
+	brb_start_time := make(map[string]time.Time)
+	brb_duration := make(map[string]time.Duration)
+
 	my_id := me.Host + ":" + me.Port
 	receive_socket, err := zctx.NewSocket(zmq.ROUTER)
 	if err != nil {
@@ -66,5 +74,7 @@ func CreateServer(me config.Node, peers []config.Node) *Server {
 		My_vote:        my_vote,
 		Peers_echo:     peers_echo,
 		Peers_vote:     peers_vote,
+		BRB_start_time: brb_start_time,
+		BRB_duration:   brb_duration,
 	}
 }

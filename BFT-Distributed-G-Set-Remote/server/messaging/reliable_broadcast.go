@@ -3,7 +3,9 @@ package messaging
 import (
 	"2-Atomic-Adds/config"
 	"2-Atomic-Adds/server"
+	"fmt"
 	"strings"
+	"time"
 )
 
 // Leader, the one who initializes the module
@@ -26,6 +28,8 @@ func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 		receiver.My_init[my_key] = true
 		receiver.My_echo[my_key] = true
 		receiver.My_vote[my_key] = true
+
+		receiver.BRB_start_time[my_key] = time.Now()
 	}
 
 	// on receiving <v> from leader:
@@ -69,6 +73,8 @@ func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
 		// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
 		// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
+		receiver.BRB_duration[my_key] = time.Since(receiver.BRB_start_time[my_key])
+		fmt.Println("Time taken for BRB: ", receiver.BRB_duration[my_key])
 		cleanup(receiver, peers_key)
 		return true
 	}
