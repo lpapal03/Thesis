@@ -1,7 +1,5 @@
 #!/bin/bash
 
-mkdir results
-
 if [ $# -eq 0 ]; then
     echo "Please provide an input parameter."
     exit 1
