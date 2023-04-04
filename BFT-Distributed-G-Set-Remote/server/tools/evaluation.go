@@ -17,7 +17,7 @@ var (
 var counter_mutex sync.Mutex
 
 func saveState() error {
-	file, err := os.OpenFile("experiment_results.txt", os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
+	file, err := os.OpenFile("scenario_results.txt", os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
 		return err
 	}
