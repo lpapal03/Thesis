@@ -25,7 +25,6 @@ type Server struct {
 	Bdso_networks  map[string]map[string]*zmq.Socket
 
 	BRB_start_time map[string]time.Time
-	BRB_duration   map[string]time.Duration
 }
 
 func CreateServer(me config.Node, peers []config.Node) *Server {
@@ -39,7 +38,6 @@ func CreateServer(me config.Node, peers []config.Node) *Server {
 	peers_vote := make(map[string]bool)
 
 	brb_start_time := make(map[string]time.Time)
-	brb_duration := make(map[string]time.Duration)
 
 	my_id := me.Host + ":" + me.Port
 	receive_socket, err := zctx.NewSocket(zmq.ROUTER)
@@ -75,6 +73,5 @@ func CreateServer(me config.Node, peers []config.Node) *Server {
 		Peers_echo:     peers_echo,
 		Peers_vote:     peers_vote,
 		BRB_start_time: brb_start_time,
-		BRB_duration:   brb_duration,
 	}
 }

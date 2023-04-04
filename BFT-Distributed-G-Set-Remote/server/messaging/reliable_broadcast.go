@@ -3,7 +3,7 @@ package messaging
 import (
 	"2-Atomic-Adds/config"
 	"2-Atomic-Adds/server"
-	"fmt"
+	"2-Atomic-Adds/tools"
 	"strings"
 	"time"
 )
@@ -73,8 +73,7 @@ func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
 		// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
 		// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
-		receiver.BRB_duration[my_key] = time.Since(receiver.BRB_start_time[my_key])
-		fmt.Println("Time taken for BRB: ", receiver.BRB_duration[my_key])
+		tools.IncrementBRBTime(time.Since(receiver.BRB_start_time[my_key]))
 		cleanup(receiver, peers_key)
 		return true
 	}
