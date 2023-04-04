@@ -16,10 +16,10 @@ for thread_num in {1..5}; do
         echo Waiting for clients to finish...
         # Get the list of nodes under the [clients-automated] tag from a remote machine
         nodes=($(awk '/^\[clients-automated\]/{flag=1;next}/^\[/{flag=0}flag{print $1}' hosts))
-        # Check if every node is done with the process "2-Atomic-Adds"
+        # Check if every node is done with the process "BFT-Distributed-G-Set-Remote"
         done_count=0
         for node in $nodes; do
-            ssh $node "pgrep 2-Atomic-Adds > /dev/null && echo \"Node $node is done\" || echo \"Node $node is not done\""
+            ssh $node "pgrep BFT-Distributed-G-Set-Remote > /dev/null && echo \"Node $node is done\" || echo \"Node $node is not done\""
         done | grep -v "Node.*is done" || ((done_count++))
 
         # If every node is done, run the second script
