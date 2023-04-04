@@ -1,5 +1,7 @@
 #!/bin/bash
 
+killall -9 2-Atomic-Adds
+
 if [ $# -eq 0 ]; then
     echo "Please provide an input parameter."
     exit 1
