@@ -24,7 +24,7 @@ func saveState() error {
 	defer file.Close()
 
 	avg_brb := float64(TOTAL_BRB_TIME) / float64(BRB_REQUESTS) / float64(time.Millisecond)
-	_, err = fmt.Fprintf(file, "BRB_MESSAGES=%d\nNORMAL_MESSAGES=%d\nTOTAL=%d\nAVG_BRB_TIME=%f", BRB_MESSAGES, NORMAL_MESSAGES, BRB_MESSAGES+NORMAL_MESSAGES, avg_brb)
+	_, err = fmt.Fprintf(file, "BRB_MESSAGES=%d\nNORMAL_MESSAGES=%d\nTOTAL=%d\nAVG_BRB_TIME=%fms\n", BRB_MESSAGES, NORMAL_MESSAGES, BRB_MESSAGES+NORMAL_MESSAGES, avg_brb)
 	if err != nil {
 		return err
 	}
