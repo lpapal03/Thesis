@@ -24,6 +24,8 @@
       file: 
         path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/stdoutfile"
         state: absent
+    - name: Log cpu specs
+      command: lscpu > lscpu.txt
     - name: Remove error files
       file: 
         path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/stderrfile"
