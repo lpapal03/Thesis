@@ -24,12 +24,6 @@
       file: 
         path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/stdoutfile"
         state: absent
-    - name: Run lscpu command and redirect output to file
-      become: yes
-      shell: lscpu > lscpu.txt 2>&1
-      args:
-        chdir: /path/to/output/directory
-      register: lscpu_output
     - name: Remove error files
       file: 
         path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/stderrfile"
