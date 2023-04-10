@@ -3,7 +3,7 @@
 rm -rf results
 mkdir results
 
-./run_scenario normal
-./run_scenario mute
-./run_scenario malicious
-./run_scenario half_and_half
+./run_scenario.sh normal
+./run_scenario.sh mute
+./run_scenario.sh malicious
+./run_scenario.sh half_and_half
