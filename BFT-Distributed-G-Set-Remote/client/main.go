@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	tools.LOGGING = false
+	tools.LOGGING = true
 	tools.ResetLogFile()
 
 	wd := "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote"

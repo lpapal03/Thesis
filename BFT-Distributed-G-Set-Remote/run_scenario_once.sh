@@ -26,10 +26,9 @@ for thread_num in {1..5}; do
             fi
         done
 
-        echo Start copying result files...
-
         # If every node is done, run the second script
         if [[ $done_count -eq ${#client_nodes[@]} ]]; then
+            echo Start copying result files...
             rm -rf results/scenario-$param/threads-$thread_num
             mkdir results/scenario-$param
             mkdir results/scenario-$param/threads-$thread_num

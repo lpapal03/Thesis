@@ -1,1 +1,1 @@
-nohup ./run_all.sh > logfile 2>&1 &
+nohup ./run_scenario.sh {name} > logfile 2>&1 &
