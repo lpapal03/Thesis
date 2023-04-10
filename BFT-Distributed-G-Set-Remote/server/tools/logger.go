@@ -8,8 +8,12 @@ import (
 )
 
 var mu sync.Mutex
+var LOGGING bool
 
 func ResetLogFile() {
+	if !LOGGING {
+		return
+	}
 	// Check if the file exists
 	if _, err := os.Stat("log.txt"); err == nil {
 		// File exists, delete it
@@ -21,10 +25,16 @@ func ResetLogFile() {
 }
 
 func LogDebug(hostname, event string) {
+	if !LOGGING {
+		return
+	}
 	log.Println("| " + hostname + " | " + event)
 }
 
 func Log(hostname, event string) error {
+	if !LOGGING {
+		return nil
+	}
 	LogDebug(hostname, event)
 	// Open a log file
 	mu.Lock()
