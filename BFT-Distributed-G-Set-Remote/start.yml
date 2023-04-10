@@ -3,14 +3,7 @@
   hosts: all
   become: true
   tasks:
-    # - name: Update repo
-    #   git:
-    #     repo: https://github.com/loukaspapalazarou/Thesis.git
-    #     dest: /users/loukis/Thesis
-    #     clone: yes
-    #     update: yes
-    #     force: yes
-- name: Get hosts file from master
+- name: Get files from master
   hosts: all
   become: true
   tasks:
@@ -28,10 +21,30 @@
       file: 
         path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/stderrfile"
         state: absent
-    - name: Remove scenario files
-      command: "rm /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/scenario_results*"
-    - name: Remove scenario files
-      command: "rm /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/scenario_results*"
+    - name: Find files starting with "scenario_results"
+      find:
+        paths: /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/
+        patterns: "scenario_results*"
+      register: found_files
+
+    - name: Delete found files
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ found_files.files }}"
+
+    - name: Find files starting with "scenario_results"
+      find:
+        paths: /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/
+        patterns: "scenario_results*"
+      register: found_files
+
+    - name: Delete found files
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ found_files.files }}"
+
     - name: Kill project processes on all machines
       command: killall -9 BFT-Distributed-G-Set-Remote
       become: true
