@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Loop through nodes
-for num in {0..29}; do
+done_counter=0
+for num in {1..29}; do
   ssh node$num "pgrep BFT-Distributed > /dev/null"
   if [ $? -eq 0 ]; then
-    echo "TEST is running on node$num"
+    echo "Experiment is running on node$num"
   else
-    echo "TEST is not running on node$num"
+    echo "Experiment is not running on node$num"
+    let "done_counter+=1"
   fi
 done
 
-# Check if all nodes are done
-if ! pgrep TEST > /dev/null; then
-  echo "Done"
-fi
+echo "Machines done:" $done_counter
+

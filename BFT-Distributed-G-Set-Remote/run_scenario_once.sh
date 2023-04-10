@@ -15,15 +15,20 @@ for thread_num in {1..5}; do
     while true; do
         echo Waiting for clients to finish...
         # Get the list of nodes under the [clients-automated] tag from a remote machine
-        nodes=($(awk '/^\[clients-automated\]/{flag=1;next}/^\[/{flag=0}flag{print $1}' hosts))
+        client_nodes=(node1 node2 node3 node4)
         # Check if every node is done with the process "BFT-Distributed-G-Set-Remote"
         done_count=0
-        for node in $nodes; do
-            ssh $node "pgrep BFT-Distributed-G-Set-Remote > /dev/null && echo \"Node $node is done\" || echo \"Node $node is not done\""
-        done | grep -v "Node.*is done" || ((done_count++))
+        for node in $client_nodes; do
+            ssh "$node" "pgrep BFT-Distributed > /dev/null"
+            if [ $? -eq 0 ]; then
+                echo "Experiment is running on $node"
+            else
+                echo "Experiment is not running on $node"
+                let "done_count+=1"
+            fi
 
         # If every node is done, run the second script
-        if [[ $done_count -eq 0 ]]; then
+        if [[ $done_count -eq ${#client_nodes[@]} ]]; then
             rm -rf results/scenario-$param/threads-$thread_num
             mkdir results/scenario-$param
             mkdir results/scenario-$param/threads-$thread_num
