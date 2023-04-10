@@ -38,21 +38,21 @@ func saveState(host, port string) error {
 func IncrementBRBCount(host, port string) {
 	counter_mutex.Lock()
 	BRB_MESSAGES++
-	saveState(host, port)
 	counter_mutex.Unlock()
+	saveState(host, port)
 }
 
 func IncrementNormalCount(host, port string) {
 	counter_mutex.Lock()
 	NORMAL_MESSAGES++
-	saveState(host, port)
 	counter_mutex.Unlock()
+	saveState(host, port)
 }
 
 func IncrementBRBTime(host, port string, t time.Duration) {
 	counter_mutex.Lock()
 	TOTAL_BRB_TIME += int(t.Nanoseconds())
 	COMPLETED_BRB_REQUESTS++
-	saveState(host, port)
 	counter_mutex.Unlock()
+	saveState(host, port)
 }

@@ -19,8 +19,11 @@ var (
 
 var counter_mutex sync.Mutex
 
-func saveState() error {
-	file, err := os.OpenFile("scenario_results.txt", os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
+func saveState(client_id string) error {
+
+	filename := "scenario_results_" + client_id + ".txt"
+
+	file, err := os.OpenFile(filename, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
 		return err
 	}
@@ -37,18 +40,18 @@ func saveState() error {
 	return nil
 }
 
-func IncrementAddTime(t time.Duration) {
+func IncrementAddTime(client_id string, t time.Duration) {
 	counter_mutex.Lock()
 	TOTAL_ADD_TIME += int(t.Nanoseconds())
 	REQUESTS++
-	saveState()
 	counter_mutex.Unlock()
+	saveState(client_id)
 }
 
-func IncrementGetTime(t time.Duration) {
+func IncrementGetTime(client_id string, t time.Duration) {
 	counter_mutex.Lock()
 	TOTAL_GET_TIME += int(t.Nanoseconds())
 	REQUESTS++
-	saveState()
 	counter_mutex.Unlock()
+	saveState(client_id)
 }
