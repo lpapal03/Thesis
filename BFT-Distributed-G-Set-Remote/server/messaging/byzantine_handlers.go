@@ -3,6 +3,7 @@ package messaging
 import (
 	"BFT-Distributed-G-Set-Remote/server"
 	"BFT-Distributed-G-Set-Remote/tools"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -80,8 +81,16 @@ func generateByzantineValue(sender string, half_and_half bool) string {
 	if !half_and_half {
 		return "BYZANTINE_0"
 	}
-	sender_port, _ := strconv.Atoi(strings.Split(sender, ":")[1])
-	if sender_port%2 == 0 {
+
+	pattern := `node(\d+)`
+	re := regexp.MustCompile(pattern)
+	match1 := re.FindStringSubmatch(sender)
+	var sender_node int
+	if len(match1) >= 2 {
+		sender_node, _ = strconv.Atoi(match1[1])
+	}
+
+	if sender_node%2 == 0 {
 		return "BYZANTINE_0"
 	} else {
 		return "BYZANTINE_1"
