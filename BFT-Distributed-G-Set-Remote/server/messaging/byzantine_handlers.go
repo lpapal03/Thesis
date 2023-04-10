@@ -31,14 +31,14 @@ func HandleMessageByzantine(s *server.Server, msg []string, scenario string) {
 
 	// handle
 	if message.Tag == GET {
-		tools.IncrementNormalCount()
+		// tools.IncrementNormalCount()
 		handleGetByzantine(s, message, half_and_half)
 	} else if message.Tag == ADD {
-		tools.IncrementNormalCount()
+		// tools.IncrementNormalCount()
 		message.Content[0] = message.Sender + "." + message.Content[0]
 		handleAddByzantine(s, message, half_and_half)
 	} else if strings.Contains(message.Tag, BRACHA_BROADCAST) {
-		tools.IncrementBRBCount()
+		// tools.IncrementBRBCount()
 		handleRBByzantine(s, message, half_and_half)
 	}
 

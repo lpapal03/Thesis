@@ -23,14 +23,14 @@ func HandleMessage(s *server.Server, msg []string) {
 
 	// handle
 	if message.Tag == GET {
-		tools.IncrementNormalCount()
+		tools.IncrementNormalCount(s.Host, s.Port)
 		handleGet(s, message)
 	} else if message.Tag == ADD {
-		tools.IncrementNormalCount()
+		tools.IncrementNormalCount(s.Host, s.Port)
 		message.Content[0] = message.Sender + "." + message.Content[0]
 		handleAdd(s, message)
 	} else if strings.Contains(message.Tag, BRACHA_BROADCAST) {
-		tools.IncrementBRBCount()
+		tools.IncrementBRBCount(s.Host, s.Port)
 		handleRB(s, message)
 	}
 

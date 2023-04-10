@@ -16,8 +16,11 @@ var (
 
 var counter_mutex sync.Mutex
 
-func saveState() error {
-	file, err := os.OpenFile("scenario_results.txt", os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
+func saveState(host, port string) error {
+
+	filename := "scenario_results_" + host + "_" + port + ".txt"
+
+	file, err := os.OpenFile(filename, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
 		return err
 	}
@@ -32,24 +35,24 @@ func saveState() error {
 	return nil
 }
 
-func IncrementBRBCount() {
+func IncrementBRBCount(host, port string) {
 	counter_mutex.Lock()
 	BRB_MESSAGES++
-	saveState()
+	saveState(host, port)
 	counter_mutex.Unlock()
 }
 
-func IncrementNormalCount() {
+func IncrementNormalCount(host, port string) {
 	counter_mutex.Lock()
 	NORMAL_MESSAGES++
-	saveState()
+	saveState(host, port)
 	counter_mutex.Unlock()
 }
 
-func IncrementBRBTime(t time.Duration) {
+func IncrementBRBTime(host, port string, t time.Duration) {
 	counter_mutex.Lock()
 	TOTAL_BRB_TIME += int(t.Nanoseconds())
 	COMPLETED_BRB_REQUESTS++
-	saveState()
+	saveState(host, port)
 	counter_mutex.Unlock()
 }
