@@ -19,12 +19,14 @@ for thread_num in {1..5}; do
         for node in "${client_nodes[@]}"; do
             ssh "$node" "pgrep BFT-Distributed > /dev/null"
             if [ $? -eq 0 ]; then
-                echo "Experiment is running on $node"
+                echo "Experiment is still running on $node"
             else
-                echo "Experiment is not running on $node"
+                echo "Experiment is done on $node"
                 let "done_count+=1"
             fi
         done
+
+        echo Start copying result files...
 
         # If every node is done, run the second script
         if [[ $done_count -eq ${#client_nodes[@]} ]]; then
@@ -33,12 +35,13 @@ for thread_num in {1..5}; do
             mkdir results/scenario-$param/threads-$thread_num
             nodes=$(grep -v "^#" hosts | grep -v "^$" | grep -v "^node0$" | grep -v "^\[" | cut -d" " -f2)
             for node in $nodes; do
+                echo Copying from $node...
                 scp loukis@$node:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/scenario_results* /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/scenario-$param/threads-$thread_num/
                 scp loukis@$node:/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/scenario_results* /users/loukis/Thesis/BFT-Distributed-G-Set-Remote/results/scenario-$param/threads-$thread_num/
             done
             break
         fi
 
-        sleep 10 # wait for 10 seconds before running the first script again
+        sleep 30 # wait for 30 seconds before running the first script again
     done
 done

@@ -30,11 +30,11 @@
         state: absent
     - name: Remove scenario files
       file: 
-        path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/scenario_results.txt"
+        path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/server/scenario_results*"
         state: absent
     - name: Remove scenario files
       file: 
-        path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/scenario_results.txt"
+        path: "/users/loukis/Thesis/BFT-Distributed-G-Set-Remote/client/scenario_results*"
         state: absent
     - name: Kill project processes on all machines
       command: killall -9 BFT-Distributed-G-Set-Remote
