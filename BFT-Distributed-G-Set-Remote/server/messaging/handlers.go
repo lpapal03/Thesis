@@ -4,12 +4,10 @@ import (
 	"BFT-Distributed-G-Set-Remote/gset"
 	"BFT-Distributed-G-Set-Remote/server"
 	"BFT-Distributed-G-Set-Remote/tools"
-	"fmt"
 	"strings"
 )
 
 func HandleMessage(s *server.Server, msg []string) {
-	fmt.Println(tools.BRB_MESSAGES, tools.NORMAL_MESSAGES)
 	message, err := ParseMessageString(msg)
 	if err != nil {
 		tools.Log(s.Id, "Error msg: "+strings.Join(msg, " "))
@@ -22,15 +20,21 @@ func HandleMessage(s *server.Server, msg []string) {
 	}
 
 	// handle
+	stats := tools.Stats{
+		BRB_MESSAGES:           s.BRB_MESSAGES,
+		NORMAL_MESSAGES:        s.NORMAL_MESSAGES,
+		TOTAL_BRB_TIME:         s.TOTAL_BRB_TIME,
+		COMPLETED_BRB_REQUESTS: s.COMPLETED_BRB_REQUESTS,
+	}
 	if message.Tag == GET {
-		tools.IncrementNormalCount(s.Host, s.Port)
+		s.NORMAL_MESSAGES = tools.IncrementNormalCount(s.Host, s.Port, stats)
 		handleGet(s, message)
 	} else if message.Tag == ADD {
-		tools.IncrementNormalCount(s.Host, s.Port)
+		s.NORMAL_MESSAGES = tools.IncrementNormalCount(s.Host, s.Port, stats)
 		message.Content[0] = message.Sender + "." + message.Content[0]
 		handleAdd(s, message)
 	} else if strings.Contains(message.Tag, BRACHA_BROADCAST) {
-		tools.IncrementBRBCount(s.Host, s.Port)
+		s.BRB_MESSAGES = tools.IncrementBRBCount(s.Host, s.Port, stats)
 		handleRB(s, message)
 	}
 

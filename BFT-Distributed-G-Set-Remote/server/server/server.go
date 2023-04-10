@@ -24,7 +24,11 @@ type Server struct {
 	Peers_vote     map[string]bool
 	Bdso_networks  map[string]map[string]*zmq.Socket
 
-	BRB_start_time map[string]time.Time
+	BRB_start_time         map[string]time.Time
+	BRB_MESSAGES           int
+	NORMAL_MESSAGES        int
+	TOTAL_BRB_TIME         int
+	COMPLETED_BRB_REQUESTS int
 }
 
 func CreateServer(me config.Node, peers []config.Node) *Server {
@@ -72,6 +76,11 @@ func CreateServer(me config.Node, peers []config.Node) *Server {
 		My_vote:        my_vote,
 		Peers_echo:     peers_echo,
 		Peers_vote:     peers_vote,
-		BRB_start_time: brb_start_time,
+
+		BRB_start_time:         brb_start_time,
+		BRB_MESSAGES:           0,
+		NORMAL_MESSAGES:        0,
+		TOTAL_BRB_TIME:         0,
+		COMPLETED_BRB_REQUESTS: 0,
 	}
 }

@@ -3,20 +3,17 @@ package tools
 import (
 	"fmt"
 	"os"
-	"sync"
 	"time"
 )
 
-var (
-	BRB_MESSAGES           = 0
-	NORMAL_MESSAGES        = 0
-	TOTAL_BRB_TIME         = 0
-	COMPLETED_BRB_REQUESTS = 0
-)
+type Stats struct {
+	BRB_MESSAGES           int
+	NORMAL_MESSAGES        int
+	TOTAL_BRB_TIME         int
+	COMPLETED_BRB_REQUESTS int
+}
 
-var counter_mutex sync.Mutex
-
-func saveState(host, port string) error {
+func saveState(host, port string, stats Stats) error {
 
 	filename := "scenario_results_" + host + "_" + port + ".txt"
 
@@ -26,8 +23,8 @@ func saveState(host, port string) error {
 	}
 	defer file.Close()
 
-	avg_brb := float64(TOTAL_BRB_TIME) / float64(COMPLETED_BRB_REQUESTS) / float64(time.Millisecond)
-	_, err = fmt.Fprintf(file, "BRB_MESSAGES=%d\nNORMAL_MESSAGES=%d\nTOTAL=%d\nAVG_BRB_TIME=%fms\n", BRB_MESSAGES, NORMAL_MESSAGES, BRB_MESSAGES+NORMAL_MESSAGES, avg_brb)
+	avg_brb := float64(stats.TOTAL_BRB_TIME) / float64(stats.COMPLETED_BRB_REQUESTS) / float64(time.Millisecond)
+	_, err = fmt.Fprintf(file, "BRB_MESSAGES=%d\nNORMAL_MESSAGES=%d\nTOTAL=%d\nAVG_BRB_TIME=%fms\n", stats.BRB_MESSAGES, stats.NORMAL_MESSAGES, stats.BRB_MESSAGES+stats.NORMAL_MESSAGES, avg_brb)
 	if err != nil {
 		return err
 	}
@@ -35,24 +32,21 @@ func saveState(host, port string) error {
 	return nil
 }
 
-func IncrementBRBCount(host, port string) {
-	counter_mutex.Lock()
-	BRB_MESSAGES++
-	counter_mutex.Unlock()
-	saveState(host, port)
+func IncrementBRBCount(host, port string, stats Stats) int {
+	stats.BRB_MESSAGES++
+	saveState(host, port, stats)
+	return stats.BRB_MESSAGES
 }
 
-func IncrementNormalCount(host, port string) {
-	counter_mutex.Lock()
-	NORMAL_MESSAGES++
-	counter_mutex.Unlock()
-	saveState(host, port)
+func IncrementNormalCount(host, port string, stats Stats) int {
+	stats.NORMAL_MESSAGES++
+	saveState(host, port, stats)
+	return stats.NORMAL_MESSAGES
 }
 
-func IncrementBRBTime(host, port string, t time.Duration) {
-	counter_mutex.Lock()
-	TOTAL_BRB_TIME += int(t.Nanoseconds())
-	COMPLETED_BRB_REQUESTS++
-	counter_mutex.Unlock()
-	saveState(host, port)
+func IncrementBRBTime(host, port string, t time.Duration, stats Stats) (int, int) {
+	stats.TOTAL_BRB_TIME += int(t.Nanoseconds())
+	stats.COMPLETED_BRB_REQUESTS++
+	saveState(host, port, stats)
+	return stats.TOTAL_BRB_TIME, stats.COMPLETED_BRB_REQUESTS
 }

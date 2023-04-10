@@ -73,7 +73,13 @@ func HandleReliableBroadcast(receiver *server.Server, v Message) bool {
 	if v.Tag == BRACHA_BROADCAST_VOTE && vote_count >= config.N-config.F {
 		// tools.Log(receiver.Id, "Echo: "+strconv.Itoa(echo_count))
 		// tools.Log(receiver.Id, "Vote: "+strconv.Itoa(vote_count))
-		tools.IncrementBRBTime(receiver.Host, receiver.Port, time.Since(receiver.BRB_start_time[my_key]))
+		s := tools.Stats{
+			BRB_MESSAGES:           receiver.BRB_MESSAGES,
+			NORMAL_MESSAGES:        receiver.NORMAL_MESSAGES,
+			TOTAL_BRB_TIME:         receiver.TOTAL_BRB_TIME,
+			COMPLETED_BRB_REQUESTS: receiver.COMPLETED_BRB_REQUESTS,
+		}
+		receiver.TOTAL_BRB_TIME, receiver.COMPLETED_BRB_REQUESTS = tools.IncrementBRBTime(receiver.Host, receiver.Port, time.Since(receiver.BRB_start_time[my_key]), s)
 		cleanup(receiver, peers_key)
 		return true
 	}
