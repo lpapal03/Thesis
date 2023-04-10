@@ -36,8 +36,8 @@ func StartAutomated(zctx *zmq.Context, client_count, request_count int) {
 					TOTAL_ADD_TIME: client.TOTAL_ADD_TIME,
 					REQUESTS:       client.REQUESTS,
 				}
-				tools.IncrementAddTime(client.Id, add_time, s)
-				tools.IncrementGetTime(client.Id, get_time, s)
+				client.TOTAL_ADD_TIME, client.REQUESTS = tools.IncrementAddTime(client.Id, add_time, s)
+				client.TOTAL_GET_TIME, client.REQUESTS = tools.IncrementGetTime(client.Id, get_time, s)
 			}
 			tools.Log(id, "Done")
 			wg.Done()
