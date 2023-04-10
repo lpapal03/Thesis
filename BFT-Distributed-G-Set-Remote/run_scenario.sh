@@ -7,7 +7,7 @@ fi
 
 param=$1
 
-for thread_num in {1..5}; do
+for thread_num in {1..3}; do
     sed -i "s/NUM_THREADS=[0-9]*/NUM_THREADS=$thread_num/" config # Update the number of threads in the config file
     echo Starting with $thread_num threads
     ansible-playbook -i ./hosts end.yml

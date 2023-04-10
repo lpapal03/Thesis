@@ -2,12 +2,14 @@
 
 # Make sure there is no other hosts file in the directory
 
+NUM_ITERATIONS=5
+
 rm -rf results
 mkdir results
 
 echo Running normal
 mv hosts_normal hosts
-for i in {1..5}
+for (( i=1; i<=NUM_ITERATIONS; i++ ))
 do
   ./run_scenario.sh normal_iteration_"$i"
 done

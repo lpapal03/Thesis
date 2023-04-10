@@ -11,9 +11,6 @@ var mu sync.Mutex
 var LOGGING bool
 
 func ResetLogFile() {
-	if !LOGGING {
-		return
-	}
 	// Check if the file exists
 	if _, err := os.Stat("log.txt"); err == nil {
 		// File exists, delete it
