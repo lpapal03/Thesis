@@ -13,6 +13,10 @@ type Client struct {
 	Poller          *zmq.Poller
 	Message_counter int
 	Servers         map[string]*zmq.Socket
+
+	TOTAL_GET_TIME int
+	TOTAL_ADD_TIME int
+	REQUESTS       int
 }
 
 func CreateClient(id string, servers []config.Node, zctx *zmq.Context) *Client {
@@ -38,6 +42,10 @@ func CreateClient(id string, servers []config.Node, zctx *zmq.Context) *Client {
 		Zctx:            zctx,
 		Poller:          poller,
 		Message_counter: 0,
-		Servers:         server_sockets}
+		Servers:         server_sockets,
+		TOTAL_GET_TIME:  0,
+		TOTAL_ADD_TIME:  0,
+		REQUESTS:        0,
+	}
 
 }

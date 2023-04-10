@@ -31,8 +31,13 @@ func StartAutomated(zctx *zmq.Context, client_count, request_count int) {
 			for r := 0; r < request_count; r++ {
 				add_time := messaging.Add(client, id+"_test_"+strconv.Itoa(r))
 				_, get_time := messaging.Get(client)
-				tools.IncrementAddTime(client.Id, add_time)
-				tools.IncrementGetTime(client.Id, get_time)
+				s := tools.Stats{
+					TOTAL_GET_TIME: client.TOTAL_GET_TIME,
+					TOTAL_ADD_TIME: client.TOTAL_ADD_TIME,
+					REQUESTS:       client.REQUESTS,
+				}
+				tools.IncrementAddTime(client.Id, add_time, s)
+				tools.IncrementGetTime(client.Id, get_time, s)
 			}
 			tools.Log(id, "Done")
 			wg.Done()
