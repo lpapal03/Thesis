@@ -1,3 +1,3 @@
 #!/bin/bash
 
-nohup run_all >/dev/null 2>&1 &
+nohup ./run_all.sh > logfile 2>&1 &
