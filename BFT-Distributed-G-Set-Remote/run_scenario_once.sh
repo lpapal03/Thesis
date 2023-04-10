@@ -14,11 +14,9 @@ for thread_num in {1..5}; do
     ansible-playbook -i ./hosts start.yml
     while true; do
         echo Waiting for clients to finish...
-        # Get the list of nodes under the [clients-automated] tag from a remote machine
         client_nodes=(node1 node2 node3 node4)
-        # Check if every node is done with the process "BFT-Distributed-G-Set-Remote"
         done_count=0
-        for node in $client_nodes; do
+        for node in "${client_nodes[@]}"; do
             ssh "$node" "pgrep BFT-Distributed > /dev/null"
             if [ $? -eq 0 ]; then
                 echo "Experiment is running on $node"
@@ -26,6 +24,7 @@ for thread_num in {1..5}; do
                 echo "Experiment is not running on $node"
                 let "done_count+=1"
             fi
+        done
 
         # If every node is done, run the second script
         if [[ $done_count -eq ${#client_nodes[@]} ]]; then
@@ -40,6 +39,6 @@ for thread_num in {1..5}; do
             break
         fi
 
-        sleep 10 # wait for 5 seconds before running the first script again
+        sleep 10 # wait for 10 seconds before running the first script again
     done
 done
